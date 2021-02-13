@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\RoleManagement;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -9,7 +10,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements MustVerifyEmail, JWTSubject
 {
-    use Notifiable;
+    use Notifiable, RoleManagement;
 
     /**
      * The attributes that are mass assignable.
@@ -17,7 +18,7 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'umur', 'alamat'
     ];
 
     /**
@@ -28,6 +29,8 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    protected $appends = [ 'role' ];
 
     /**
      * The attributes that should be cast to native types.
@@ -45,5 +48,9 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function roles() {
+        return $this->belongsToMany('App\Models\Role');
     }
 }

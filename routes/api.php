@@ -21,5 +21,14 @@ Route::namespace('Api')->group(function() {
         Route::post('login', 'AuthController@login');
     });
 
+
+    Route::middleware('jwt.verify')->group(function() {
+
+        // Profile
+        Route::prefix('profile')->group(function() {
+            Route::get('/', 'ProfileController@getAuthenticatedUser');
+        });
+    });
+
 });
 
