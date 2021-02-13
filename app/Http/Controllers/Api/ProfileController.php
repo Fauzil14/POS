@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Models\User;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
-use Illuminate\Validation\Rule;
 
 class ProfileController extends Controller
 {
@@ -46,14 +47,7 @@ class ProfileController extends Controller
 
         $validatedData = $request->validate([
             'name'            => [ 'sometimes', 'string' ],
-            'email'           => [ 
-                                   'sometimes',
-                                   'email:rfc,dns', 
-                                   Rule::unique('users')->ignore($authUser->id),
-                                 ],
-            // 'no_telephone'    => [
-            //                         Rule::unique('users')->ignore($authUser->id),
-            //                      ],
+            'email'           => [ 'sometimes', 'email:rfc,dns', Rule::unique('users')->ignore($authUser->id) ],
             'umur'            => [ 'sometimes', 'integer' ],
             'alamat'          => [ 'sometimes', 'string' ],
             'profile_picture' => [ 'sometimes', 'image', 'max:2048', 'mimes:jpg,jpeg,png' ],
@@ -78,7 +72,29 @@ class ProfileController extends Controller
 
             return $this->sendResponse('succes', 'User data has been succesfully updated', $authUser, 200);
         } catch(\Throwable $e) {
-            return $this->sendResponse('failed', 'User data failed to update', null, 500);
+
+            return $this->sendResponse('failed', 'User data failed to update', $e->getMessage(), 500);
+        }
+    }
+
+    public function changePassword(Request $request) {
+
+        $validatedData = $request->validate([
+            'password'          => [ 'required', 'password:api' ],
+            'new_password'      => [ 'required', 'min:8', 'confirmed' ],
+        ]);
+
+        $user = User::findOrFail(Auth::id());
+
+        try {
+            $user->password = Hash::make($validatedData['new_password']);
+            $user->save();
+
+            return $this->sendResponse('succes', 'Your password has been change', true, 200);
+        } catch(\Throwable $e) {
+            report($e);
+
+            return $this->sendResponse('failed', 'Failed to change password', $e->getMessage(), 500);
         }
     }
 }

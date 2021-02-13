@@ -2,10 +2,11 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Validation\ValidationException;
 use Throwable;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
@@ -52,11 +53,19 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        // Auto redirect with response json
         if( $request->wantsJson() ) {
+            if ($exception instanceof ModelNotFoundException) {
+                return response()->json([
+                        'status'  => 'failed',
+                        'message' => 'Data not found or has beend modified',
+                    ], 404);
+            }
+
             if ($exception instanceof ValidationException) {
                 return response()->json([
                         'status' => 'failed',
-                        'errors'  => $exception->validator->errors()
+                        'errors' => $exception->validator->errors()
                     ], 422);
                 }
         }

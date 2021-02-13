@@ -28,6 +28,7 @@ Route::namespace('Api')->group(function() {
         Route::prefix('profile')->group(function() {
             Route::get('/', 'ProfileController@getAuthenticatedUser');
             Route::put('/update', 'ProfileController@updateProfile');
+            Route::put('/change-password', 'ProfileController@changePassword');
         });
     });
 
