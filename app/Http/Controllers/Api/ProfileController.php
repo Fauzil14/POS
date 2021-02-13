@@ -81,7 +81,7 @@ class ProfileController extends Controller
 
         $validatedData = $request->validate([
             'password'          => [ 'required', 'password:api' ],
-            'new_password'      => [ 'required', 'min:8', 'confirmed' ],
+            'new_password'      => [ 'required', 'min:8', 'confirmed', 'different:password' ],
         ]);
 
         $user = User::findOrFail(Auth::id());
