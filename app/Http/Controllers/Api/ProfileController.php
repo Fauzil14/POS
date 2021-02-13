@@ -40,57 +40,42 @@ class ProfileController extends Controller
         return $this->sendResponse('succes', 'User data succesfully obtained', $user, 200);
     }
 
-    public function updateProfileNasabah(Request $request, Client $client) 
+    public function updateProfile(Request $request) 
     {
         $authUser = User::find(Auth::id());
 
-        $request->validate([
-            'name'            => ['string'],
+        $validatedData = $request->validate([
+            'name'            => [ 'sometimes', 'string' ],
             'email'           => [ 
-                                    'email', 
-                                    Rule::unique('users')->ignore($authUser->id),
+                                   'sometimes',
+                                   'email:rfc,dns', 
+                                   Rule::unique('users')->ignore($authUser->id),
                                  ],
-            'no_telephone'    => [
-                                    Rule::unique('users')->ignore($authUser->id),
-                                 ],
-            // 'location' => '',
-            'profile_picture' => ['image', 'max:2048', 'mimes:jpg,jpeg,png'],
+            // 'no_telephone'    => [
+            //                         Rule::unique('users')->ignore($authUser->id),
+            //                      ],
+            'umur'            => [ 'sometimes', 'integer' ],
+            'alamat'          => [ 'sometimes', 'string' ],
+            'profile_picture' => [ 'sometimes', 'image', 'max:2048', 'mimes:jpg,jpeg,png' ],
         ]);
 
-        if(!empty($request->profile_picture)) {
-            $image = base64_encode(file_get_contents($request->profile_picture));
-
-            $response = $client->request('POST', 'https://freeimage.host/api/1/upload', [
-                'form_params' => [
-                    'key' => '6d207e02198a847aa98d0a2a901485a5',
-                    'action' => 'upload',
-                    'source' => $image,
-                    'format' => 'json'
-                ]
-            ]);
-
-            $content = $response->getBody()->getContents();
-            
-            $pp = json_decode($content);
-            $pp = $pp->image->display_url;
+        if(!empty($validatedData['profile_picture'])) {
+            $pp = $this->uploadImage($validatedData['profile_picture']);
         } else {
             $pp = $authUser->profile_picture;
         }
 
         // forget = The forget method removes an item from the collection by its key
-        $request = collect($request->toArray())->forget('profile_picture');
-
-        if($request->has('_method')) {
-            $request = $request->forget('_method');
-        }
+        $request = collect($validatedData)->forget('profile_picture');
     
-        $request->each(function($item, $key) use ($authUser) {
-            $authUser->{$key} = $item;
-        });
-        $authUser->profile_picture = $pp;
-        $authUser->update();
-
         try {
+
+            $request->each(function($item, $key) use ($authUser) {
+                $authUser->{$key} = $item;
+            });
+            $authUser->profile_picture = $pp;
+            $authUser->update();
+
             return $this->sendResponse('succes', 'User data has been succesfully updated', $authUser, 200);
         } catch(\Throwable $e) {
             return $this->sendResponse('failed', 'User data failed to update', null, 500);
