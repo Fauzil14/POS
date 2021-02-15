@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Validation\ValidationException;
+
+use function PHPUnit\Framework\throwException;
 
 class AuthController extends Controller
 {
@@ -40,16 +43,20 @@ class AuthController extends Controller
         
         $credentials = $request->validate([
             'email'    => [ 'required', 'email', 'exists:users,email' ],
-            'password' => [ 'required', 'check_password' ],
+            'password' => [ 'required', ],
         ]);
 
-        try {
-            $token = JWTAuth::attempt($credentials);
-            $user = User::firstWhere('email', $credentials['email']);
+        if( Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']])) {
+            try {
+                $token = JWTAuth::attempt($credentials);
+                $user = User::firstWhere('email', $credentials['email']);
 
-            return response()->json(compact('user', 'token'));
-        } catch (JWTException $e) {
-            return response()->json(['error' => 'could_not_create_token'], 500);
+                return response()->json(compact('user', 'token'));
+            } catch (JWTException $e) {
+                return response()->json(['error' => 'could_not_create_token'], 500);
+            }
+        } else {
+            throw ValidationException::withMessages(['password' => 'Password yang anda masukkan salah !']);
         }
 
     }
