@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
-use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -37,22 +38,14 @@ class AuthController extends Controller
 
     public function login(Request $request) {
         
-        $user = User::firstWhere('email', $request->email);
-
         $credentials = $request->validate([
             'email'    => [ 'required', 'email', 'exists:users,email' ],
-            'password' => [ 'required', function($attribute, $value, $fail) use ($request, $user) {                                           
-                                            if( !empty($user) ) {
-                                                if(!Hash::check($value, $user->password) ) {
-                                                    $fail(__('Password is invalid'));
-                                                }
-                                            }
-                                        }
-                          ],
+            'password' => [ 'required', 'check_password' ],
         ]);
 
         try {
             $token = JWTAuth::attempt($credentials);
+            $user = User::firstWhere('email', $credentials['email']);
 
             return response()->json(compact('user', 'token'));
         } catch (JWTException $e) {

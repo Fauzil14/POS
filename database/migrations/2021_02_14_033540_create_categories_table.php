@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRoleRequestsTable extends Migration
+class CreateCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateRoleRequestsTable extends Migration
      */
     public function up()
     {
-        Schema::create('role_requests', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('role_id')->constrained('roles')->onDelete('cascade');
-            $table->enum('status', [ 'menunggu', 'diterima', 'ditolak', 'dialihfungsikan' ]);
+            $table->string('category_name', 100);
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ class CreateRoleRequestsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('role_requests');
+        Schema::dropIfExists('categories');
     }
 }
