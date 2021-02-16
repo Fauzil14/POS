@@ -21,3 +21,5 @@ Route::get('/', function () {
 Auth::routes(['verify' => true]);
 
 Route::get('/home', 'HomeController@index')->middleware('verified')->name('home');
+
+Route::get('/cari-barang/{keyword?}', 'ProductController@cariBarang');

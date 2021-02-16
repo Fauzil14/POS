@@ -6,5 +6,7 @@ use Illuminate\Http\Request;
 
 class BusinessController extends Controller
 {
-    //
+    // public function getBusiness() {
+    
+    // }
 }
