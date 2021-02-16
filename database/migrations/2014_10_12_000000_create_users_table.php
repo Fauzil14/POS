@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->smallInteger('umur')->nullable();
             $table->string('alamat', 500)->nullable();
-            $table->string('profile_picture')->default('https://via.placeholder.com/150/0000FF/000000?text=User');
+            $table->string('profile_picture')->default(asset('pictures/user-512.png'));
             $table->rememberToken();
             $table->timestamps();
         });

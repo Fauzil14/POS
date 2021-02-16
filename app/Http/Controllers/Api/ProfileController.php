@@ -97,4 +97,11 @@ class ProfileController extends Controller
             return $this->sendResponse('failed', 'Failed to change password', $e->getMessage(), 500);
         }
     }
+
+    public function requestRole($role_id) {
+        // 3 = kasir
+        // 4 = staff
+
+        // RequestRole::create
+    }
 }
