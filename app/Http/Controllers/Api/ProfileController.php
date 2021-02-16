@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
+use Exception;
+use App\Models\Role;
 use App\Models\User;
 use GuzzleHttp\Client;
+use App\Models\RequestRole;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Dotenv\Exception\ValidationException;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
@@ -101,7 +105,15 @@ class ProfileController extends Controller
     public function requestRole($role_id) {
         // 3 = kasir
         // 4 = staff
+        $signedRole = RequestRole::firstWhere('user', Auth::id());
 
+        if ( !empty($signedRole) ) {
+            throw new ValidationException([
+                'role' => 'Anda sudah memiliki role sebagai ' . Role::find($signedRole->role_id)->role_name 
+                ]);
+        }
+
+        return $this->sendResponse('success', 'Permintaan anda berhasil dikirim', true, 200);
         // RequestRole::create
     }
 }
