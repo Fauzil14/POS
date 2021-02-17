@@ -2,6 +2,10 @@
 
 namespace App\Helpers;
 
+use App\Models\Role;
+use App\Models\RoleUser;
+use Illuminate\Support\Facades\DB;
+
 trait RoleManagement {
     
     public function hasAnyRoles($roles) {
@@ -26,8 +30,15 @@ trait RoleManagement {
         });
     }
 
-    public function assignRole($role) {
-        return static::roles()->attach($role);
+    public function assignRole($role_id) {
+        if( RoleUser::where('role_id', $role_id)->exists() ) {
+            $count = ltrim(substr(RoleUser::where('role_id', $role_id)->orderByDesc('id')->first()->kode_user, 1), 0) + 1;
+        } else {
+            $count = RoleUser::where('role_id', $role_id)->count() + 1;
+        }
+        $kode_user = $role_id . sprintf("%03d", $count);
+
+        return static::roles()->attach($role_id, ['kode_user' => $kode_user]);
     }
 
 }

@@ -17,6 +17,8 @@ class CreateRoleUserTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('role_id')->constrained('roles')->onDelete('cascade');
+            $table->char('kode_user', 4)->unique();
+            $table->enum('status', ['aktif', 'nonaktif', 'dikeluarkan']);
             $table->timestamps();
         });
     }
