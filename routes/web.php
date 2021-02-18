@@ -23,3 +23,8 @@ Auth::routes(['verify' => true]);
 Route::get('/home', 'HomeController@index')->middleware('verified')->name('home');
 
 Route::get('/cari-barang/{keyword?}', 'ProductController@cariBarang');
+
+Route::prefix('dashboard')->middleware(['verified'])->group(function() {
+    Route::get('/', 'HomeController@dashboard')->name('dashboard');
+    
+});

@@ -13,8 +13,6 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::get('/cari-barang/{keyword?}', 'ProductController@cariBarang')->middleware('jwt.verify');
-
 Route::namespace('Api')->group(function() {
     
     // Authentication
@@ -32,8 +30,20 @@ Route::namespace('Api')->group(function() {
             Route::put('/update', 'ProfileController@updateProfile');
             Route::put('/change-password', 'ProfileController@changePassword');
             Route::get('/request-role/{role_id}', 'ProfileController@requestRole');
+            Route::get('/set-self-as-admin', 'ProfileController@setSelfAsAdmin');
         });
+
+        Route::prefix('kasir')->group(function() {
+            // Route::
+        });
+
     });
+});
+
+Route::middleware('jwt.verify')->group(function() {
+    
+    Route::get('/cari-barang/{keyword?}', 'ProductController@cariBarang');
+    Route::put('business/update', 'BusinessController@updateBusiness')->middleware('can:admin');
 
 });
 

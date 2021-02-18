@@ -4,16 +4,16 @@ namespace App\Helpers;
 
 use App\Models\Role;
 use App\Models\RoleUser;
-use Illuminate\Support\Facades\DB;
 
 trait RoleManagement {
+    use CodeGenerator;
     
     public function hasAnyRoles($roles) {
-        return static::roles()->whereIn('name', $roles)->first() ? TRUE : FALSE;
+        return static::roles()->whereIn('role_name', $roles)->first() ? TRUE : FALSE;
     }
 
     public function hasRole($role) {
-        return static::roles()->where('name', $role)->first() ? TRUE : FALSE;
+        return static::roles()->where('role_name', $role)->first() ? TRUE : FALSE;
     }
 
     public function whatRole() {
@@ -26,17 +26,13 @@ trait RoleManagement {
 
     public function whoHasRole($role) {
         return static::whereHas('roles', function($q) use ($role) { // whereHas didn't return null data
-            $q->where('name', $role);
+            $q->where('role_name', $role);
         });
     }
 
-    public function assignRole($role_id) {
-        if( RoleUser::where('role_id', $role_id)->exists() ) {
-            $count = ltrim(substr(RoleUser::where('role_id', $role_id)->orderByDesc('id')->first()->kode_user, 1), 0) + 1;
-        } else {
-            $count = RoleUser::where('role_id', $role_id)->count() + 1;
-        }
-        $kode_user = $role_id . sprintf("%03d", $count);
+    public function assignRole($role) {
+        $role_id = Role::firstWhere('role_name', $role)->id;
+        $kode_user = $this->kodeUserPerRole($role_id);
 
         return static::roles()->attach($role_id, ['kode_user' => $kode_user]);
     }

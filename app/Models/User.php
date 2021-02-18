@@ -53,4 +53,8 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
     public function roles() {
         return $this->belongsToMany('App\Models\Role')->withPivot('user_id', 'role_id', 'kode_user');
     }
+
+    public function business() {
+        return $this->hasMany('App\Models\Business', 'admin_id', 'id');
+    }
 }

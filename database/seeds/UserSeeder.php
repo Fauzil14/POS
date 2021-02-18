@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $seeds = [
+        $pegawai_seeds = [
                     [
                         'name'              => 'fauzil',
                         'email'             => 'fauzil@gmail.com',
@@ -61,12 +61,36 @@ class UserSeeder extends Seeder
         // 3 = kasir 
         // 4 = staff
                  
-        $roles = [1, 1, 2, 3, 4];
+        $roles = ['admin', 'admin', 'pimpinan', 'kasir', 'staff'];
 
         $user = new User;
-        foreach($seeds as $key => $value) {
+        foreach($pegawai_seeds as $key => $value) {
             $user->create($value)->assignRole($roles[$key]);
         }
+
+        $seeds = [
+            [
+                'name'              => 'pengusaha',
+                'email'             => 'pengusaha@gmail.com',
+                'email_verified_at' => now(),
+                'password'          => Hash::make('password'),
+                'umur'              => 30,
+                'alamat'            => 'payakumbuh',
+            ],
+            [
+                'name'              => 'pengusaha1',
+                'email'             => 'pengusaha1@gmail.com',
+                'email_verified_at' => now(),
+                'password'          => Hash::make('password'),
+                'umur'              => 26,
+                'alamat'            => 'payakumbuh',
+            ],
+        ];
+
+        foreach($seeds as $seed) {
+            $user->create($seed);
+        }
+
 
     }
 }

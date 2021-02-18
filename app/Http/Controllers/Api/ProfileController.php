@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Role;
 use App\Models\User;
-use GuzzleHttp\Client;
-use App\Models\RoleUser;
+use App\Models\Business;
 use App\Models\RequestRole;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -42,7 +42,7 @@ class ProfileController extends Controller
             return response()->json(['token_absent']);
         }
         
-        return $this->sendResponse('succes', 'User data succesfully obtained', $user, 200);
+        return $this->sendResponse('success', 'User data successfully obtained', $user, 200);
     }
 
     public function updateProfile(Request $request) 
@@ -74,7 +74,7 @@ class ProfileController extends Controller
             $authUser->profile_picture = $pp;
             $authUser->update();
 
-            return $this->sendResponse('succes', 'User data has been succesfully updated', $authUser, 200);
+            return $this->sendResponse('success', 'User data has been successfully updated', $authUser, 200);
         } catch(\Throwable $e) {
 
             return $this->sendResponse('failed', 'User data failed to update', $e->getMessage(), 500);
@@ -102,6 +102,21 @@ class ProfileController extends Controller
         }
     }
 
+    public function setSelfAsAdmin() {
+        
+        try {
+            $data = DB::transaction(function() {
+                User::find(Auth::id())->assignRole('admin');
+
+                return Business::create(['admin_id' => Auth::id()]);
+            });
+
+            return $this->sendResponse('success', 'Business successfully made', $data, 200);
+        } catch(\Throwable $e) {
+            return $this->sendResponse('failed', 'Failed to make business', $e->getMessage(), 500);
+        }
+    }
+
     public function requestRole($role_id) {
         // 3 = kasir
         // 4 = staff
@@ -124,6 +139,6 @@ class ProfileController extends Controller
             'role_id' => $role_id,
         ]);
 
-        return $this->sendResponse('success', 'Permintaan anda berhasil dikirim', $data, 200);
+        return $this->sendResponse('successs', 'Permintaan anda berhasil dikirim', $data, 200);
     }
 }
