@@ -15,4 +15,15 @@ class MemberController extends Controller
                                          ->orWhereRaw('lower(nama) like (?)',["%{$keyword}%"]);
                           });
     }
+
+    public function createMember(Request $request)
+    {
+        $validatedData = $request->validate([
+            'nama'         => 'required',
+            'no_telephone' => 'required|unique:members',
+            'saldo'        => 'required|number',
+        ]);
+
+        Member::create($validatedData);
+    }
 }

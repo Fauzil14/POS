@@ -37,4 +37,9 @@ class Controller extends BaseController
 
         return $image_url;
     }
+
+    // public function optionalResponse()
+    // {
+
+    // }
 }

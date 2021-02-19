@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller
 {
@@ -19,6 +20,9 @@ class ProductController extends Controller
                   });  
         })->get();
         
+        if( empty($data) ) {
+            throw ValidationException::withMessages(['barang' => 'Barang dengan kata kunci yang anda masukkan tidak ditemukan']);
+        }
         if ( Route::current()->action['prefix'] == "api") {
             return response()->json($data);
         } 
