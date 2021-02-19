@@ -19,8 +19,8 @@ class ProductController extends Controller
                                      ->orWhereRaw('lower(merek) like (?)',["%{$lkey}%"]);
                   });  
         })->get();
-        
-        if( empty($data) ) {
+
+        if( count($data) == 0 ) {
             throw ValidationException::withMessages(['barang' => 'Barang dengan kata kunci yang anda masukkan tidak ditemukan']);
         }
         if ( Route::current()->action['prefix'] == "api") {

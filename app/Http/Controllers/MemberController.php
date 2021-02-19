@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class MemberController extends Controller
 {
-    public function cariMember($keyword)
+    public function cariMember($keyword = null)
     {
         $member = Member::where(function($query) use ($keyword) {
                             return $query->where('UID', $keyword)
@@ -24,6 +24,26 @@ class MemberController extends Controller
             'saldo'        => 'required|number',
         ]);
 
-        Member::create($validatedData);
+        $member = Member::create($validatedData);
+    
+        if ($request->wantsJson()) {
+            return $this->sendResponse('success', 'Member successfully created', $member, 200);
+        }
+    }
+
+    public function topUpSaldoMember(Request $request)
+    {
+        $validatedData = $request->validate([
+            'member_id' => 'required|exists:members,id',
+            'nominal'   => 'required|number'
+        ]);
+
+        $member = Member::find($validatedData['id']);
+        $member->saldo += $validatedData['nominal'];
+        $member->save();
+
+        if ($request->wantsJson()) {
+            return $this->sendResponse('success', 'Member successfully created', $member, 200);
+        }
     }
 }
