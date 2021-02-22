@@ -18,6 +18,6 @@ class Product extends Model
     ];
 
     public function product_penjualan() {
-        return $this->belongsToMany('App\Models\Penjualan')->using('App\Models\DetailPenjualan');
+        return $this->belongsToMany('App\Models\Penjualan', 'detail_penjualans')->withPivot('penjualan_id', 'product_id', 'quantity', 'harga_jual', 'diskon', 'subtotal_harga');
     }
 }

@@ -20,6 +20,7 @@ class CreatePenjualansTable extends Migration
             $table->foreignId('kasir_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('member_id')->nullable()->constrained('members')->onDelete('cascade');
             $table->decimal('total_price')->nullable();
+            $table->enum('status', ['unfinished', 'finished']);
             $table->timestamps();
         });
     }
