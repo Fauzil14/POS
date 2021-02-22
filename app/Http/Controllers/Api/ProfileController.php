@@ -103,18 +103,16 @@ class ProfileController extends Controller
     }
 
     public function setSelfAsAdmin() {
-        
-        try {
-            $data = DB::transaction(function() {
-                User::find(Auth::id())->assignRole('admin');
 
-                return Business::create(['admin_id' => Auth::id()]);
-            });
+        $data = DB::transaction(function() {
+            
+            $user = User::find(Auth::id());
+            $user->assignRole('admin'); 
+            
+            return $user->admin_business()->first();
+        });
 
-            return $this->sendResponse('success', 'Business successfully made', $data, 200);
-        } catch(\Throwable $e) {
-            return $this->sendResponse('failed', 'Failed to make business', $e->getMessage(), 500);
-        }
+        return $this->sendResponse('success', 'Business successfully made', $data, 200);
     }
 
     public function requestRole($role_id) {

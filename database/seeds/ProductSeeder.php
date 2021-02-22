@@ -71,6 +71,7 @@ class ProductSeeder extends Seeder
                         'harga_beli' => $harga_beli,
                         'harga_jual' => $harga_jual,
                         'category_id' => $raw[1],
+                        'supplier_id' => rand(1, 19),
                         'merek' => $raw[2],
                         'stok' => rand(0, 50),
                         'diskon' => $diskon,

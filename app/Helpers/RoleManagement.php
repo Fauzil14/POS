@@ -3,7 +3,11 @@
 namespace App\Helpers;
 
 use App\Models\Role;
+use App\Models\Business;
 use App\Models\RoleUser;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\BusinessController;
+use Illuminate\Validation\ValidationException;
 
 trait RoleManagement {
     use CodeGenerator;
@@ -30,11 +34,27 @@ trait RoleManagement {
         });
     }
 
-    public function assignRole($role) {
+    public function assignRole($role, $business_id = null) {
         $role_id = Role::firstWhere('role_name', $role)->id;
         $kode_user = $this->kodeUserPerRole($role_id);
 
-        return static::roles()->attach($role_id, ['kode_user' => $kode_user]);
+        if($role == 'admin') {
+            $business = new Business;
+            if ($business->checkAdmin($this->getKey())) {
+                throw ValidationException::withMessages(['admin' => 'Anda sudah memiliki outlet sebelumnnya']);
+            }; 
+            $business = $business->create(['admin_id' => $this->getKey()]);
+            $business_id = $business->id;
+        }
+
+        // return static::roles()->attach($role_id, ['business_id' => $business_id, 'kode_user' => $kode_user]);
+        static::roles()->attach($role_id, ['business_id' => $business_id, 'kode_user' => $kode_user]);
+        if($role == 'kasir') {
+            static::kasir()->create(['kode_user' => $kode_user]);
+        }
+        if($role == 'staff') {
+            static::staff()->create(['kode_user' => $kode_user]);
+        }
     }
 
 }

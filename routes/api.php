@@ -39,14 +39,18 @@ Route::namespace('Api')->group(function() {
 Route::middleware('jwt.verify')->group(function() {
     
     Route::get('/cari-barang/{keyword?}', 'ProductController@cariBarang');
-    Route::put('business/update', 'BusinessController@updateBusiness')->middleware('can:admin');
+    Route::put('/business/update', 'BusinessController@updateBusiness')->middleware('can:admin');
 
     // Kasir    
-    Route::prefix('kasir')->group(function() {
+    Route::prefix('kasir')->middleware('can:kasir')->group(function() {
         Route::prefix('member')->group(function() {
             Route::get('/cari/{keyword?}', 'MemberController@cariMember');
             Route::post('/create', 'MemberController@createMember');
             Route::post('/top-up', 'MemberController@topUpSaldoMember');
+        });
+
+        Route::prefix('penjualan')->group(function() {
+            Route::get('form', 'PenjualanController@getFormTransaksi');
         });
     });
 });

@@ -7,6 +7,7 @@ use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
@@ -49,7 +50,7 @@ class AuthController extends Controller
         if( Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']])) {
             try {
                 $token = JWTAuth::attempt($credentials);
-                $user = User::firstWhere('email', $credentials['email']);
+                $user = new UserResource(User::firstWhere('email', $credentials['email']));
 
                 return response()->json(compact('user', 'token'));
             } catch (JWTException $e) {

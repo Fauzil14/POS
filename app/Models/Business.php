@@ -16,7 +16,12 @@ class Business extends Model
         ,'diskon_member'
     ];
 
-    public function business() {
+    public function admin_business() {
         return $this->hasOne('App\Models\Users', 'id','admin_id');
     }
+
+    public function checkAdmin($admin_id) {
+        return self::where('admin_id', $admin_id)->exists();
+    }
+
 }

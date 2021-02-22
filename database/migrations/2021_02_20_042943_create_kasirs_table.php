@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRoleUserTable extends Migration
+class CreateKasirsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateRoleUserTable extends Migration
      */
     public function up()
     {
-        Schema::create('role_user', function (Blueprint $table) {
+        Schema::create('kasirs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('role_id')->constrained('roles')->onDelete('cascade');
-            $table->foreignId('business_id')->nullable()->constrained('businesses')->onDelete('cascade');
             $table->char('kode_user', 4)->unique();
-            $table->enum('status', ['aktif', 'nonaktif', 'dikeluarkan'])->default('aktif');
+            $table->bigInteger('number_of_transaction')->nullable();
+            $table->decimal('total_penjualan')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ class CreateRoleUserTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('role_user');
+        Schema::dropIfExists('kasirs');
     }
 }

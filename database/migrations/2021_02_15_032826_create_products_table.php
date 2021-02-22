@@ -17,12 +17,13 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->string('UID', 13)->unique();
             $table->string('merek');
-            $table->foreignId('category_id')->constrained('categories');
             $table->string('nama');
-            $table->decimal('stok');
+            $table->foreignId('category_id')->constrained('categories');
+            $table->foreignId('supplier_id')->constrained('suppliers');
+            $table->integer('stok');
             $table->decimal('harga_beli', 8, 2);
             $table->decimal('harga_jual', 8, 2);
-            $table->decimal('diskon', 4, 2);
+            $table->integer('diskon');
             $table->timestamps();
         });
     }

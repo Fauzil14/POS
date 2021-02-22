@@ -16,4 +16,8 @@ class Product extends Model
         ,'harga_jual'
         ,'diskon'
     ];
+
+    public function product_penjualan() {
+        return $this->belongsToMany('App\Models\Penjualan')->using('App\Models\DetailPenjualan');
+    }
 }

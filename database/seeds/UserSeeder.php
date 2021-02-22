@@ -65,7 +65,7 @@ class UserSeeder extends Seeder
 
         $user = new User;
         foreach($pegawai_seeds as $key => $value) {
-            $user->create($value)->assignRole($roles[$key]);
+            $user->create($value)->assignRole($roles[$key], 2);
         }
 
         $seeds = [
