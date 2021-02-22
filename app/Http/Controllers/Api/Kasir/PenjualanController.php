@@ -31,7 +31,26 @@ class PenjualanController extends Controller
             'diskon'         => $product->diskon,
             'subtotal_harga' => ($validatedData['quantity'] * $product->harga_jual) - (($product->harga_jual * $product->diskon) / 100),
         ]);
+        $penjualan->total_price = $penjualan->detail_penjualan()->sum('subtotal_harga');
+        $penjualan->update();
+        $data = $penjualan->refresh();
 
-        return response()->json($penjualan->load('detail_penjualan'));
+        return response()->json($data->load('detail_penjualan'));
     }
+
+    public function addMemberToPenjualan($penjualan_id, $member_id)
+    {
+        $penjualan = Penjualan::findOrFail($penjualan_id);
+        $penjualan->member_id = $member_id;
+        dd($penjualan->detail_penjualan->get());
+        // $penjualan->detail_penjualan->get()->each(function($item, $key) {
+
+        // });
+
+    }
+
+    // public function finishPenjualan($penjualan_id)
+    // {
+
+    // }
 }

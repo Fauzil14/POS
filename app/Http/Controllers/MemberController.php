@@ -10,10 +10,14 @@ class MemberController extends Controller
     public function cariMember($keyword = null)
     {
         $member = Member::where(function($query) use ($keyword) {
-                            return $query->where('UID', $keyword)
+                            return $query->where('kode_member', $keyword)
                                          ->orWhere('no_telephone', $keyword)
                                          ->orWhereRaw('lower(nama) like (?)',["%{$keyword}%"]);
-                          });
+                          })->get();
+        
+        if (request()->wantsJson()) {
+            return response()->json($member);
+        }
     }
 
     public function createMember(Request $request)
@@ -21,7 +25,7 @@ class MemberController extends Controller
         $validatedData = $request->validate([
             'nama'         => 'required',
             'no_telephone' => 'required|unique:members',
-            'saldo'        => 'required|number',
+            'saldo'        => 'required|integer|min:10000',
         ]);
 
         $member = Member::create($validatedData);
@@ -35,12 +39,12 @@ class MemberController extends Controller
     {
         $validatedData = $request->validate([
             'member_id' => 'required|exists:members,id',
-            'nominal'   => 'required|number'
+            'nominal'   => 'required|integer'
         ]);
 
-        $member = Member::find($validatedData['id']);
+        $member = Member::find($validatedData['member_id']);
         $member->saldo += $validatedData['nominal'];
-        $member->save();
+        $member->update();
 
         if ($request->wantsJson()) {
             return $this->sendResponse('success', 'Member successfully created', $member, 200);

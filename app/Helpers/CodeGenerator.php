@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\User;
+use App\Models\Member;
 use App\Models\RoleUser;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,7 +26,7 @@ trait CodeGenerator {
                 $prenumb = 1;
                 $kode_user = $user->kasir()->first()->kode_user;
                 if(static::where('kasir_id', $user->id)->exists()) {
-                    $last_number = $this->parseTransactionCode(static::latest()->where('kasir_id', $user->id)->first()->kode_transaksi) + 1;
+                    $last_number = $this->parseCode(static::latest()->where('kasir_id', $user->id)->first()->kode_transaksi, 7, 0) + 1;
                 } else {
                     $last_number = 1;
                 }
@@ -39,8 +40,19 @@ trait CodeGenerator {
         return $prenumb . now()->format('y') . $kode_user . sprintf("%05d", $last_number);
     }
 
-    public function parseTransactionCode($raw) {
-        return ltrim(substr($raw, 7), 0);
+    public function parseCode($raw, $start, $char) {
+        return ltrim(substr($raw, $start), $char);
+    }
+
+    public function kodeMember() {
+        $now = now();
+        if( count(static::get()) > 0 ) {
+            $last_number = $this->parseCode(static::orderByDesc('id')->first()->kode_member, 8, 0) + 1;
+        } else {
+            $last_number = 1;
+        }
+
+        return $now->format('y') . sprintf("%03d",$now->dayOfYear) . $now->format('H') . sprintf("%04d", $last_number);
     }
 
 }
