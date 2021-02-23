@@ -52,7 +52,7 @@ Route::middleware('jwt.verify')->group(function() {
         Route::prefix('penjualan')->group(function() {
             Route::get('form', 'PenjualanController@getFormTransaksi');
             Route::post('create-detail', 'Api\Kasir\PenjualanController@createDetailPenjualan');
-            Route::get('add-member/{penjualan_id}/{member_id}', 'Api\Kasir\PenjualanController@addMemberToPenjualan');
+            Route::post('finish', 'Api\Kasir\PenjualanController@finishPenjualan');
         });
     });
 });

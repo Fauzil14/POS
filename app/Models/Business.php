@@ -24,4 +24,8 @@ class Business extends Model
         return self::where('admin_id', $admin_id)->exists();
     }
 
+    public function penjualan() {
+        return $this->hasOne('App\Models\Penjualan', 'business_id', 'id');
+    }
+
 }

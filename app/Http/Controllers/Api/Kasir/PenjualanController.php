@@ -6,7 +6,9 @@ use App\Models\Product;
 use App\Models\Penjualan;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class PenjualanController extends Controller
 {
@@ -38,19 +40,43 @@ class PenjualanController extends Controller
         return response()->json($data->load('detail_penjualan'));
     }
 
-    public function addMemberToPenjualan($penjualan_id, $member_id)
+    public function finishPenjualan(Request $request)
     {
-        $penjualan = Penjualan::findOrFail($penjualan_id);
-        $penjualan->member_id = $member_id;
-        dd($penjualan->detail_penjualan->get());
-        // $penjualan->detail_penjualan->get()->each(function($item, $key) {
+        $validatedData = $request->validate([
+            'penjualan_id'     => ['required', Rule::exists('penjualans','id')->where('status', 'unfinished')],
+            'member_id'        => ['sometimes', 'exists:members,id'],
+            'jenis_pembayaran' => ['sometimes']
+        ]);
 
-        // });
+        $penjualan = Penjualan::findOrFail($validatedData['penjualan_id']);
+        
+        try {
+        
+            DB::transaction(function () use($penjualan, $validatedData) {
+                
+                if( isset($validatedData['member_id']) ) {
+                    $penjualan->member_id = $validatedData['member_id'];
+                    if( !is_null($penjualan->business->diskon_member) ) {
+                        $penjualan->total_price = $penjualan->total_price - (($penjualan->total_price * $penjualan->business->diskon_member) / 100);  
+                    }
+                }
+                if( isset($validatedData['jenis_pembayaran']) ) {
+                    $penjualan->jenis_pembayaran = $validatedData['jenis_pembayaran'];
+                }
+                $penjualan->status = 'finished';
+                $penjualan->update();
+                
+                $penjualan->refresh();
+                $penjualan->kasir->increment('number_of_transaction', 1);
+                $penjualan->kasir->increment('total_penjualan', $penjualan->total_price);
+                if(isset($validatedData['jenis_pembayaran']) && $validatedData['jenis_pembayaran'] == 'debit' ) {
+                    $penjualan->member->decrement('saldo', $penjualan->total_price);
+                }                
+            });
 
+            return $this->sendResponse('success', 'Transaksi berhasil', $penjualan->load('detail_penjualan'), 200);
+        } catch(\Throwable $e) {
+            return $this->sendResponse('failed', 'Transaksi gagal', $e->getMessage(), 500);
+        }
     }
-
-    // public function finishPenjualan($penjualan_id)
-    // {
-
-    // }
 }

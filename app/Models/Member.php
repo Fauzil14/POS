@@ -27,5 +27,9 @@ class Member extends Model
     public function setKodeMember() {
         return $this->kodeMember();
     }
+
+    public function penjualan() {
+        return $this->hasMany('App\Models\Penjualan', 'member_id', 'id');
+    }
     
 }

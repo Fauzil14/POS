@@ -13,4 +13,8 @@ class Kasir extends Model
                             ,'number_of_transaction'
                             ,'total_penjualan'
                           ];
+
+    public function penjualan() {
+      return $this->hasMany('App\Models\Penjualan', 'kasir_id', 'user_id');
+    }
 }

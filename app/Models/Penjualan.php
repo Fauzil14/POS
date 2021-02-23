@@ -15,6 +15,8 @@ class Penjualan extends Model
                             ,'kasir_id'
                             ,'member_id'
                             ,'total_price'
+                            ,'jenis_pembayaran'
+                            ,'status'
                           ];
 
     public function penjualan_product() {
@@ -23,5 +25,17 @@ class Penjualan extends Model
 
     public function detail_penjualan() {
         return $this->hasMany('App\Models\DetailPenjualan');        
+    }
+
+    public function business() {
+        return $this->hasOne('App\Models\Business', 'id', 'business_id');
+    }
+
+    public function kasir() {
+        return $this->hasOne('App\Models\Kasir', 'user_id', 'kasir_id');
+    }
+
+    public function member() {
+        return $this->hasOne('App\Models\Member', 'id', 'member_id');
     }
 }

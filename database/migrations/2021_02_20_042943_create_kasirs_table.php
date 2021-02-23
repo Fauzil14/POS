@@ -17,7 +17,7 @@ class CreateKasirsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->char('kode_user', 4)->unique();
-            $table->bigInteger('number_of_transaction')->nullable();
+            $table->bigInteger('number_of_transaction')->default(0);
             $table->decimal('total_penjualan')->nullable();
             $table->timestamps();
         });
