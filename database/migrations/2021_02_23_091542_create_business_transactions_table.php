@@ -17,8 +17,8 @@ class CreateBusinessTransactionsTable extends Migration
             $table->id();
             $table->foreignId('business_id')->constrained('businesses');
             $table->date('tanggal_transaksi');
-            $table->double('pemasukan', 20, 2);
-            $table->double('pengeluaran', 20, 2);
+            $table->integer('pemasukan');
+            $table->integer('pengeluaran');
             $table->timestamp('updated_at');
         });
     }

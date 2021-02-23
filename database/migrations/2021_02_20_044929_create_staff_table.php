@@ -17,8 +17,8 @@ class CreateStaffTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->char('kode_user', 4)->unique();
-            $table->bigInteger('number_of_transaction')->nullable();
-            $table->decimal('total_pembelian')->nullable();
+            $table->integer('number_of_transaction')->nullable();
+            $table->bigInteger('total_pembelian')->nullable();
             $table->timestamps();
         });
     }

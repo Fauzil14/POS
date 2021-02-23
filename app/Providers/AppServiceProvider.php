@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use App\Validation\BailingValidator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
@@ -39,6 +40,15 @@ class AppServiceProvider extends ServiceProvider
                 ->line(Lang::get('Silahkan klik tombol dibawah ini untuk verifikasi email anda.'))
                 ->action(Lang::get('Verifikasi Email'), $verificationUrl)
                 ->line(Lang::get('Abaikan pesan jika anda sudah verifikasi atau belum memiliki akun.'));
+        });
+
+        Str::macro('decimalForm', function($value) {            
+            if( is_numeric($value) && floor($value) != $value ) {
+                $decimals = (strlen($value) - strpos($value, '.')) - 1;
+                return number_format($value, $decimals, ',', '.');
+            } else {
+                return number_format($value, 0, ',', '.');
+            }
         });
 
     }

@@ -19,10 +19,10 @@ class CreatePenjualansTable extends Migration
             $table->foreignId('business_id')->constrained('businesses')->onDelete('cascade');
             $table->foreignId('kasir_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('member_id')->nullable()->constrained('members')->onDelete('cascade');
-            $table->decimal('total_price')->nullable();
+            $table->integer('total_price')->nullable();
             $table->enum('jenis_pembayaran', ['tunai', 'debit']);
-            $table->decimal('dibayar', 10, 2)->default(0);
-            $table->decimal('kembalian', 10, 2)->default(0);
+            $table->integer('dibayar')->default(0);
+            $table->integer('kembalian')->default(0);
             $table->enum('status', ['unfinished', 'finished']);
             $table->timestamps();
         });

@@ -21,7 +21,7 @@ class CreateBusinessesTable extends Migration
             $table->string('alamat_bisnis', 100)->nullable();            
             $table->string('telepon')->nullable();            
             $table->string('logo_bisnis')->nullable();            
-            $table->decimal('diskon_member', 4, 2)->nullable();
+            $table->tinyInteger('diskon_member')->nullable();
             $table->timestamps();
         });
     }
