@@ -76,7 +76,7 @@ class PenjualanController extends Controller
                     if($penjualan->member->saldo < $penjualan->total_price) {
                         throw ValidationException::withMessages([
                             'error' => 'Jumlah saldo yang anda miliki tidak mencukupi untuk melakakun transaksi',
-                            'saldo'  => $penjualan->member->saldo
+                            'saldo' => $penjualan->member->saldo
                         ]);
                     }
                     $penjualan->dibayar = $penjualan->total_price;
@@ -85,7 +85,7 @@ class PenjualanController extends Controller
                     if($validatedData['dibayar'] < $penjualan->total_price) {
                         throw ValidationException::withMessages([
                             'error' => 'Uang yang anda bayar tidak mencukupi untuk melakakun transaksi',
-                            'saldo'  => $penjualan->total_price
+                            'kekurangan'  => $validatedData['dibayar'] - $penjualan->total_price
                         ]); 
                     }
                     $penjualan->dibayar = $validatedData['dibayar'];
@@ -96,10 +96,13 @@ class PenjualanController extends Controller
                 // $penjualan->kasir->increment('number_of_transaction', 1);
                 // $penjualan->kasir->increment('total_penjualan', $penjualan->total_price);
             // });
+            $data = new PenjualanResource($penjualan->refresh());
 
-            return $this->sendResponse('success', 'Transaksi berhasil', $penjualan->load('detail_penjualan'), 200);
+            return $this->sendResponse('success', 'Transaksi berhasil', $data, 200);
         } catch(ValidationException $e) {
-            return $e->getResponse();
+            return $e->errors();
+        } catch(\Throwable $e) {
+            return $this->sendResponse('failed', 'Transaksi gagal', $data, 200);
         }
     }
 }
