@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PenjualanResource;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Penjualan;
@@ -23,8 +24,10 @@ class PenjualanController extends Controller
             'status'         => 'unfinished',
         ],[ 'kode_transaksi' => $kode_transaksi ]);
         
+        $data = new PenjualanResource($data);
+        
         if ( request()->wantsJson() ) {
-            return $this->sendResponse('success', 'Form is ready', $data->load('detail_penjualan'), 200);
+            return $this->sendResponse('success', 'Form is ready', $data, 200);
         }
     }
 

@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PenjualanResource;
+
 use function PHPUnit\Framework\throwException;
 
 use Illuminate\Validation\ValidationException;
@@ -38,9 +40,9 @@ class PenjualanController extends Controller
         ]);
         $penjualan->total_price = $penjualan->detail_penjualan()->sum('subtotal_harga');
         $penjualan->update();
-        $data = $penjualan->refresh();
+        $data = new PenjualanResource($penjualan->refresh());
 
-        return response()->json($data->load('detail_penjualan'));
+        return response()->json($data);
     }
 
     public function finishPenjualan(Request $request)
@@ -58,7 +60,7 @@ class PenjualanController extends Controller
         
         try {
         
-            DB::transaction(function () use($penjualan, $validatedData) {
+            // DB::transaction(function () use($penjualan, $validatedData) {
                 
                 if( isset($validatedData['member_id']) ) {
                     $penjualan->member_id = $validatedData['member_id'];
@@ -72,25 +74,32 @@ class PenjualanController extends Controller
                 $penjualan->refresh();
                 if( $penjualan->jenis_pembayaran == 'debit' ) {
                     if($penjualan->member->saldo < $penjualan->total_price) {
-                        return throwException(ValidationException::withMessages(['error' => 'Jumlah saldo yang anda miliki tidak mencukupi untuk melakakun transaksi',
-                                                                          'saldo'  => $penjualan->member->saldo
-                                                                        ]));
+                        throw ValidationException::withMessages([
+                            'error' => 'Jumlah saldo yang anda miliki tidak mencukupi untuk melakakun transaksi',
+                            'saldo'  => $penjualan->member->saldo
+                        ]);
                     }
                     $penjualan->dibayar = $penjualan->total_price;
                     $penjualan->member->decrement('saldo', $penjualan->total_price);
                 } else {
+                    if($validatedData['dibayar'] < $penjualan->total_price) {
+                        throw ValidationException::withMessages([
+                            'error' => 'Uang yang anda bayar tidak mencukupi untuk melakakun transaksi',
+                            'saldo'  => $penjualan->total_price
+                        ]); 
+                    }
                     $penjualan->dibayar = $validatedData['dibayar'];
                     $penjualan->kembalian = round($validatedData['dibayar'] - $penjualan->total_price);
                 }
                 $penjualan->status = 'finished';
                 $penjualan->update();
-                $penjualan->kasir->increment('number_of_transaction', 1);
-                $penjualan->kasir->increment('total_penjualan', $penjualan->total_price);
-            });
+                // $penjualan->kasir->increment('number_of_transaction', 1);
+                // $penjualan->kasir->increment('total_penjualan', $penjualan->total_price);
+            // });
 
             return $this->sendResponse('success', 'Transaksi berhasil', $penjualan->load('detail_penjualan'), 200);
-        } catch(\Throwable $e) {
-            return $this->sendResponse('failed', 'Transaksi gagal', $e->getMessage(), 500);
+        } catch(ValidationException $e) {
+            return $e->getResponse();
         }
     }
 }
