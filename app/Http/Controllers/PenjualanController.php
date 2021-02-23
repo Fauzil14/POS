@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class PenjualanController extends Controller
 {
-    public function getFormTransaksi(Penjualan $penjualan) 
+    public function getFormPenjualan(Penjualan $penjualan) 
     {
         $kode_transaksi = $penjualan->kodeTransaksi();
 

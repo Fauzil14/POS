@@ -50,7 +50,7 @@ Route::middleware('jwt.verify')->group(function() {
         });
 
         Route::prefix('penjualan')->group(function() {
-            Route::get('form', 'PenjualanController@getFormTransaksi');
+            Route::get('form', 'PenjualanController@getFormPenjualan');
             Route::post('create-detail', 'Api\Kasir\PenjualanController@createDetailPenjualan');
             Route::post('finish', 'Api\Kasir\PenjualanController@finishPenjualan');
         });
