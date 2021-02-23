@@ -18,7 +18,7 @@ class CreateMembersTable extends Migration
             $table->string('kode_member', 11);
             $table->string('nama', 50);
             $table->string('no_telephone', 21)->unique();
-            $table->decimal('saldo', 12, 2)->nullable();
+            $table->double('saldo', 12, 2)->nullable();
             $table->timestamps();
         });
     }

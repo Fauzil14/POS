@@ -2,20 +2,23 @@
 
 namespace App\Http\Controllers\Api\Kasir;
 
+use App\Models\Member;
 use App\Models\Product;
 use App\Models\Penjualan;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
+use function PHPUnit\Framework\throwException;
+
+use Illuminate\Validation\ValidationException;
 
 class PenjualanController extends Controller
 {
     public function createDetailPenjualan(Request $request) 
     {
         $validatedData = $request->validate([
-            'penjualan_id' => ['required', 'exists:penjualans,id'],
+            'penjualan_id' => ['required', Rule::exists('penjualans','id')->where('status','unfinished') ],
             'product_id'   => ['required', Rule::exists('products','id')->where(function($q) {
                 $q->where('stok', '>', 0);
             })],
@@ -44,8 +47,8 @@ class PenjualanController extends Controller
     {
         $validatedData = $request->validate([
             'penjualan_id'     => ['required', Rule::exists('penjualans','id')->where('status', 'unfinished')],
-            'member_id'        => ['sometimes', 'exists:members,id'],
-            'jenis_pembayaran' => ['sometimes'],
+            'member_id'        => ['required_if:jenis_pembayaran,debit', 'exists:members,id'],
+            'jenis_pembayaran' => ['required'],
             'dibayar'          => ['required_unless:jenis_pembayaran,debit']
         ]);
         /* Note: required_unless */
@@ -62,23 +65,27 @@ class PenjualanController extends Controller
                     if( !is_null($penjualan->business->diskon_member) ) {
                         $penjualan->total_price = $penjualan->total_price - (($penjualan->total_price * $penjualan->business->diskon_member) / 100);  
                     }
-                }
-                if( isset($validatedData['jenis_pembayaran']) && $validatedData['jenis_pembayaran'] == 'debit' ) {
                     $penjualan->jenis_pembayaran = $validatedData['jenis_pembayaran'];
                 }
                 $penjualan->update();
                 
                 $penjualan->refresh();
                 if( $penjualan->jenis_pembayaran == 'debit' ) {
+                    if($penjualan->member->saldo < $penjualan->total_price) {
+                        return throwException(ValidationException::withMessages(['error' => 'Jumlah saldo yang anda miliki tidak mencukupi untuk melakakun transaksi',
+                                                                          'saldo'  => $penjualan->member->saldo
+                                                                        ]));
+                    }
                     $penjualan->dibayar = $penjualan->total_price;
                     $penjualan->member->decrement('saldo', $penjualan->total_price);
                 } else {
                     $penjualan->dibayar = $validatedData['dibayar'];
                     $penjualan->kembalian = round($validatedData['dibayar'] - $penjualan->total_price);
                 }
+                $penjualan->status = 'finished';
+                $penjualan->update();
                 $penjualan->kasir->increment('number_of_transaction', 1);
                 $penjualan->kasir->increment('total_penjualan', $penjualan->total_price);
-                $penjualan->push();                                
             });
 
             return $this->sendResponse('success', 'Transaksi berhasil', $penjualan->load('detail_penjualan'), 200);

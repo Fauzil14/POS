@@ -15,7 +15,11 @@ class CreateBusinessTransactionsTable extends Migration
     {
         Schema::create('business_transactions', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('business_id')->constrained('businesses');
+            $table->date('tanggal_transaksi');
+            $table->double('pemasukan', 20, 2);
+            $table->double('pengeluaran', 20, 2);
+            $table->timestamp('updated_at');
         });
     }
 
