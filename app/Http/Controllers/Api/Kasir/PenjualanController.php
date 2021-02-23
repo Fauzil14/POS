@@ -45,8 +45,11 @@ class PenjualanController extends Controller
         $validatedData = $request->validate([
             'penjualan_id'     => ['required', Rule::exists('penjualans','id')->where('status', 'unfinished')],
             'member_id'        => ['sometimes', 'exists:members,id'],
-            'jenis_pembayaran' => ['sometimes']
+            'jenis_pembayaran' => ['sometimes'],
+            'dibayar'          => ['required_unless:jenis_pembayaran,debit']
         ]);
+        /* Note: required_unless */
+        // The field under validation must be present and not empty unless the anotherfield field is equal to any value.
 
         $penjualan = Penjualan::findOrFail($validatedData['penjualan_id']);
         
@@ -60,18 +63,22 @@ class PenjualanController extends Controller
                         $penjualan->total_price = $penjualan->total_price - (($penjualan->total_price * $penjualan->business->diskon_member) / 100);  
                     }
                 }
-                if( isset($validatedData['jenis_pembayaran']) ) {
+                if( isset($validatedData['jenis_pembayaran']) && $validatedData['jenis_pembayaran'] == 'debit' ) {
                     $penjualan->jenis_pembayaran = $validatedData['jenis_pembayaran'];
                 }
-                $penjualan->status = 'finished';
                 $penjualan->update();
                 
                 $penjualan->refresh();
+                if( $penjualan->jenis_pembayaran == 'debit' ) {
+                    $penjualan->dibayar = $penjualan->total_price;
+                    $penjualan->member->decrement('saldo', $penjualan->total_price);
+                } else {
+                    $penjualan->dibayar = $validatedData['dibayar'];
+                    $penjualan->kembalian = round($validatedData['dibayar'] - $penjualan->total_price);
+                }
                 $penjualan->kasir->increment('number_of_transaction', 1);
                 $penjualan->kasir->increment('total_penjualan', $penjualan->total_price);
-                if(isset($validatedData['jenis_pembayaran']) && $validatedData['jenis_pembayaran'] == 'debit' ) {
-                    $penjualan->member->decrement('saldo', $penjualan->total_price);
-                }                
+                $penjualan->push();                                
             });
 
             return $this->sendResponse('success', 'Transaksi berhasil', $penjualan->load('detail_penjualan'), 200);

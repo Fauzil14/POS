@@ -16,6 +16,8 @@ class Penjualan extends Model
                             ,'member_id'
                             ,'total_price'
                             ,'jenis_pembayaran'
+                            ,'dibayar'
+                            ,'kembalian'
                             ,'status'
                           ];
 
