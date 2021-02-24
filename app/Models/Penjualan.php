@@ -21,6 +21,14 @@ class Penjualan extends Model
                             ,'status'
                           ];
 
+    protected static function boot() {
+        parent::boot();
+
+        static::creating(function($query) {
+            $query->jenis_pembayaran = 'tunai';
+        });
+    }
+
     public function penjualan_product() {
         return $this->belongsToMany('App\Models\Product', 'detail_penjualans')->withPivot('penjualan_id', 'product_id', 'quantity', 'harga_jual', 'diskon', 'subtotal_harga');
     }
