@@ -20,7 +20,7 @@ class CreateDetailPenjualansTable extends Migration
             $table->integer('quantity');
             $table->decimal('harga_jual', 15, 2);
             $table->tinyInteger('diskon');
-            $table->double('subtotal_harga');
+            $table->decimal('subtotal_harga', 20, 2);
             $table->timestamps();
         });
     }
