@@ -28,4 +28,8 @@ class Business extends Model
         return $this->hasOne('App\Models\Penjualan', 'business_id', 'id');
     }
 
+    public function keuangan() {
+        return $this->hasOne('App\Models\KeuanganBusiness', 'business_id', 'id');
+    }
+
 }

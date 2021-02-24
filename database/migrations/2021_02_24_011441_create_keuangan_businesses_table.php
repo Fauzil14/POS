@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBusinessTransactionsTable extends Migration
+class CreateKeuanganBusinessesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,13 @@ class CreateBusinessTransactionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('business_transactions', function (Blueprint $table) {
+        Schema::create('keuangan_businesses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('business_id')->constrained('businesses');
-            $table->date('tanggal');
             $table->bigInteger('pemasukan')->default(0);
             $table->bigInteger('pengeluaran')->default(0);
-            $table->bigInteger('saldo')->default(0);
-            $table->timestamp('updated_at');
+            $table->bigInteger('saldo')->default(10000000);
+            $table->timestamps();
         });
     }
 
@@ -31,6 +30,6 @@ class CreateBusinessTransactionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('business_transactions');
+        Schema::dropIfExists('keuangan_businesses');
     }
 }

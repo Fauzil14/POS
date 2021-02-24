@@ -10,6 +10,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PenjualanResource;
+use App\Models\KeuanganBusiness;
 
 use function PHPUnit\Framework\throwException;
 
@@ -60,7 +61,7 @@ class PenjualanController extends Controller
         
         try {
         
-            // DB::transaction(function () use($penjualan, $validatedData) {
+            DB::beginTransaction();
                 
                 if( isset($validatedData['member_id']) ) {
                     $penjualan->member_id = $validatedData['member_id'];
@@ -75,8 +76,8 @@ class PenjualanController extends Controller
                 if( $penjualan->jenis_pembayaran == 'debit' ) {
                     if($penjualan->member->saldo < $penjualan->total_price) {
                         throw ValidationException::withMessages([
-                            'error' => 'Jumlah saldo yang anda miliki tidak mencukupi untuk melakakun transaksi',
-                            'saldo' => $penjualan->member->saldo
+                            'saldo' => 'Jumlah saldo yang anda miliki tidak mencukupi untuk melakakun transaksi',
+                            'saldo_member' => $penjualan->member->saldo
                         ]);
                     }
                     $penjualan->dibayar = $penjualan->total_price;
@@ -84,7 +85,7 @@ class PenjualanController extends Controller
                 } else {
                     if($validatedData['dibayar'] < $penjualan->total_price) {
                         throw ValidationException::withMessages([
-                            'error' => 'Uang yang anda bayar tidak mencukupi untuk melakakun transaksi',
+                            'dibayar' => 'Uang yang anda bayar tidak mencukupi untuk melakakun transaksi',
                             'kekurangan'  => $validatedData['dibayar'] - $penjualan->total_price
                         ]); 
                     }
@@ -93,16 +94,25 @@ class PenjualanController extends Controller
                 }
                 $penjualan->status = 'finished';
                 $penjualan->update();
-                // $penjualan->kasir->increment('number_of_transaction', 1);
-                // $penjualan->kasir->increment('total_penjualan', $penjualan->total_price);
-            // });
+                $penjualan->kasir->increment('number_of_transaction', 1);
+                $penjualan->kasir->increment('total_penjualan', $penjualan->total_price);
+                $keuangan = new KeuanganBusiness;
+                $keuangan->increment('pemasukan', $penjualan->total_price);
+                $keuangan->increment('saldo', $penjualan->total_price);
+            DB::commit();
+
             $data = new PenjualanResource($penjualan->refresh());
 
             return $this->sendResponse('success', 'Transaksi berhasil', $data, 200);
         } catch(ValidationException $e) {
-            return $e->errors();
+            DB::rollBack();
+            return response()->json([
+                'status' => 'failed',
+                'error' => $e->errors()
+            ]);
         } catch(\Throwable $e) {
-            return $this->sendResponse('failed', 'Transaksi gagal', $data, 200);
+            DB::rollback();
+            return $this->sendResponse('failed', 'Transaksi gagal', $e->getMessage(), 200);
         }
     }
 }

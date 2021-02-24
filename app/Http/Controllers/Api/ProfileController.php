@@ -137,6 +137,6 @@ class ProfileController extends Controller
             'role_id' => $role_id,
         ]);
 
-        return $this->sendResponse('successs', 'Permintaan anda berhasil dikirim', $data, 200);
+        return $this->sendResponse('success', 'Permintaan anda berhasil dikirim', $data, 200);
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Business;
 use App\Models\RoleUser;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\BusinessController;
+use App\Models\KeuanganBusiness;
 use Illuminate\Validation\ValidationException;
 
 trait RoleManagement {
@@ -45,6 +46,7 @@ trait RoleManagement {
             }; 
             $business = $business->create(['admin_id' => $this->getKey()]);
             $business_id = $business->id;
+            KeuanganBusiness::create(['business_id' => $business_id]);
         }
 
         // return static::roles()->attach($role_id, ['business_id' => $business_id, 'kode_user' => $kode_user]);
