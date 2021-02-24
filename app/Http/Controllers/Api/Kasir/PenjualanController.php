@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api\Kasir;
 
-use App\Models\Member;
 use App\Models\Product;
 use App\Models\Penjualan;
 use Illuminate\Http\Request;
@@ -10,10 +9,6 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PenjualanResource;
-use App\Models\KeuanganBusiness;
-
-use function PHPUnit\Framework\throwException;
-
 use Illuminate\Validation\ValidationException;
 
 class PenjualanController extends Controller
@@ -97,8 +92,10 @@ class PenjualanController extends Controller
                 }
                 $penjualan->status = 'finished';
                 $penjualan->update();
-                $penjualan->kasir->increment('number_of_transaction', 1);
-                $penjualan->kasir->increment('total_penjualan', $penjualan->total_price);
+                if( $this->checkAuthRole('kasir') ) {
+                    $penjualan->kasir->increment('number_of_transaction', 1);
+                    $penjualan->kasir->increment('total_penjualan', $penjualan->total_price);
+                }
                 $penjualan->business->keuangan->increment('pemasukan', $penjualan->total_price);
                 $penjualan->business->keuangan->increment('saldo', $penjualan->total_price);
             

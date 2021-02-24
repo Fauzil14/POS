@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Controller extends BaseController
 {
@@ -36,6 +37,10 @@ class Controller extends BaseController
         $image_url = json_decode($response->getBody())->image->display_url;
 
         return $image_url;
+    }
+
+    public function checkAuthRole($check) {
+        return Auth::user()->role == $check ? true : false; 
     }
 
     // public function optionalResponse()

@@ -19,7 +19,7 @@ class Pembelian extends Model
     ];
 
     public function pembelian_product() {
-        return $this->belongsToMany('App\Models\Product', 'detail_pembelians')->withPivot('pembelian_id', 'product_id', 'quantity', 'harga_beli', 'diskon', 'subtotal_harga');
+        return $this->belongsToMany('App\Models\Product', 'detail_pembelians')->withPivot('pembelian_id', 'product_id', 'quantity', 'harga_beli', 'subtotal_harga');
     }
 
     public function detail_pembelian() {

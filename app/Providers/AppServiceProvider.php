@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Pembelian;
 use App\Models\User;
+use App\Observers\PembelianObserver;
 use Illuminate\Support\Str;
 use App\Validation\BailingValidator;
 use Illuminate\Support\Facades\Auth;
@@ -33,6 +35,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Pembelian::observe(PembelianObserver::class);
+
         // change email notification message
         VerifyEmail::toMailUsing(function (User $user, string $verificationUrl) {
             return (new MailMessage)
