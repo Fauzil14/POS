@@ -19,7 +19,6 @@ class CreateDetailPembeliansTable extends Migration
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->integer('quantity');
             $table->decimal('harga_beli', 15, 2);
-            $table->tinyInteger('diskon');
             $table->decimal('subtotal_harga', 20, 2);
             $table->timestamps();
         });

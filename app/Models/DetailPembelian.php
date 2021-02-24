@@ -11,7 +11,6 @@ class DetailPembelian extends Model
         ,'product_id'
         ,'quantity'
         ,'harga_beli'
-        ,'diskon'
         ,'subtotal_harga'
     ];
 

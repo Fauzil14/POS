@@ -58,6 +58,7 @@ Route::middleware('jwt.verify')->group(function() {
 
     Route::prefix('staff')->middleware('can:staff')->group(function() {
         Route::post('new-product', 'ProductController@newProduct');
+        Route::get('cari-supplier/{keyword?}', 'SupplierController@cariSupplier');
 
         Route::prefix('pembelian')->group(function() {
             Route::get('form', 'PembelianController@getFormPembelian');

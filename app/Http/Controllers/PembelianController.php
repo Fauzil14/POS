@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class PembelianController extends Controller
 {
-    public function getFormPembelian(Pembelian $pembelian) 
+    public function getFormPembelian($supplier_id, Pembelian $pembelian) 
     {
         $kode_transaksi = $pembelian->kodeTransaksi();
 

@@ -34,6 +34,11 @@ trait CodeGenerator {
             case request()->is('*/pembelian/*') : 
                 $prenumb = 2;
                 $kode_user = $user->staff()->first()->kode_user;
+                if(static::where('staff_id', $user->id)->exists()) {
+                    $last_number = $this->parseCode(static::latest()->where('staff_id', $user->id)->first()->kode_transaksi, 7, 0) + 1;
+                } else {
+                    $last_number = 1;
+                }
                 break;
         }
 

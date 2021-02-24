@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api\Staff;
 
 use App\Models\Product;
+use App\Models\Pembelian;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 
 class PembelianController extends Controller
@@ -14,23 +16,22 @@ class PembelianController extends Controller
             'product_id'     => ['required', 'exists:products,id'],
             'quantity'       => ['required_with:product_id', 'integer'],
             'harga_beli'     => ['required'],
-            'diskon'         => ['nullable']
         ]);
 
         $product = Product::find($validatedData['product_id']);
 
-        $penjualan = Penjualan::find($validatedData['penjualan_id']);
-        $penjualan->detail_penjualan()->updateOrCreate([
+        $pembelian = Pembelian::find($validatedData['pembelian_id']);
+        $pembelian->detail_pembelian()->updateOrCreate([
             'product_id'     => $validatedData['product_id'],
         ],[ 
             'quantity'       => $validatedData['quantity'],
-            'harga_jual'     => $product->harga_jual,
-            'diskon'         => $product->diskon,
-            'subtotal_harga' => ($validatedData['quantity'] * $product->harga_jual) - (($product->harga_jual * $product->diskon) / 100),
+            'harga_beli'     => $product->harga_beli,
+            'subtotal_harga' => $validatedData['quantity'] * $product->harga_beli,
         ]);
-        $penjualan->total_price = $penjualan->detail_penjualan()->sum('subtotal_harga');
-        $penjualan->update();
-        $data = new PenjualanResource($penjualan->refresh());
+        $pembelian->total_price = $pembelian->detail_pembelian()->sum('subtotal_harga');
+        $pembelian->update();
+        $data = $pembelian->refresh();
+        // $data = new PembelianResource($pembelian->refresh());
 
         return response()->json($data);
     }

@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Helpers\CodeGenerator;
 use Illuminate\Database\Eloquent\Model;
 
 class Pembelian extends Model
 {
+    use CodeGenerator;
+
     protected $fillable = [
         'kode_transaksi'
         ,'business_id'
@@ -25,6 +28,10 @@ class Pembelian extends Model
 
     public function business() {
         return $this->hasOne('App\Models\Business', 'id', 'business_id');
+    }
+
+    public function supplier() {
+        return $this->hasOne('App\Models\Supplier', 'id', 'supplier_id');
     }
 
     public function staff() {
