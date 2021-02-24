@@ -22,10 +22,10 @@ class SupplierController extends Controller
         if( count($data) == 0 ) {
             throw ValidationException::withMessages(['supplier' => 'Supplier dengan kata kunci yang anda masukkan tidak ditemukan']);
         }
-        if ( Route::current()->action['prefix'] == "api") {
+
+        if ( Route::current()->action['prefix'] == "api/staff") {
             return response()->json($data);
-        } else {
-            dd('data to view');
-        }
+        } 
+        dd('data to view');
     }
 }

@@ -38,11 +38,11 @@ Route::namespace('Api')->group(function() {
 
 Route::middleware('jwt.verify')->group(function() {
     
-    Route::get('/cari-barang/{keyword?}', 'ProductController@cariBarang');
+    Route::get('/cari-barang/{keyword?}', 'ProductController@cariBarang')->middleware('can:has-any-role');
     Route::put('/business/update', 'BusinessController@updateBusiness')->middleware('can:admin');
 
     // Kasir    
-    Route::prefix('kasir')->middleware('can:kasir')->group(function() {
+    Route::prefix('kasir')->middleware('can:admin-kasir')->group(function() {
         Route::prefix('member')->group(function() {
             Route::get('/cari/{keyword?}', 'MemberController@cariMember');
             Route::post('/create', 'MemberController@createMember');
@@ -56,12 +56,12 @@ Route::middleware('jwt.verify')->group(function() {
         });
     });
 
-    Route::prefix('staff')->middleware('can:staff')->group(function() {
+    Route::prefix('staff')->middleware('can:admin-staff')->group(function() {
         Route::post('new-product', 'ProductController@newProduct');
         Route::get('cari-supplier/{keyword?}', 'SupplierController@cariSupplier');
 
         Route::prefix('pembelian')->group(function() {
-            Route::get('form', 'PembelianController@getFormPembelian');
+            Route::get('form/{supplier_id}', 'PembelianController@getFormPembelian');
             Route::post('create-detail', 'Api\Staff\PembelianController@createDetailPembelian');
             Route::post('finish', 'Api\Staff\PembelianController@finishPembelian');
         });

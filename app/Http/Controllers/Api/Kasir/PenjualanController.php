@@ -22,10 +22,13 @@ class PenjualanController extends Controller
     {
         $validatedData = $request->validate([
             'penjualan_id' => ['required', Rule::exists('penjualans','id')->where('status','unfinished') ],
-            'product_id'   => ['required', Rule::exists('products','id')->where(function($q) use ($request) {
-                $q->where('stok', '>', $request->quantity);
-            })],
-            'quantity'     => ['required_with:product_id', 'integer'], //The field under validation must be present and not empty only if any of the other specified fields are present.
+            'product_id'   => ['required', 'exists:products,id'],
+            'quantity'     => ['required_with:product_id', 'integer', function($attribute, $value, $fail) use ($request) {
+                if(Product::find($request->product_id)->stok < $request->quantity) {
+                    $fail('Jumlah stok dari produk tidak mencukupi untuk transaksi');
+                }
+            }], 
+            //The field under validation must be present and not empty only if any of the other specified fields are present.
         ]);
         
         $product = Product::find($validatedData['product_id']);
@@ -96,9 +99,9 @@ class PenjualanController extends Controller
                 $penjualan->update();
                 $penjualan->kasir->increment('number_of_transaction', 1);
                 $penjualan->kasir->increment('total_penjualan', $penjualan->total_price);
-                $keuangan = new KeuanganBusiness;
-                $keuangan->increment('pemasukan', $penjualan->total_price);
-                $keuangan->increment('saldo', $penjualan->total_price);
+                $penjualan->business->keuangan->increment('pemasukan', $penjualan->total_price);
+                $penjualan->business->keuangan->increment('saldo', $penjualan->total_price);
+            
             DB::commit();
 
             $data = new PenjualanResource($penjualan->refresh());

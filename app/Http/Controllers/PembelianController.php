@@ -18,6 +18,7 @@ class PembelianController extends Controller
         $data = Pembelian::firstOrCreate([
             'business_id'    => $user->roles->pluck('pivot.business_id')->first(),
             'staff_id'       => $user->id,
+            'supplier_id'    => $supplier_id,
             'status'         => 'unfinished',
         ],[ 'kode_transaksi' => $kode_transaksi ]);
         
