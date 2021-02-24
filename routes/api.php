@@ -56,6 +56,14 @@ Route::middleware('jwt.verify')->group(function() {
         });
     });
 
-    // Route::prefix('staff')->
+    Route::prefix('staff')->middleware('can:staff')->group(function() {
+        Route::post('new-product', 'ProductController@newProduct');
+
+        Route::prefix('pembelian')->group(function() {
+            Route::get('form', 'PembelianController@getFormPembelian');
+            Route::post('create-detail', 'Api\Staff\PembelianController@createDetailPembelian');
+            Route::post('finish', 'Api\Staff\PembelianController@finishPembelian');
+        });
+    });
 });
 

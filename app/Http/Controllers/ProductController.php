@@ -28,4 +28,9 @@ class ProductController extends Controller
         } 
         dd('data to view');
     }
+
+    public function newProduct(Request $request) 
+    {
+        
+    }
 }

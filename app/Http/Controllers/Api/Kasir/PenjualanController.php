@@ -22,8 +22,8 @@ class PenjualanController extends Controller
     {
         $validatedData = $request->validate([
             'penjualan_id' => ['required', Rule::exists('penjualans','id')->where('status','unfinished') ],
-            'product_id'   => ['required', Rule::exists('products','id')->where(function($q) {
-                $q->where('stok', '>', 0);
+            'product_id'   => ['required', Rule::exists('products','id')->where(function($q) use ($request) {
+                $q->where('stok', '>', $request->quantity);
             })],
             'quantity'     => ['required_with:product_id', 'integer'], //The field under validation must be present and not empty only if any of the other specified fields are present.
         ]);
@@ -76,7 +76,7 @@ class PenjualanController extends Controller
                 if( $penjualan->jenis_pembayaran == 'debit' ) {
                     if($penjualan->member->saldo < $penjualan->total_price) {
                         throw ValidationException::withMessages([
-                            'saldo' => 'Jumlah saldo yang anda miliki tidak mencukupi untuk melakakun transaksi',
+                            'message' => 'Jumlah saldo yang anda miliki tidak mencukupi untuk melakakun transaksi',
                             'saldo_member' => $penjualan->member->saldo
                         ]);
                     }
@@ -85,7 +85,7 @@ class PenjualanController extends Controller
                 } else {
                     if($validatedData['dibayar'] < $penjualan->total_price) {
                         throw ValidationException::withMessages([
-                            'dibayar' => 'Uang yang anda bayar tidak mencukupi untuk melakakun transaksi',
+                            'message' => 'Uang yang anda bayar tidak mencukupi untuk melakakun transaksi',
                             'kekurangan'  => $validatedData['dibayar'] - $penjualan->total_price
                         ]); 
                     }

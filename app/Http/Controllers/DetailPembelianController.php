@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class BusinessTransactionController extends Controller
+class DetailPembelianController extends Controller
 {
     //
 }
