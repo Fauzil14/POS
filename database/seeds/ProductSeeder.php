@@ -63,7 +63,7 @@ class ProductSeeder extends Seeder
         foreach($raws as $raw) {
             $harga_beli = rand(300, 100000);
             $diskon = rand(0, 50);
-            $harga_jual = $harga_beli + (($harga_beli * ($diskon + 10) / 100));
+            $harga_jual = round($harga_beli + (($harga_beli * ($diskon + 10) / 100)), 0, PHP_ROUND_HALF_UP);
 
             $seed[] = [
                         'nama' => $raw[3],
