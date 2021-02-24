@@ -55,5 +55,7 @@ Route::middleware('jwt.verify')->group(function() {
             Route::post('finish', 'Api\Kasir\PenjualanController@finishPenjualan');
         });
     });
+
+    // Route::prefix('staff')->
 });
 

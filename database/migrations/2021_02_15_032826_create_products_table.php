@@ -21,8 +21,8 @@ class CreateProductsTable extends Migration
             $table->foreignId('category_id')->constrained('categories');
             $table->foreignId('supplier_id')->constrained('suppliers');
             $table->integer('stok');
-            $table->bigInteger('harga_beli');
-            $table->bigInteger('harga_jual');
+            $table->decimal('harga_beli', 15, 0);
+            $table->decimal('harga_jual', 15, 0);
             $table->tinyInteger('diskon');
             $table->timestamps();
         });

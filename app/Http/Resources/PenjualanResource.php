@@ -19,6 +19,7 @@ class PenjualanResource extends JsonResource
             "id" => $this->id,
             "kode_transaksi" => $this->kode_transaksi,
             "business_id" => $this->business_id,
+            "diskon_member" => $this->business->diskon_member,
             "kasir_id" => $this->kasir_id,
             "member_id" => $this->member_id,
             "total_price" => $this->total_price,

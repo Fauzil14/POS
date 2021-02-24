@@ -18,9 +18,9 @@ class CreateDetailPenjualansTable extends Migration
             $table->foreignId('penjualan_id')->constrained('penjualans')->onDelete('cascade');
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->integer('quantity');
-            $table->integer('harga_jual');
-            $table->integer('diskon');
-            $table->integer('subtotal_harga');
+            $table->decimal('harga_jual', 15, 0);
+            $table->tinyInteger('diskon');
+            $table->double('subtotal_harga');
             $table->timestamps();
         });
     }
