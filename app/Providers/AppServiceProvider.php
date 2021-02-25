@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
-use App\Models\Pembelian;
 use App\Models\User;
-use App\Observers\PembelianObserver;
+use App\Models\Pembelian;
+use App\Models\Penjualan;
 use Illuminate\Support\Str;
+use App\Observers\PembelianObserver;
+use App\Observers\PenjualanObserver;
 use App\Validation\BailingValidator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;

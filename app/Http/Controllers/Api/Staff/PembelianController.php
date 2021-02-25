@@ -51,7 +51,6 @@ class PembelianController extends Controller
 
         $pembelian = Pembelian::findOrFail($validatedData['pembelian_id']);
 
-
         try {
             DB::beginTransaction();
                 if($pembelian->business->keuangan->saldo < $pembelian->total_price) {  

@@ -44,7 +44,7 @@ class PenjualanController extends Controller
         return response()->json($data);
     }
 
-    public function finishPenjualan(Request $request)
+    public function finishPenjualan(Request $request) // if a controller has multiple update method it will loop the updated Model event
     {
         $validatedData = $request->validate([
             'penjualan_id'     => ['required', Rule::exists('penjualans','id')->where('status', 'unfinished')],
@@ -96,6 +96,10 @@ class PenjualanController extends Controller
                     $penjualan->kasir->increment('number_of_transaction', 1);
                     $penjualan->kasir->increment('total_penjualan', $penjualan->total_price);
                 }
+                $product = new Product;
+                $penjualan->detail_penjualan->pluck('quantity', 'product_id')->each(function($item, $key) use ($product) {
+                    $product->where('id',$key)->decrement('stok', $item);
+                });
                 $penjualan->business->keuangan->increment('pemasukan', $penjualan->total_price);
                 $penjualan->business->keuangan->increment('saldo', $penjualan->total_price);
             

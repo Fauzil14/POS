@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Helpers\CodeGenerator;
+use App\Observers\PenjualanObserver;
 use Illuminate\Database\Eloquent\Model;
 
 class Penjualan extends Model
@@ -24,10 +25,10 @@ class Penjualan extends Model
     protected static function boot() {
         parent::boot();
 
-        static::creating(function($query) {
-            $query->jenis_pembayaran = 'tunai';
+        static::creating(function($model) {
+            $model->jenis_pembayaran = 'tunai';
         });
-    }
+    }                      
 
     public function penjualan_product() {
         return $this->belongsToMany('App\Models\Product', 'detail_penjualans')->withPivot('penjualan_id', 'product_id', 'quantity', 'harga_jual', 'diskon', 'subtotal_harga');

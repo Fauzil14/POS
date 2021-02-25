@@ -10,9 +10,10 @@ class PembelianObserver
     public function updated(Pembelian $pembelian) {
         $product = new Product;
         if($pembelian->status == 'finished') {
-            $pembelian->detail_pembelian()->get(['product_id', 'harga_beli', 'harga_jual'])->each(function($item, $key) use ($product) {
+            $pembelian->detail_pembelian()->get(['product_id', 'harga_beli', 'harga_jual', 'quantity'])->each(function($item, $key) use ($product) {
                 $change = $product->find($item->product_id);
                 $change->harga_beli = $item->harga_beli;
+                $change->stok += $item->quantity;
                 if( !is_null($item->harga_jual) ) {
                     $change->harga_jual = $item->harga_jual;
                 }

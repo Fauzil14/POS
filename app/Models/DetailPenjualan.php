@@ -15,6 +15,8 @@ class DetailPenjualan extends Model
                             ,'subtotal_harga'
                          ];
 
+    // protected $touches = ['Penjualan'];
+
     public function product() {
         return $this->hasOne('App\Models\Product', 'id', 'product_id');
     }
