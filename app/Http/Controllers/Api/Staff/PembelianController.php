@@ -21,6 +21,7 @@ class PembelianController extends Controller
             'product_id'     => ['required', 'exists:products,id'],
             'quantity'       => ['required_with:product_id', 'integer'],
             'harga_beli'     => ['required'],
+            'harga_jual'     => ['sometimes'],
         ]);
 
         $product = Product::find($validatedData['product_id']);
@@ -30,7 +31,8 @@ class PembelianController extends Controller
             'product_id'     => $validatedData['product_id'],
         ],[ 
             'quantity'       => $validatedData['quantity'],
-            'harga_beli'     => $validatedData['harga_beli'] ?? $product->harga_beli,
+            'harga_beli'     => $validatedData['harga_beli'],
+            'harga_jual'     => isset($validatedData['harga_jual']) ? $validatedData['harga_jual'] : null ,
             'subtotal_harga' => $validatedData['quantity'] * ($validatedData['harga_beli'] ?? $product->harga_beli),
         ]);
         $pembelian->total_price = $pembelian->detail_pembelian()->sum('subtotal_harga');
@@ -48,6 +50,7 @@ class PembelianController extends Controller
         ]);
 
         $pembelian = Pembelian::findOrFail($validatedData['pembelian_id']);
+
 
         try {
             DB::beginTransaction();
@@ -73,23 +76,21 @@ class PembelianController extends Controller
                     $pembelian->staff->increment('number_of_transaction', 1);
                     $pembelian->staff->increment('total_pembelian', $pembelian->total_price);
                 }
-                $pembelian->business->keuangan->increment('pengeluaran', $pembelian->total_price);
-                $pembelian->business->keuangan->increment('saldo', $pembelian->total_price);
 
             DB::commit();
 
             $data = new PembelianResource($pembelian->refresh());
 
             return $this->sendResponse('success', 'Transaksi berhasil', $data, 200);
-        // } catch(ValidationException $e) {
-        //     DB::rollBack();
-        //     return response()->json([
-        //         'status' => 'failed',
-        //         'error' => $e->errors()
-        //     ]);
-        // } catch(\Throwable $e) {
-        //     DB::rollback();
-        //     return $this->sendResponse('failed', 'Transaksi gagal', $e->getMessage(), 200);
-        // }
+        } catch(ValidationException $e) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 'failed',
+                'error' => $e->errors()
+            ]);
+        } catch(\Throwable $e) {
+            DB::rollback();
+            return $this->sendResponse('failed', 'Transaksi gagal', $e->getMessage(), 200);
+        }
     }
 }
