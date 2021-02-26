@@ -15,7 +15,14 @@ class DetailPembelian extends Model
         ,'subtotal_harga'
     ];
 
+    /* $touches update the parent timestamp when the child model is updated */
+    protected $touches = ['Pembelian']; // need relation
+
     public function product() {
         return $this->hasOne('App\Models\Product', 'id', 'product_id');
+    }
+
+    public function pembelian() {
+        return $this->hasOne('App\Models\Pembelian', 'id', 'pembelian_id');
     }
 }

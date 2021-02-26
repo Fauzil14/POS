@@ -23,7 +23,7 @@ class CreateProductsTable extends Migration
             $table->integer('stok');
             $table->decimal('harga_beli', 15, 2);
             $table->decimal('harga_jual', 15, 2);
-            $table->tinyInteger('diskon');
+            $table->tinyInteger('diskon')->nullable();
             $table->timestamps();
         });
     }

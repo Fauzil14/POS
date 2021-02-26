@@ -31,6 +31,16 @@ class ProductController extends Controller
 
     public function newProduct(Request $request) 
     {
-        
+        $validatedData = $request->validate([
+            'UID'         => 'unique:products',
+            'merek'       => 'required',
+            'nama'        => 'required',
+            'category_id' => 'required',
+            'supplier_id' => 'required', 
+            'stok'        => 'required',
+            'harga_beli'  => 'required',
+            'harga_jual'  => 'required',
+            'diskon'      => 'required',
+        ]);
     }
 }

@@ -7,9 +7,13 @@ use App\Models\Product;
 
 class PembelianObserver
 {
-    public function updated(Pembelian $pembelian) {
-        $product = new Product;
+
+
+    public function updated(Pembelian $pembelian) 
+    {
+        
         if($pembelian->status == 'finished') {
+            $product = new Product;
             $pembelian->detail_pembelian()->get(['product_id', 'harga_beli', 'harga_jual', 'quantity'])->each(function($item, $key) use ($product) {
                 $change = $product->find($item->product_id);
                 $change->harga_beli = $item->harga_beli;

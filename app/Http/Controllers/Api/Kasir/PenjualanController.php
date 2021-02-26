@@ -34,8 +34,10 @@ class PenjualanController extends Controller
         ],[ 
             'quantity'       => $validatedData['quantity'],
             'harga_jual'     => $product->harga_jual,
-            'diskon'         => $product->diskon,
-            'subtotal_harga' => ($validatedData['quantity'] * $product->harga_jual) - (($product->harga_jual * $product->diskon) / 100),
+            'diskon'         => $product->diskon ,
+            'subtotal_harga' => is_null($product->diskon) 
+                                ? $validatedData['quantity'] * $product->harga_jual 
+                                : ($validatedData['quantity'] * $product->harga_jual) - (($product->harga_jual * $product->diskon) / 100),
         ]);
         $penjualan->total_price = $penjualan->detail_penjualan()->sum('subtotal_harga');
         $penjualan->update();

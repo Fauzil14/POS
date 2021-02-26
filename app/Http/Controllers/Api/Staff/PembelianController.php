@@ -24,8 +24,6 @@ class PembelianController extends Controller
             'harga_jual'     => ['sometimes'],
         ]);
 
-        $product = Product::find($validatedData['product_id']);
-
         $pembelian = Pembelian::find($validatedData['pembelian_id']);
         $pembelian->detail_pembelian()->updateOrCreate([
             'product_id'     => $validatedData['product_id'],
@@ -33,12 +31,13 @@ class PembelianController extends Controller
             'quantity'       => $validatedData['quantity'],
             'harga_beli'     => $validatedData['harga_beli'],
             'harga_jual'     => isset($validatedData['harga_jual']) ? $validatedData['harga_jual'] : null ,
-            'subtotal_harga' => $validatedData['quantity'] * ($validatedData['harga_beli'] ?? $product->harga_beli),
+            'subtotal_harga' => $validatedData['quantity'] * $validatedData['harga_beli'],
         ]);
+
         $pembelian->total_price = $pembelian->detail_pembelian()->sum('subtotal_harga');
         $pembelian->update();
-        $data = $pembelian->refresh();
-        $data = new PembelianResource($pembelian->refresh());
+        
+        $data = new PembelianResource($pembelian);
 
         return response()->json($data);
     }
@@ -69,8 +68,6 @@ class PembelianController extends Controller
                 $pembelian->status = 'finished';
                 $pembelian->update();
 
-                $pembelian->refresh();
-
                 if( $this->checkAuthRole('staff') ) {
                     $pembelian->staff->increment('number_of_transaction', 1);
                     $pembelian->staff->increment('total_pembelian', $pembelian->total_price);
@@ -78,7 +75,7 @@ class PembelianController extends Controller
 
             DB::commit();
 
-            $data = new PembelianResource($pembelian->refresh());
+            $data = new PembelianResource($pembelian);
 
             return $this->sendResponse('success', 'Transaksi berhasil', $data, 200);
         } catch(ValidationException $e) {

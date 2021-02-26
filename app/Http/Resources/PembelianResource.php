@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\DetailPembelianResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PembelianResource extends JsonResource
@@ -24,7 +25,7 @@ class PembelianResource extends JsonResource
             "status" => $this->status,
             "created_at" => $this->created_at,
             "updated_at" => $this->updated_at,
-            "detail_pembelian" => $this->detail_pembelian,
+            "detail_pembelian" => DetailPembelianResource::collection($this->detail_pembelian),
         ];
     }
 }
