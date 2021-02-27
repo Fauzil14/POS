@@ -32,7 +32,7 @@ class ProductController extends Controller
     public function newProduct(Request $request) 
     {
         $validatedData = $request->validate([
-            'UID'         => 'unique:products',
+            'UID'         => 'unique:products|min:7',
             'merek'       => 'required',
             'nama'        => 'required',
             'category_id' => 'required',
@@ -40,7 +40,11 @@ class ProductController extends Controller
             'stok'        => 'required',
             'harga_beli'  => 'required',
             'harga_jual'  => 'required',
-            'diskon'      => 'required',
+            'diskon'      => 'nullable',
         ]);
+
+        $product = Product::create($validatedData);
+    
+        return response()->json($product);
     }
 }

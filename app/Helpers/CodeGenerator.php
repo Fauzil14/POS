@@ -3,7 +3,6 @@
 namespace App\Helpers;
 
 use App\Models\User;
-use App\Models\Member;
 use App\Models\RoleUser;
 use Illuminate\Support\Facades\Auth;
 
@@ -58,6 +57,13 @@ trait CodeGenerator {
         }
 
         return $now->format('y') . sprintf("%03d",$now->dayOfYear) . $now->format('H') . sprintf("%04d", $last_number);
+    }
+
+    public function kodeProduct($supplier_id, $category_id)
+    {   // 7 digits
+        $last_number = (int) $this->parseCode(static::latest()->whereRaw('LENGTH(UID) = ?', [7])->first(), 5, 0) + 1;
+
+        return sprintf("%02d", $supplier_id) . sprintf("%02d", $category_id) . sprintf("%03d", $last_number);
     }
 
 }
