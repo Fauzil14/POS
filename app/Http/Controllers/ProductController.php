@@ -35,8 +35,8 @@ class ProductController extends Controller
             'UID'         => 'unique:products|min:7',
             'merek'       => 'required',
             'nama'        => 'required',
-            'category_id' => 'required',
-            'supplier_id' => 'required', 
+            'category_id' => 'required|exists:categories,id',
+            'supplier_id' => 'required|exists:suppliers,id', 
             'stok'        => 'required',
             'harga_beli'  => 'required',
             'harga_jual'  => 'required',
@@ -45,6 +45,8 @@ class ProductController extends Controller
 
         $product = Product::create($validatedData);
     
-        return response()->json($product);
+        if($request->wantsJson()) {
+            return response()->json($product);
+        }
     }
 }
