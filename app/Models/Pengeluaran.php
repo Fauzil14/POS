@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pengeluaran extends Model
 {
+    const CREATED_AT = null; // disable created_at columm on creating
+
+    public $timestamps = ['updated_at'];
+
     protected $fillable = [
         'tanggal'
         ,'business_id'

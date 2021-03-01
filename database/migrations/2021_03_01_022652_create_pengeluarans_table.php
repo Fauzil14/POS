@@ -17,7 +17,7 @@ class CreatePengeluaransTable extends Migration
             $table->id();
             $table->date('tanggal');
             $table->foreignId('business_id')->constrained('businesses');
-            $table->decimal('total_pengeluaran', 15, 2);
+            $table->decimal('total_pengeluaran', 15, 2)->default(0);
             $table->timestamp('updated_at');
         });
     }

@@ -27,8 +27,8 @@ class CreateBebansTable extends Migration
                     ('Beban Penyewaan Gedung'),
                     ('Beban Angkut Penjualan'),
                     ('Harga Pokok Penjualan'),
-                    ('Beban Lain-Lain'),
-                ");
+                    ('Beban Lain-Lain')
+                  ");
     }
 
     /**
