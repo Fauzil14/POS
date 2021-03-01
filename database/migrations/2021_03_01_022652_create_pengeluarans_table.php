@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreatePengeluaransTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('pengeluarans', function (Blueprint $table) {
+            $table->id();
+            $table->date('tanggal');
+            $table->foreignId('business_id')->constrained('businesses');
+            $table->decimal('total_pengeluaran', 15, 2);
+            $table->timestamp('updated_at');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('pengeluarans');
+    }
+}
