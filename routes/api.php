@@ -65,6 +65,11 @@ Route::middleware('jwt.verify')->group(function() {
             Route::post('create-detail', 'Api\Staff\PembelianController@createDetailPembelian');
             Route::post('finish', 'Api\Staff\PembelianController@finishPembelian');
         });
+
+        Route::prefix('pengeluaran')->group(function() {
+            Route::get('/get/{waktu}', 'PengeluaranController@getPengeluaran');
+            Route::post('/make', 'PengeluaranController@makePengeluaran');
+        });
     });
 });
 

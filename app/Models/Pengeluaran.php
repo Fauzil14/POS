@@ -15,4 +15,7 @@ class Pengeluaran extends Model
     public function detail_pengeluaran() {
         return $this->hasMany('App\Models\DetailPengeluaran', 'pengeluaran_id', 'id');
     }
+
+    
+
 }

@@ -20,7 +20,7 @@ class CreateBebansTable extends Migration
             $table->timestamps();
         });
 
-        DB::raw("INSERT INTO bebans(jenis_beban) VALUES 
+        DB::insert("INSERT INTO bebans(jenis_beban) VALUES 
                     ('Beban Gaji Karyawan'),
                     ('Beban Listrik'),
                     ('Beban Air'),
