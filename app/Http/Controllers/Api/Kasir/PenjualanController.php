@@ -97,6 +97,10 @@ class PenjualanController extends Controller
                 if( $this->checkAuthRole('kasir') ) {
                     $penjualan->kasir->increment('number_of_transaction', 1);
                     $penjualan->kasir->increment('total_penjualan', $penjualan->total_price);
+                    if( $penjualan->kasir->status == 'on_shift' ) {
+                        $penjualan->kasir->shift->increment('transaction_on_shift', 1);
+                        $penjualan->kasir->shift->increment('total_penjualan_on_shift', $penjualan->total_price);
+                    };
                 }
                 $product = new Product;
                 $penjualan->detail_penjualan->pluck('quantity', 'product_id')->each(function($item, $key) use ($product) {
