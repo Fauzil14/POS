@@ -24,7 +24,7 @@ class ProductController extends Controller
             throw ValidationException::withMessages(['barang' => 'Barang dengan kata kunci yang anda masukkan tidak ditemukan']);
         }
         if ( Route::current()->action['prefix'] == "api") {
-            return response()->json($data);
+            return $this->sendResponse('success', 'Product baru berhasil di tambahkan', $data, 200);
         } 
         dd('data to view');
     }
