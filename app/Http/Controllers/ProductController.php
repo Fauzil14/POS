@@ -32,7 +32,7 @@ class ProductController extends Controller
     public function newProduct(Request $request) 
     {
         $validatedData = $request->validate([
-            'UID'         => 'unique:products|min:7',
+            'UID'         => 'sometimes|unique:products|min:8',
             'merek'       => 'required',
             'nama'        => 'required',
             'category_id' => 'required|exists:categories,id',
