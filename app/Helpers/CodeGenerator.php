@@ -61,8 +61,8 @@ trait CodeGenerator {
 
     public function kodeProduct($supplier_id, $category_id)
     {   // 7 digits
-        if(static::latest()->whereRaw('LENGTH(UID) = ?', [7])->exists()) {
-            $last_number = (int) $this->parseCode(static::latest()->whereRaw('LENGTH(UID) = ?', [7])->first()->UID, 5, 0) + 1;
+        if(static::latest()->whereRaw('LENGTH(uid) = ?', [7])->exists()) {
+            $last_number = (int) $this->parseCode(static::latest()->whereRaw('LENGTH(uid) = ?', [7])->first()->uid, 5, 0) + 1;
         } else {
             $last_number = 1;
         }

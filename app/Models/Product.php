@@ -10,7 +10,7 @@ class Product extends Model
     use CodeGenerator;
 
     protected $fillable = [
-        'UID'
+        'uid'
         ,'merek'
         ,'nama'
         ,'category_id'
@@ -26,7 +26,7 @@ class Product extends Model
         parent::boot();
 
         static::creating(function($query) {
-            $query->UID = parent::setKodeProduct($query->supplier_id, $query->category_id);
+            $query->uid = parent::setKodeProduct($query->supplier_id, $query->category_id);
             $query->diskon = !is_null($query->diskon) ? $query->diskon : null;
         });
     }

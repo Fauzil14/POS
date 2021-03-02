@@ -12,7 +12,7 @@ class ProductController extends Controller
     public function cariBarang($keyword = null) {
 
         $data = Product::where(function($query) use ($keyword) {
-            $query->where('UID', $keyword)
+            $query->where('uid', $keyword)
                   ->orWhere(function($query) use ($keyword) {
                         $lkey = strtolower($keyword);
                         return $query->whereRaw('lower(nama) like (?)',["%{$lkey}%"])
@@ -32,7 +32,7 @@ class ProductController extends Controller
     public function newProduct(Request $request) 
     {
         $validatedData = $request->validate([
-            'UID'         => 'sometimes|unique:products|min:8',
+            'uid'         => 'sometimes|unique:products|min:8',
             'merek'       => 'required',
             'nama'        => 'required',
             'category_id' => 'required|exists:categories,id',

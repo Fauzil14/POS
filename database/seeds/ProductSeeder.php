@@ -67,7 +67,7 @@ class ProductSeeder extends Seeder
 
             $seed[] = [
                         'nama' => $raw[3],
-                        'UID' => $raw[0],
+                        'uid' => $raw[0],
                         'harga_beli' => $harga_beli,
                         'harga_jual' => $harga_jual,
                         'category_id' => $raw[1],
