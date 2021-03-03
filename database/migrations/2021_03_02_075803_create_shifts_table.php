@@ -18,8 +18,8 @@ class CreateShiftsTable extends Migration
             $table->foreignId('kasir_id')->constrained('kasirs');
             $table->timestamp('start_time');
             $table->timestamp('end_time')->nullable();
-            $table->integer('transaction_on_shift')->default(0);
-            $table->double('total_penjualan_on_shift', 20, 2)->default(0);
+            $table->integer('transaction_on_shift');
+            $table->double('total_penjualan_on_shift', 20, 2);
         });
     }
 

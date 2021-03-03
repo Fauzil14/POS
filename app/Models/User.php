@@ -65,4 +65,8 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
     public function staff() {
         return $this->hasMany('App\Models\Staff', 'user_id', 'id');
     }
+
+    public function request_role() {
+        return $this->hasOne(RequestRole::class, 'user_id', 'id');
+    }
 }

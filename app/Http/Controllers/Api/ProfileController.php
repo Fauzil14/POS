@@ -11,6 +11,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -41,6 +42,8 @@ class ProfileController extends Controller
 
             return response()->json(['token_absent']);
         }
+
+        $user = new UserResource($user);
         
         return $this->sendResponse('success', 'User data successfully obtained', $user, 200);
     }
@@ -103,10 +106,14 @@ class ProfileController extends Controller
     }
 
     public function setSelfAsAdmin() {
+                 
+        $user = User::find(Auth::id());
+        if($user->request_role->exists()) {
+            throw ValidationException::withMessages(['role' => 'Anda sudah mengirim permintaan role sebagai ' . Role::find($user->request_role->role_id)->role_name]);
+        }
 
-        $data = DB::transaction(function() {
-            
-            $user = User::find(Auth::id());
+        $data = DB::transaction(function() use ($user) {
+
             $user->assignRole('admin'); 
             
             return $user->admin_business()->first();

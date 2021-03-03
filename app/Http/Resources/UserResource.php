@@ -23,6 +23,7 @@ class UserResource extends JsonResource
             'profile_picture'   => $this->profile_picture,
             'role'              => $this->roles()->first()->role_name ?? "Anda belum memiliki role",
             'business_id'       => $this->roles->pluck('pivot.business_id')->first() ?? "Anda belum memiliki bisnis",
+            'is_on_shift'       => $this->when($this->roles()->first()->role_name == 'kasir', $this->kasir->first()->status),
         ];
     }
 }

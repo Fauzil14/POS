@@ -98,8 +98,8 @@ class PenjualanController extends Controller
                     $penjualan->kasir->increment('number_of_transaction', 1);
                     $penjualan->kasir->increment('total_penjualan', $penjualan->total_price);
                     if( $penjualan->kasir->status == 'on_shift' ) {
-                        $penjualan->kasir->shift->increment('transaction_on_shift', 1);
-                        $penjualan->kasir->shift->increment('total_penjualan_on_shift', $penjualan->total_price);
+                        $penjualan->kasir->shift->where('end_time', null)->first()->increment('transaction_on_shift', 1);
+                        $penjualan->kasir->shift->where('end_time', null)->first()->increment('total_penjualan_on_shift', $penjualan->total_price);
                     };
                 }
                 $product = new Product;

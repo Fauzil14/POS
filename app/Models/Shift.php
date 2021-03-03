@@ -17,6 +17,19 @@ class Shift extends Model
 
     public $timestamps = false;
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function($model) {
+            $model->kasir->update(['status' => 'on_shift']);
+        });
+
+        static::updated(function($model) {
+            $model->kasir->update(['status' => 'not_on_shift']);
+        });
+    }
+
     public function kasir() {
         return $this->hasOne(Kasir::class, 'id', 'kasir_id');
     }
