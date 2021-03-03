@@ -20,7 +20,7 @@ class CreateBusinessTransactionsTable extends Migration
             $table->enum('jenis_transaksi', ['penjualan', 'pembelian', 'pengeluaran']);
             $table->decimal('pemasukan', 15, 2)->default(0);
             $table->decimal('pengeluaran', 15, 2)->default(0);
-            $table->double('saldo_saat_ini', 20, 2);
+            $table->double('saldo_transaksi', 20, 2);
             $table->timestamps();
         });
     }

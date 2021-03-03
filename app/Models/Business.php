@@ -33,7 +33,7 @@ class Business extends Model
     }
 
     public function business_transaction() {
-        return $this->hasMany(BusinessTransaction::class, 'business_id', 'id')
+        return $this->hasMany(BusinessTransaction::class, 'business_id', 'id');
     }
 
 }

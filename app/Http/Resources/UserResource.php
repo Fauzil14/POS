@@ -14,7 +14,7 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $result = [
             'name'              => $this->name,
             'email'             => $this->email,
             'email_verified_at' => $this->email_verified_at,
@@ -23,7 +23,16 @@ class UserResource extends JsonResource
             'profile_picture'   => $this->profile_picture,
             'role'              => $this->roles()->first()->role_name ?? "Anda belum memiliki role",
             'business_id'       => $this->roles->pluck('pivot.business_id')->first() ?? "Anda belum memiliki bisnis",
-            'is_on_shift'       => $this->when($this->roles()->first()->role_name == 'kasir', $this->kasir->first()->status),
         ];
+
+        if(isset($this->roles()->first()->role_name)) {
+            if($this->roles()->first()->role_name == 'kasir') {
+                $result = array_merge($result, [
+                    'is_on_shift'   => $this->kasir->first()->status
+                ]);
+            }
+        }
+        
+        return $result;
     }
 }

@@ -15,7 +15,7 @@ class BusinessTransaction extends Model
         ,'jenis_transaksi'
         ,'pemasukan'
         ,'pengeluaran'
-        ,'saldo_saat_ini'
+        ,'saldo_transaksi'
     ];
 
     public function penjualan() {

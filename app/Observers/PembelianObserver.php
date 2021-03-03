@@ -23,6 +23,12 @@ class PembelianObserver
                 }
                 $change->update();
             });
+            $pembelian->business->business_transaction()->create([
+                'transaction_id'    => $pembelian->id,
+                'jenis_transaksi'   => 'pembelian',
+                'pengeluaran'       => $pembelian->total_price,
+                'saldo_transaksi'   => $pembelian->business->keuangan->saldo - $pembelian->total_price
+            ]);
             $pembelian->business->keuangan->increment('pengeluaran', $pembelian->total_price);
             $pembelian->business->keuangan->decrement('saldo', $pembelian->total_price);
         }
