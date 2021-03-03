@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\BusinessTransaction;
 use Illuminate\Database\Eloquent\Model;
 
 class Pengeluaran extends Model
@@ -20,6 +21,8 @@ class Pengeluaran extends Model
         return $this->hasMany('App\Models\DetailPengeluaran', 'pengeluaran_id', 'id');
     }
 
-    
+    public function business_transaction() {
+        return $this->hasOne(BusinessTransaction::class, 'transcaction_id', 'id');
+    }
 
 }

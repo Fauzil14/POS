@@ -106,6 +106,11 @@ class PenjualanController extends Controller
                 $penjualan->detail_penjualan->pluck('quantity', 'product_id')->each(function($item, $key) use ($product) {
                     $product->where('id',$key)->decrement('stok', $item);
                 });
+                $penjualan->business->business_transaction()->create([
+                    'jenis_transaksi'   => 'penjualan',
+                    'pemasukan'         => $penjualan->total_price,
+                    'saldo_saat_ini'    => $penjualan->business->keuangan->saldo + $penjualan->total_price
+                ]);
                 $penjualan->business->keuangan->increment('pemasukan', $penjualan->total_price);
                 $penjualan->business->keuangan->increment('saldo', $penjualan->total_price);
             

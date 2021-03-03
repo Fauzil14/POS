@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Helpers\CodeGenerator;
+use App\Models\BusinessTransaction;
 use App\Observers\PenjualanObserver;
 use Illuminate\Database\Eloquent\Model;
 
@@ -48,5 +49,9 @@ class Penjualan extends Model
 
     public function member() {
         return $this->hasOne('App\Models\Member', 'id', 'member_id');
+    }
+
+    public function business_transaction() {
+        return $this->hasOne(BusinessTransaction::class, 'transcaction_id', 'id');
     }
 }

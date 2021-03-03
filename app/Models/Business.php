@@ -32,4 +32,8 @@ class Business extends Model
         return $this->hasOne('App\Models\KeuanganBusiness', 'business_id', 'id');
     }
 
+    public function business_transaction() {
+        return $this->hasMany(BusinessTransaction::class, 'business_id', 'id')
+    }
+
 }
