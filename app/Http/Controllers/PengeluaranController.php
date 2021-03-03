@@ -39,26 +39,18 @@ class PengeluaranController extends Controller
             'subtotal_pengeluaran'  => 'required_with:beban_id',
         ]);
         
-        // $pengeluaran = Pengeluaran::create([
-        //     'tanggal'     => isset($validatedData['tanggal']) ? $validatedData['tanggal'] : today()->format('Y-m-d'),
-        //     'business_id' => RoleUser::firstWhere('user_id', Auth::id())->business_id,
-        // ]);
+        $pengeluaran = Pengeluaran::firstOrCreate([
+            'tanggal'     => isset($validatedData['tanggal']) ? $validatedData['tanggal'] : today()->format('Y-m-d'),
+            'business_id' => RoleUser::firstWhere('user_id', Auth::id())->business_id,
+        ]);
 
-        // $pengeluaran->detail_pengeluaran()->create([
-        //     'pegawai_id'            => Auth::id(),
-        //     'beban_id'              => $validatedData['beban_id'],
-        //     'deskripsi'             => $validatedData['deskripsi'],
-        //     'subtotal_pengeluaran'  => $validatedData['subtotal_pengeluaran'],
-        // ]);
-
-        $pengeluaran = new Pengeluaran;
-        $pengeluaran->tanggal     = isset($validatedData['tanggal']) ? $validatedData['tanggal'] : today()->format('Y-m-d');
-        $pengeluaran->business_id = RoleUser::firstWhere('user_id', Auth::id())->business_id;
-        $pengeluaran->detail_pengeluaran->pegawai_id            = Auth::id();
-        $pengeluaran->detail_pengeluaran->beban_id              = $validatedData['beban_id'];
-        $pengeluaran->detail_pengeluaran->deskripsi             = $validatedData['deskripsi'];
-        $pengeluaran->detail_pengeluaran->subtotal_pengeluaran  = $validatedData['subtotal_pengeluaran'];
-        $pengeluaran->push();
+        $pengeluaran->detail_pengeluaran()->create([
+            'pegawai_id'            => Auth::id(),
+            'beban_id'              => $validatedData['beban_id'],
+            'deskripsi'             => $validatedData['deskripsi'],
+            'subtotal_pengeluaran'  => $validatedData['subtotal_pengeluaran'],
+        ]);
+        event('eloquent.saved: App\Models\Pengeluaran', $pengeluaran);
 
         if( $request->wantsJson() ) {
             return response()->json($pengeluaran);
