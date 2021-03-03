@@ -17,6 +17,15 @@ class Pengeluaran extends Model
         ,'total_pengeluaran'
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saved(function($model) {
+            $model->total_pengeluaran = $model->detail_pengeluaran()->sum('subtotal_pengeluaran');
+        });
+    }
+
     public function detail_pengeluaran() {
         return $this->hasMany('App\Models\DetailPengeluaran', 'pengeluaran_id', 'id');
     }
