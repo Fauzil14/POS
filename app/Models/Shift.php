@@ -21,6 +21,11 @@ class Shift extends Model
     {
         parent::boot();
 
+        static::creating(function($query) {
+            $query->transaction_on_shift = 0;
+            $query->total_penjualan_on_shift = 0;
+        });
+
         static::created(function($model) {
             $model->kasir->update(['status' => 'on_shift']);
         });
