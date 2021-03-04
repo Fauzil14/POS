@@ -72,7 +72,7 @@ Route::middleware('jwt.verify')->group(function() {
         });
 
         Route::prefix('pengeluaran')->group(function() {
-            Route::get('/get/{waktu}', 'PengeluaranController@getPengeluaran');
+            Route::get('/get/{waktu}', 'PengeluaranController@getPengeluaran')->name('api-get-pengeluaran');
             Route::post('/make', 'PengeluaranController@makePengeluaran');
         });
     });

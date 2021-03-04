@@ -116,7 +116,8 @@ class ProfileController extends Controller
 
             $user->assignRole('admin'); 
             
-            return $user->admin_business()->first();
+            // The put() method sets the given key and value in the collection:
+            return collect($user->admin_business()->first())->put('role', $user->roles()->first()->role_name);
         });
 
         return $this->sendResponse('success', 'Business successfully made', $data, 200);

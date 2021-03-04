@@ -23,10 +23,9 @@ class PengeluaranController extends Controller
                                             return $q->whereMonth('tanggal', now()->month)->get();
                                         });
                                     })->get();
-        
 
-        if( Route::current()->action['prefix'] == "api" ) {
-            return $this->sendResponse('success', 'Transaksi berhasil', $pengeluaran, 200); 
+        if( Route::currentRouteName() == "api-get-pengeluaran" ) {
+            return $this->sendResponse('success', "Pengeluaran $waktu", $pengeluaran, 200); 
         }
     }
 
