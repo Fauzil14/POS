@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 
 class Business extends Model
@@ -15,6 +16,10 @@ class Business extends Model
         ,'logo_bisnis'
         ,'diskon_member'
     ];
+
+    public function product() {
+        return $this->hasOne(Product::class, 'business_id', 'id');
+    }
 
     public function admin_business() {
         return $this->hasOne('App\Models\Users', 'id','admin_id');

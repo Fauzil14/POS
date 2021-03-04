@@ -66,6 +66,7 @@ class ProductSeeder extends Seeder
             $harga_jual = $harga_beli + (($harga_beli * ($diskon + 10) / 100));
 
             $seed[] = [
+                        'business_id' => 2,
                         'nama' => $raw[3],
                         'uid' => $raw[0],
                         'harga_beli' => $harga_beli,

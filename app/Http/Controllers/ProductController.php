@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\ValidationException;
 
@@ -24,7 +25,7 @@ class ProductController extends Controller
             throw ValidationException::withMessages(['barang' => 'Barang dengan kata kunci yang anda masukkan tidak ditemukan']);
         }
         if ( Route::current()->action['prefix'] == "api") {
-            return $this->sendResponse('success', 'Product baru berhasil di tambahkan', $data, 200);
+            return $this->sendResponse('success', 'Product berhasil di dapat', $data, 200);
         } 
         dd('data to view');
     }

@@ -8,7 +8,6 @@ use App\Models\Product;
 class PembelianObserver
 {
 
-
     public function updated(Pembelian $pembelian) 
     {
         

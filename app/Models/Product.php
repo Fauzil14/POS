@@ -2,15 +2,19 @@
 
 namespace App\Models;
 
+use App\Models\Business;
 use App\Helpers\CodeGenerator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Product extends Model
 {
     use CodeGenerator;
 
     protected $fillable = [
-        'uid'
+        'business_id'
+        ,'uid'
         ,'merek'
         ,'nama'
         ,'category_id'
@@ -25,7 +29,12 @@ class Product extends Model
     {
         parent::boot();
 
+        static::addGlobalScope('business', function(Builder $builder) {
+            $builder->where('business_id', Auth::user()->roles->pluck('pivot.business_id')->first());
+        });
+
         static::creating(function($query) {
+            $query->business_id = Auth::user()->roles->pluck('pivot.business_id')->first();
             $query->uid = parent::setKodeProduct($query->supplier_id, $query->category_id);
             $query->diskon = !is_null($query->diskon) ? $query->diskon : null;
         });
@@ -39,5 +48,7 @@ class Product extends Model
         return $this->belongsToMany('App\Models\Penjualan', 'detail_penjualans')->withPivot('penjualan_id', 'product_id', 'quantity', 'harga_jual', 'diskon', 'subtotal_harga');
     }
 
-    
+    public function business() {
+        return $this->hasOne(Business::class, 'id', 'business_id');
+    }    
 }
