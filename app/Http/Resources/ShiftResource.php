@@ -23,7 +23,9 @@ class ShiftResource extends JsonResource
             'end_time'                 => is_null($this->end_time) ? $this->end_time : $this->end_time->toDateTimeString(),
             'transaction_on_shift'     => $this->transaction_on_shift,
             'total_penjualan_on_shift' => $this->total_penjualan_on_shift,
-            'duration'                 => $this->when(is_null($this->end_time) == false, $this->end_time->timespan($this->start_time))
+            $this->mergeWhen(is_null($this->end_time) == false, [
+                'duration' => $this->end_time->timespan($this->start_time)
+            ])
         ];
     }
 }
