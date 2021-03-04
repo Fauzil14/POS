@@ -21,7 +21,7 @@ class Pengeluaran extends Model
     {
         parent::boot();
 
-        static::saved(function($model) {
+        static::updated(function($model) {
             $model->total_pengeluaran = $model->detail_pengeluaran()->sum('subtotal_pengeluaran');
         });
     }

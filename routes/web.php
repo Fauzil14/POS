@@ -26,5 +26,4 @@ Route::get('/cari-barang/{keyword?}', 'ProductController@cariBarang');
 
 Route::prefix('dashboard')->middleware(['verified'])->group(function() {
     Route::get('/', 'HomeController@dashboard')->name('dashboard');
-    
 });

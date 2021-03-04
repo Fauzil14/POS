@@ -108,7 +108,7 @@ class ProfileController extends Controller
     public function setSelfAsAdmin() {
                  
         $user = User::find(Auth::id());
-        if($user->request_role->exists()) {
+        if(!is_null($user->request_role()->first())) {
             throw ValidationException::withMessages(['role' => 'Anda sudah mengirim permintaan role sebagai ' . Role::find($user->request_role->role_id)->role_name]);
         }
 

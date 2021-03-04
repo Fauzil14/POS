@@ -17,13 +17,14 @@ class PengeluaranController extends Controller
         $pengeluaran = Pengeluaran::where('business_id', RoleUser::firstWhere('user_id', Auth::id())->business_id)
                                     ->where(function($query) use ($waktu) {
                                         $query->when($waktu == 'hari_ini', function($q) {
-                                           $q->whereDate('tanggal', today()); 
+                                           return $q->whereDate('tanggal', today()); 
                                         });
                                         $query->when($waktu == 'bulan_ini', function($q) {
-                                            $q->whereMonth('tanggal', now()->month);
+                                            return $q->whereMonth('tanggal', now()->month)->get();
                                         });
                                     })->get();
         
+
         if( Route::current()->action['prefix'] == "api" ) {
             return $this->sendResponse('success', 'Transaksi berhasil', $pengeluaran, 200); 
         }
@@ -50,10 +51,10 @@ class PengeluaranController extends Controller
             'deskripsi'             => $validatedData['deskripsi'],
             'subtotal_pengeluaran'  => $validatedData['subtotal_pengeluaran'],
         ]);
-        event('eloquent.saved: App\Models\Pengeluaran', $pengeluaran);
+        event('eloquent.updated: App\Models\Pengeluaran', $pengeluaran);
 
         if( $request->wantsJson() ) {
-            return response()->json($pengeluaran);
+            return response()->json($pengeluaran->load('detail_pengeluaran'));
         }
     }
    
