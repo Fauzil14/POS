@@ -57,7 +57,7 @@ Route::middleware('jwt.verify')->group(function() {
     });
     
     Route::prefix('kasir/shift')->middleware('can:kasir')->group(function() {
-        Route::get('/start', 'ShiftController@startShift');
+        Route::get('/start', 'ShiftController@startShift')->name('api-shift-start');
         Route::get('/end', 'ShiftController@endShift');
     });
     
