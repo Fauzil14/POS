@@ -47,6 +47,14 @@ class UserSeeder extends Seeder
                         'alamat'            => 'DIY',
                     ],
                     [
+                        'name'              => 'kasir 2',
+                        'email'             => 'kasir2@gmail.com',
+                        'email_verified_at' => now(),
+                        'password'          => Hash::make('password'),
+                        'umur'              => 22,
+                        'alamat'            => 'DIY',
+                    ],
+                    [
                         'name'              => 'staff',
                         'email'             => 'staff@gmail.com',
                         'email_verified_at' => now(),
@@ -54,6 +62,15 @@ class UserSeeder extends Seeder
                         'umur'              => 30,
                         'alamat'            => 'DI Yogyakarta',
                     ],
+                    [
+                        'name'              => 'staff 2',
+                        'email'             => 'staff2@gmail.com',
+                        'email_verified_at' => now(),
+                        'password'          => Hash::make('password'),
+                        'umur'              => 29,
+                        'alamat'            => 'DI Yogyakarta',
+                    ],
+                    
                  ];
 
         // 1 = admin 
@@ -61,7 +78,7 @@ class UserSeeder extends Seeder
         // 3 = kasir 
         // 4 = staff
                  
-        $roles = ['admin', 'admin', 'pimpinan', 'kasir', 'staff'];
+        $roles = ['admin', 'admin', 'pimpinan', 'kasir', 'kasir', 'staff', 'staff'];
 
         $user = new User;
         foreach($pegawai_seeds as $key => $value) {

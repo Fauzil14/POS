@@ -15,12 +15,12 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('business_id')->constrained('businesses');
+            $table->foreignId('business_id')->constrained('businesses')->onDelete('cascade');
             $table->string('uid', 13)->unique();
             $table->string('merek');
             $table->string('nama');
-            $table->foreignId('category_id')->constrained('categories');
-            $table->foreignId('supplier_id')->constrained('suppliers');
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
+            $table->foreignId('supplier_id')->constrained('suppliers')->onDelete('cascade');
             $table->integer('stok');
             $table->decimal('harga_beli', 15, 2);
             $table->decimal('harga_jual', 15, 2);

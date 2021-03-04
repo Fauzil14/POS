@@ -54,13 +54,13 @@ Route::middleware('jwt.verify')->group(function() {
             Route::post('create-detail', 'Api\Kasir\PenjualanController@createDetailPenjualan');
             Route::post('finish', 'Api\Kasir\PenjualanController@finishPenjualan');
         });
-
-        Route::prefix('shift')->middleware('can:kasir')->group(function() {
-            Route::get('/start', 'ShiftController@startShift');
-            Route::get('/end', 'ShiftController@endShift');
-        });
     });
-
+    
+    Route::prefix('kasir/shift')->middleware('can:kasir')->group(function() {
+        Route::get('/start', 'ShiftController@startShift');
+        Route::get('/end', 'ShiftController@endShift');
+    });
+    
     Route::prefix('staff')->middleware('can:admin-staff')->group(function() {
         Route::post('new-product', 'ProductController@newProduct');
         Route::get('cari-supplier/{keyword?}', 'SupplierController@cariSupplier');

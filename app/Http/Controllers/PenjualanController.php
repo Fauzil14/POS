@@ -4,10 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\PenjualanResource;
 use App\Models\User;
-use App\Models\Product;
 use App\Models\Penjualan;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 
 class PenjualanController extends Controller

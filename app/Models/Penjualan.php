@@ -29,7 +29,15 @@ class Penjualan extends Model
         static::creating(function($model) {
             $model->jenis_pembayaran = 'tunai';
         });
-    }                      
+    }
+    
+    public function scopeHarian($query, $tanggal = null) {
+        $query->whereDate('created_at', is_null($tanggal) ? today() : $tanggal);
+    }
+
+    public function scopeBulanan($query, $tahun = null) {
+        $query->whereYear('created_at', is_null($tahun) ? now()->year() : $tahun);
+    }
 
     public function penjualan_product() {
         return $this->belongsToMany('App\Models\Product', 'detail_penjualans')->withPivot('penjualan_id', 'product_id', 'quantity', 'harga_jual', 'diskon', 'subtotal_harga');

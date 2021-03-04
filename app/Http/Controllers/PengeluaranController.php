@@ -20,7 +20,7 @@ class PengeluaranController extends Controller
                                            return $q->whereDate('tanggal', today()); 
                                         });
                                         $query->when($waktu == 'bulan_ini', function($q) {
-                                            return $q->whereMonth('tanggal', now()->month)->get();
+                                            return $q->whereMonth('tanggal', now()->month);
                                         });
                                     })->get();
 
