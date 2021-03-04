@@ -30,9 +30,13 @@ class Penjualan extends Model
             $model->jenis_pembayaran = 'tunai';
         });
     }
+
+    public function scopeDate($query, $tanggal) {
+        $query->whereDate('created_at', $tanggal);
+    }
     
-    public function scopeHarian($query, $tanggal = null) {
-        $query->whereDate('created_at', is_null($tanggal) ? today() : $tanggal);
+    public function scopeHarian($query, $bulan = null) {
+        $query->whereMonth('created_at', is_null($bulan) ? now()->month() : $bulan);
     }
 
     public function scopeBulanan($query, $tahun = null) {

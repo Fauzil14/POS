@@ -32,7 +32,6 @@ class ShiftController extends Controller
             throw ValidationException::withMessages(['message' => 'Shfit anda belum berjalan']);
         }
 
-
         $shift = Shift::where(function($q) {
             $q->where('kasir_id', Auth::user()->kasir->first()->id)
                 ->where('end_time', null);

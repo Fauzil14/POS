@@ -76,5 +76,9 @@ Route::middleware('jwt.verify')->group(function() {
             Route::post('/make', 'PengeluaranController@makePengeluaran');
         });
     });
+
+    Route::prefix('pimpinan')->middleware('can:pimpinan')->group(function() {
+        Route::get('laporan/{jenis_laporan}/{waktu}', 'Api\LaporanController@getLaporan');
+    });
 });
 
