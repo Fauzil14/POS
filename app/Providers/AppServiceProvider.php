@@ -38,6 +38,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Pembelian::observe(PembelianObserver::class);
+        Penjualan::observe(PenjualanObserver::class);
 
         // change email notification message
         VerifyEmail::toMailUsing(function (User $user, string $verificationUrl) {

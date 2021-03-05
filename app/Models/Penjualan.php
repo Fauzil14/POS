@@ -26,9 +26,20 @@ class Penjualan extends Model
     protected static function boot() {
         parent::boot();
 
-        static::creating(function($model) {
-            $model->jenis_pembayaran = 'tunai';
-        });
+        
+        // static::creating(function($query) {
+        //     if( request('member_id') !== null ) {
+        //         $query->member_id = request('member_id');
+        //         if( !is_null($query->business->diskon_member) ) {
+        //             $query->total_price = $query->total_price - (($query->total_price * $query->business->diskon_member) / 100);  
+        //         }
+        //         $query->jenis_pembayaran = request('jenis_pembayaran');
+        //         $query->update();
+        //     } else {
+        //         $query->jenis_pembayaran = 'tunai';
+        //     }
+        // });
+        
     }
 
     public function scopeDate($query, $tanggal) {

@@ -41,7 +41,8 @@ class PenjualanController extends Controller
         ]);
         $penjualan->total_price = $penjualan->detail_penjualan()->sum('subtotal_harga');
         $penjualan->update();
-        $data = new PenjualanResource($penjualan->refresh());
+        // event('eloquent.updated: App\Models\Penjualan', $penjualan);
+        $data = new PenjualanResource($penjualan);
 
         return response()->json($data);
     }
@@ -59,20 +60,14 @@ class PenjualanController extends Controller
 
         $penjualan = Penjualan::findOrFail($validatedData['penjualan_id']);
         
+        if( isset($validatedData['member_id']) ) {
+            event('eloquent.creating: App\Models\Penjualan', $penjualan);
+        }
+
         try {
         
             DB::beginTransaction();
                 
-                if( isset($validatedData['member_id']) ) {
-                    $penjualan->member_id = $validatedData['member_id'];
-                    if( !is_null($penjualan->business->diskon_member) ) {
-                        $penjualan->total_price = $penjualan->total_price - (($penjualan->total_price * $penjualan->business->diskon_member) / 100);  
-                    }
-                    $penjualan->jenis_pembayaran = $validatedData['jenis_pembayaran'];
-                }
-                $penjualan->update();
-                
-                $penjualan->refresh();
                 if( $penjualan->jenis_pembayaran == 'debit' ) {
                     if($penjualan->member->saldo < $penjualan->total_price) {
                         throw ValidationException::withMessages([
@@ -82,6 +77,7 @@ class PenjualanController extends Controller
                     }
                     $penjualan->dibayar = $penjualan->total_price;
                     $penjualan->member->decrement('saldo', $penjualan->total_price);
+                    
                 } else {
                     if($validatedData['dibayar'] < $penjualan->total_price) {
                         throw ValidationException::withMessages([
@@ -94,26 +90,6 @@ class PenjualanController extends Controller
                 }
                 $penjualan->status = 'finished';
                 $penjualan->update();
-                if( $this->checkAuthRole('kasir') ) {
-                    $penjualan->kasir->increment('number_of_transaction', 1);
-                    $penjualan->kasir->increment('total_penjualan', $penjualan->total_price);
-                    if( $penjualan->kasir->status == 'on_shift' ) {
-                        $penjualan->kasir->shift->where('end_time', null)->first()->increment('transaction_on_shift', 1);
-                        $penjualan->kasir->shift->where('end_time', null)->first()->increment('total_penjualan_on_shift', $penjualan->total_price);
-                    };
-                }
-                $product = new Product;
-                $penjualan->detail_penjualan->pluck('quantity', 'product_id')->each(function($item, $key) use ($product) {
-                    $product->where('id',$key)->decrement('stok', $item);
-                });
-                $penjualan->business->business_transaction()->create([
-                    'transaction_id'    => $penjualan->id,
-                    'jenis_transaksi'   => 'penjualan',
-                    'pemasukan'         => $penjualan->total_price,
-                    'saldo_transaksi'   => $penjualan->business->keuangan->saldo + $penjualan->total_price
-                ]);
-                $penjualan->business->keuangan->increment('pemasukan', $penjualan->total_price);
-                $penjualan->business->keuangan->increment('saldo', $penjualan->total_price);
             
             DB::commit();
 

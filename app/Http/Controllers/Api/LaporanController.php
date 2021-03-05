@@ -39,8 +39,6 @@ class LaporanController extends Controller
     {
         $stok = Product::get();
         return $stok;
-        // $stok_barang = new Product;
-        
     }
 
     public function laporanTransPembelian($waktu) 
