@@ -68,11 +68,6 @@ class PembelianController extends Controller
                 $pembelian->status = 'finished';
                 $pembelian->update();
 
-                if( $this->checkAuthRole('staff') ) {
-                    $pembelian->staff->increment('number_of_transaction', 1);
-                    $pembelian->staff->increment('total_pembelian', $pembelian->total_price);
-                }
-
             DB::commit();
 
             $data = new PembelianResource($pembelian);

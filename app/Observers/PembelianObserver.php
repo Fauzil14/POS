@@ -30,6 +30,11 @@ class PembelianObserver
             ]);
             $pembelian->business->keuangan->increment('pengeluaran', $pembelian->total_price);
             $pembelian->business->keuangan->decrement('saldo', $pembelian->total_price);
+            
+            if( $pembelian->user->role == "staff" ) {
+                $pembelian->staff->increment('number_of_transaction', 1);
+                $pembelian->staff->increment('total_pembelian', $pembelian->total_price);
+            }
         }
     }
 }

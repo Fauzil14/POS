@@ -20,25 +20,36 @@ trait CodeGenerator {
     public function kodeTransaksi() {
         $user = User::find(Auth::id());
 
-        switch (TRUE) {
-            case request()->is('*/penjualan/*') : // asterrisk for wildcard
-                $prenumb = 1;
-                $kode_user = $user->kasir()->first()->kode_user;
-                if(static::where('kasir_id', $user->id)->exists()) {
-                    $last_number = $this->parseCode(static::latest()->where('kasir_id', $user->id)->first()->kode_transaksi, 7, 0) + 1;
-                } else {
-                    $last_number = 1;
-                }
-                break;
-            case request()->is('*/pembelian/*') : 
-                $prenumb = 2;
-                $kode_user = $user->staff()->first()->kode_user;
-                if(static::where('staff_id', $user->id)->exists()) {
-                    $last_number = $this->parseCode(static::latest()->where('staff_id', $user->id)->first()->kode_transaksi, 7, 0) + 1;
-                } else {
-                    $last_number = 1;
-                }
-                break;
+        if($user->role != 'admin') {
+            switch (TRUE) {
+                case request()->is('*/penjualan/*') : // asterrisk for wildcard
+                    $prenumb = 1;
+                    $kode_user = $user->kasir()->first()->kode_user;
+                    if(static::where('kasir_id', $user->id)->exists()) {
+                        $last_number = $this->parseCode(static::latest()->where('kasir_id', $user->id)->first()->kode_transaksi, 7, 0) + 1;
+                    } else {
+                        $last_number = 1;
+                    }
+                    break;
+                case request()->is('*/pembelian/*') : 
+                    $prenumb = 2;
+                    $kode_user = $user->staff()->first()->kode_user;
+                    if(static::where('staff_id', $user->id)->exists()) {
+                        $last_number = $this->parseCode(static::latest()->where('staff_id', $user->id)->first()->kode_transaksi, 7, 0) + 1;
+                    } else {
+                        $last_number = 1;
+                    }
+                    break;
+            }
+        } else {
+            request()->is('*/penjualan/*') ? $which_id = 'kasir_id' : $which_id = 'staff_id';
+            $prenumb = 0;
+            $kode_user = $user->roles->pluck('pivot.kode_user')->first();
+            if(static::where($which_id, $user->id)->exists()) {
+                $last_number = $this->parseCode(static::latest()->where($which_id, $user->id)->first()->kode_transaksi, 7, 0) + 1;
+            } else {
+                $last_number = 1;
+            }
         }
 
         return $prenumb . now()->format('y') . $kode_user . sprintf("%05d", $last_number);

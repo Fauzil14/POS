@@ -39,7 +39,7 @@ class PenjualanObserver
             $penjualan->business->keuangan->increment('pemasukan', $penjualan->total_price);
             $penjualan->business->keuangan->increment('saldo', $penjualan->total_price);
 
-            if( Auth::user()->role == 'kasir' ) {
+            if( $penjualan->user->role == 'kasir' ) {
                 $penjualan->kasir->increment('number_of_transaction', 1);
                 $penjualan->kasir->increment('total_penjualan', $penjualan->total_price);
                 if( $penjualan->kasir->status == 'on_shift' ) {

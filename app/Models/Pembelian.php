@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use App\Helpers\CodeGenerator;
 use App\Models\BusinessTransaction;
 use Illuminate\Database\Eloquent\Model;
@@ -41,6 +42,10 @@ class Pembelian extends Model
 
     public function business_transaction() {
         return $this->hasOne(BusinessTransaction::class, 'transcaction_id', 'id');
+    }
+
+    public function user() {
+        return $this->hasOne(User::class, 'id', 'staff_id');
     }
 
 }

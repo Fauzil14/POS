@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use App\Helpers\CodeGenerator;
 use App\Models\BusinessTransaction;
 use App\Observers\PenjualanObserver;
@@ -22,25 +23,6 @@ class Penjualan extends Model
                             ,'kembalian'
                             ,'status'
                           ];
-
-    protected static function boot() {
-        parent::boot();
-
-        
-        // static::creating(function($query) {
-        //     if( request('member_id') !== null ) {
-        //         $query->member_id = request('member_id');
-        //         if( !is_null($query->business->diskon_member) ) {
-        //             $query->total_price = $query->total_price - (($query->total_price * $query->business->diskon_member) / 100);  
-        //         }
-        //         $query->jenis_pembayaran = request('jenis_pembayaran');
-        //         $query->update();
-        //     } else {
-        //         $query->jenis_pembayaran = 'tunai';
-        //     }
-        // });
-        
-    }
 
     public function scopeDate($query, $tanggal) {
         $query->whereDate('created_at', $tanggal);
@@ -77,4 +59,9 @@ class Penjualan extends Model
     public function business_transaction() {
         return $this->hasOne(BusinessTransaction::class, 'transcaction_id', 'id');
     }
+
+    public function user() {
+        return $this->hasOne(User::class, 'id', 'kasir_id');
+    }
+
 }

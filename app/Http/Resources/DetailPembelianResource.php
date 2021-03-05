@@ -16,7 +16,7 @@ class DetailPembelianResource extends JsonResource
     {
         return [
             "id" => $this->id,
-            "pembelian_id" => $this->penjualan_id,
+            "pembelian_id" => $this->pembelian_id,
             "product_id" => $this->product_id,
             "nama_product" => $this->product->nama,
             "quantity" => $this->quantity,
