@@ -30,5 +30,6 @@ Route::prefix('dashboard')->middleware(['verified'])->group(function() {
     Route::prefix('inventaris')->group(function() {
 
         Route::get('/', 'ProductController@index')->name('inventaris');
+        Route::post('new-product', 'ProductController@newProduct')->name('inventaris.new-product');
     });
 });

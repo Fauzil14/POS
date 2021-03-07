@@ -18,8 +18,8 @@
         </div>
         <div class="col-sm-6">
           <div class="d-flex justify-content-end">
-            <a class="btn btn-default ng-binding mr-2"><!-- react-text: 735 -->Total : <!-- /react-text --><!-- react-text: 830 -->{{ count($products) }}<!-- /react-text --></a>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-primary">
+            <a class="btn btn-default ng-binding mr-2"><!-- react-text: 735 -->Total Produk : <!-- /react-text --><!-- react-text: 830 -->{{ count($products) }}<!-- /react-text --></a>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-lg">
               Tambah Produk
             </button>
           </div>
@@ -73,6 +73,102 @@
       <!-- /.row -->
     </div>
     <!-- /.container-fluid -->
+
+    <div class="modal fade" id="modal-lg">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Tambah Produk Baru</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+            <div class="modal-body">
+              'category_id'
+              'supplier_id'
+              'stok'
+
+                      <!-- form start -->
+                      <form method="POST" action="{{ route('inventaris.new-product') }}" class="form-horizontal">
+                        @csrf
+
+                        <input type="hidden" name="user_role" value="bendahara">
+
+                        <div class="card-body">
+                          <p class="mb-1">Informasi Umum</p>
+                          <hr class="mt-0">
+                          <div class="form-group row">
+                            <label class="col-sm-2 col-form-label" for="uid">UID</label>
+                            <div class="col-sm-10">
+                              <input type="text" class="form-control @error('uid', 'tambah') is-invalid @enderror" name="uid" id="uid" placeholder="Masukkan Kode Produk (Optional)">
+                              @error('uid', 'tambah')
+                                <strong class="error-message" style="color: red;">{{ $message }}</strong>
+                              @enderror
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label class="col-sm-2 col-form-label" for="merek">Merek</label>
+                            <div class="col-sm-10">
+                              <input type="text" class="form-control @error('merek', 'tambah') is-invalid @enderror" name="merek" id="merek" placeholder="Masukkan merek Produk">
+                              @error('merek', 'tambah')
+                                <strong class="error-message" style="color: red;">{{ $message }}</strong>
+                              @enderror
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label class="col-sm-2 col-form-label" for="nama">Nama</label>
+                            <div class="col-sm-10">
+                              <input type="text" class="form-control @error('nama', 'tambah') is-invalid @enderror" name="nama" id="nama" placeholder="Masukkan nama Produk">
+                              @error('nama', 'tambah')
+                                <strong class="error-message" style="color: red;">{{ $message }}</strong>
+                              @enderror
+                            </div>
+                          </div>
+                          <hr>
+                          <div class="row">
+                            <div class="col-sm-5">
+                              <div class="form-group">
+                                <label class="col-sm-4 col-form-label" for="harga_beli">Harga beli</label>
+                                <div class="input-group">
+                                  <div class="input-group-prepend">
+                                    <span class="input-group-text">Rp.</span>
+                                  </div>
+                                    <input type="number" class="form-control" id="harga_beli" name="harga_beli">
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-5">
+                              <label class="col-sm-4 col-form-label" for="harga_jual">Harga Jual</label>
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text">Rp.</span>
+                                </div>
+                                <input type="number" class="form-control" id="harga_jual" name="harga_jual">
+                              </div>
+                            </div>
+                            <div class="col-sm-2">
+                              <label class="col-sm-4 col-form-label" for="diskon">Diskon</label>
+                              <div class="input-group">
+                                <input type="number" class="form-control" id="diskon" name="diskon">
+                                <div class="input-group-append">
+                                  <span class="input-group-text">%</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Batalkan</button>
+              <button type="button" class="btn btn-primary">Simpan</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
   </section>
 
 
