@@ -10,6 +10,13 @@ use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller
 {
+    public function index()
+    {
+        $products = Product::get();
+
+        return view('inventaris.index', compact('products'));
+    }
+
     public function cariBarang($keyword = null) {
 
         $data = Product::where(function($query) use ($keyword) {

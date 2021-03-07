@@ -50,5 +50,13 @@ class Product extends Model
 
     public function business() {
         return $this->hasOne(Business::class, 'id', 'business_id');
-    }    
+    }
+
+    public function category() {
+        return $this->hasOne(Category::class, 'id', 'category_id');
+    }
+
+    public function supplier() {
+        return $this->hasOne(Supplier::class, 'id', 'supplier_id');
+    }
 }

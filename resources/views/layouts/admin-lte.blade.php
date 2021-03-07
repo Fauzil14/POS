@@ -205,8 +205,8 @@
                with font-awesome or any other icon font library -->
           <li class="nav-item menu-open">
             <a href="#" class="nav-link active">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
-                <i class="nav-icon fas fa-tachometer-alt"></i>
                 Dashboard
                 <i class="right fas fa-angle-left"></i>
               </p>
@@ -232,7 +232,7 @@
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-file-invoice-dollar"></i>
-              <p class="pl-2">
+              <p>
                 Laporan
                 <i class="right fas fa-angle-left"></i>
               </p>
@@ -247,7 +247,7 @@
               <li class="nav-item">
                 <a href="charts/flot.html" class="nav-link">
                   <i class="fas fa-sort-down fa-rotate-270"></i>
-                  <p class="pl-2" class="pl-2">Transaksi Pembelian</p>
+                  <p class="pl-2">Transaksi Pembelian</p>
                 </a>
               </li>
               <li class="nav-item">
@@ -267,21 +267,29 @@
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-boxes"></i>
-              <p class="pl-2">
+              <p>
                 Inventaris
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
+            <ul class="nav nav-treeview pl-3" style="display: none;">
+              <li class="nav-item">
+                <a href="{{ route('inventaris') }}" class="nav-link">
+                  <i class="fas fa-sort-down fa-rotate-270"></i>
+                  <p class="pl-2">Produk</p>
+                </a>
+              </li>
+            </ul>
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-users-cog"></i>
-              <p class="pl-2">
+              <p>
                 Karyawan
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
-            <ul class="nav nav-treeview" style="display: none;">
+            <ul class="nav nav-treeview pl-3" style="display: none;">
               <li class="nav-item">
                 <a href="charts/chartjs.html" class="nav-link">
                   <i class="fas fa-sort-down fa-rotate-270"></i>
@@ -305,7 +313,7 @@
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-id-card"></i>
-              <p class="pl-2">
+              <p>
                 Member
                 <i class="right fas fa-angle-left"></i>
               </p>
