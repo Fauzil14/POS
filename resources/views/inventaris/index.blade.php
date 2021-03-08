@@ -251,18 +251,19 @@
   });
 </script>
 
-{{-- <script>
+<script>
   $(document).ready(function() {
     var form = $("modal-lg");
 
-    $('#simpan').on('click', function() {
+    $('#simpan').on('click', function(e) {
+      e.preventDefault();
       $.ajax({
         type: form.attr("method"),
         url: form.attr("action"),
       });
     });
   });
-</script> --}}
+</script>
 
 @endsection
 
