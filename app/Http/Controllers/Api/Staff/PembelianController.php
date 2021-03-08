@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Staff;
 use App\Models\Product;
 use App\Models\Pembelian;
 use Illuminate\Http\Request;
+use App\Models\DetailPembelian;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -83,5 +84,12 @@ class PembelianController extends Controller
             DB::rollback();
             return $this->sendResponse('failed', 'Transaksi gagal', $e->getMessage(), 200);
         }
+    }
+
+    public function deleteDetailPembelian($detail_pembelian_id) 
+    {
+        $data = DetailPembelian::destroy($detail_pembelian_id);
+        
+        return $this->sendResponse('success', 'Detail pembelian berhasil di hapus', (boolean) $data, 200);
     }
 }

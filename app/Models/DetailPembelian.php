@@ -15,8 +15,15 @@ class DetailPembelian extends Model
         ,'subtotal_harga'
     ];
 
-    /* $touches update the parent timestamp when the child model is updated */
-    protected $touches = ['Pembelian']; // need relation
+    protected static function boot() {
+        parent::boot();
+
+        static::deleted(function($model) {
+            $pembelian = Pembelian::find($model->pembelian_id);
+            $pembelian->total_price = $pembelian->detail_pembelian()->sum('subtotal_harga');
+            $pembelian->update();
+        });
+    }
 
     public function product() {
         return $this->hasOne('App\Models\Product', 'id', 'product_id');

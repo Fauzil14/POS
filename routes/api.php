@@ -53,6 +53,7 @@ Route::middleware('jwt.verify')->group(function() {
             Route::get('form', 'PenjualanController@getFormPenjualan');
             Route::post('create-detail', 'Api\Kasir\PenjualanController@createDetailPenjualan');
             Route::post('finish', 'Api\Kasir\PenjualanController@finishPenjualan');
+            Route::delete('delete-detail/{detail_penjualan_id}', 'Api\Kasir\PenjualanController@deleteDetailPenjualan');
         });
     });
     
@@ -69,6 +70,7 @@ Route::middleware('jwt.verify')->group(function() {
             Route::get('form/{supplier_id}', 'PembelianController@getFormPembelian');
             Route::post('create-detail', 'Api\Staff\PembelianController@createDetailPembelian');
             Route::post('finish', 'Api\Staff\PembelianController@finishPembelian');
+            Route::delete('delete-detail/{detail_pembelian_id}', 'Api\Staff\PembelianController@deleteDetailPembelian');
         });
 
         Route::prefix('pengeluaran')->group(function() {

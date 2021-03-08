@@ -17,7 +17,23 @@ class DetailPenjualan extends Model
 
     // protected $touches = ['Penjualan'];
 
+    protected static function boot() {
+        parent::boot();
+
+        static::deleted(function($model) {
+            $penjualan = Penjualan::find($model->penjualan_id);
+            $penjualan->total_price = $penjualan->detail_penjualan()->sum('subtotal_harga');
+            $penjualan->update();
+        });
+    }
+
     public function product() {
         return $this->hasOne('App\Models\Product', 'id', 'product_id');
     }
+
+    public function penjualan() {
+        return $this->hasOne('App\Models\Penjualan', 'id', 'penjualan_id');
+    }
+
+
 }

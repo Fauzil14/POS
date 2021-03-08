@@ -9,6 +9,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PenjualanResource;
+use App\Models\DetailPenjualan;
 use Illuminate\Validation\ValidationException;
 
 class PenjualanController extends Controller
@@ -106,5 +107,13 @@ class PenjualanController extends Controller
             DB::rollback();
             return $this->sendResponse('failed', 'Transaksi gagal', $e->getMessage(), 200);
         }
+
+    }
+
+    public function deleteDetailPenjualan($detail_penjualan_id) 
+    {
+        $data = DetailPenjualan::destroy($detail_penjualan_id);
+        
+        return $this->sendResponse('success', 'Detail penjualan berhasil di hapus', (boolean) $data, 200);
     }
 }
