@@ -84,9 +84,6 @@
             </button>
           </div>
             <div class="modal-body">
-              'category_id'
-              'supplier_id'
-              'stok'
 
                       <!-- form start -->
                       <form method="POST" action="{{ route('inventaris.new-product') }}" class="form-horizontal">
@@ -124,8 +121,37 @@
                               @enderror
                             </div>
                           </div>
+                          <div class="row">
+                            <div class="col-sm-5">
+                              <div class="form-group">
+                                <label class="col-sm-6 col-form-label" for="kategori">Kategori Produk</label>
+                                <div class="col-sm">
+                                    <!-- select -->
+                                      <select class="custom-select" id="kategori">
+                                        <option>Silahkan Pilih Kategori Produk</option>
+                                        @foreach ($categories as $category)
+                                          <option value="{{ $category->id }}">{{ ucfirst($category->category_name) }}</option>
+                                        @endforeach
+                                      </select>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-7">
+                              <div class="form-group">
+                                <label class="col-sm-6 col-form-label" for="supplier">Supplier</label>
+                                <div class="col-sm">
+                                    <!-- select -->
+                                    <select class="custom-select" id="kategori">
+                                      @foreach ($suppliers as $supplier)
+                                        <option value="{{ $supplier->id }}">{{ ucfirst($supplier->nama_supplier) }}</option>
+                                      @endforeach
+                                    </select>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                           <p class="mb-0 mt-4">Kalkulasi Harga</p>
-                          <hr class="mt-0 mb-1" >
+                          <hr class="mt-0 mb-1">
                           <div class="row">
                             <div class="col-sm-5">
                               <div class="form-group">
@@ -157,16 +183,18 @@
                               </div>
                             </div>
                           </div>
-                          <div class="form-group row">
-                            <div class="col-sm-2">
-                              <label class="col-sm-4 col-form-label" for="diskon">Stok</label>
-                              <div class="input-group">
-                                <input type="number" class="form-control" id="diskon" name="diskon">
-                                <div class="input-group-append">
-                                  <span class="input-group-text">PCS</span>
+                          <p class="mb-0 mt-3">Persediaan</p>
+                          <hr class="mt-0">                         
+                          <div class="form-group row mt-3">
+                              <label class="col-sm-2 col-form-label" for="stok">Stok</label>
+                              <div class="col-sm-10">
+                                <div class="input-group">
+                                  <input type="number" class="form-control" id="stok" name="stok">
+                                  <div class="input-group-append">
+                                    <span class="input-group-text">PCS</span>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
                           </div>
                         </div>
                 

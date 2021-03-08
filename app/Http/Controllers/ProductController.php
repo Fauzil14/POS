@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Category;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -13,8 +15,10 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::get();
+        $categories = Category::get();
+        $suppliers = Supplier::get();
 
-        return view('inventaris.index', compact('products'));
+        return view('inventaris.index', compact('products', 'categories', 'suppliers'));
     }
 
     public function cariBarang($keyword = null) {
