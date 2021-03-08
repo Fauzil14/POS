@@ -86,7 +86,7 @@
             <div class="modal-body">
 
                       <!-- form start -->
-                      <form method="POST" action="{{ route('inventaris.new-product') }}" class="form-horizontal">
+                      <form method="POST" action="{{ route('inventaris.new-product') }}" class="form-horizontal" id="tambah">
                         @csrf
 
                         <div class="card-body">
@@ -122,7 +122,7 @@
                           <div class="row">
                             <div class="col-sm-5">
                               <div class="form-group">
-                                <label class="col-sm-6 col-form-label" for="category_id">Kategori Produk</label>
+                                <label class="col-sm-6 col-form-label" for="category_id">Kategori</label>
                                 <div class="col-sm">
                                     <!-- select -->
                                       <select class="custom-select" id="category_id" name="category_id">
@@ -253,13 +253,31 @@
 
 <script>
   $(document).ready(function() {
-    var form = $("modal-lg");
+    var form = $("#tambah");
 
     $('#simpan').on('click', function(e) {
       e.preventDefault();
       $.ajax({
-        type: form.attr("method"),
-        url: form.attr("action"),
+        type: form.attr('method'),
+        url: form.attr('action'),
+        // data: {
+        //   'uid': $("#uid").val(),  
+        //   'merek': $("#merek").val(),
+        //   'nama': $("#nama").val(),
+        //   'category_id': $("#category_id").val(),
+        //   'supplier_id': $("#supplier_id").val(),
+        //   'stok': $("#stok").val(),
+        //   'harga_beli': $("#harga_beli").val(),
+        //   'harga_jual': $("#harga_jual").val(),
+        //   'diskon': $("#diskon").val(),
+        // },
+        data: form.serialize(),
+        success: function(data) {
+          console.log(data);
+        },
+        error: function(data) {
+          console.log(data);
+        }
       });
     });
   });
