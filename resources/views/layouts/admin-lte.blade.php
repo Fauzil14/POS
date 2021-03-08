@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Katastima</title>
 
   <!-- Google Font: Source Sans Pro -->
@@ -379,6 +380,8 @@
 <!-- jQuery UI 1.11.4 -->
 <script src="{{ asset('plugins/jquery-ui/jquery-ui.min.js') }}"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script src="{{ asset('js/init.js')}}"></script>
+
 <script>
   $.widget.bridge('uibutton', $.ui.button)
 </script>

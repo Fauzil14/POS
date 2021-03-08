@@ -18,7 +18,7 @@
         </div>
         <div class="col-sm-6">
           <div class="d-flex justify-content-end">
-            <a class="btn btn-default ng-binding mr-2"><!-- react-text: 735 -->Total Produk : <!-- /react-text --><!-- react-text: 830 -->{{ count($products) }}<!-- /react-text --></a>
+            <a class="btn btn-default ng-binding mr-2">Total Produk : {{ count($products) }}</a>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-lg">
               Tambah Produk
             </button>
@@ -89,8 +89,6 @@
                       <form method="POST" action="{{ route('inventaris.new-product') }}" class="form-horizontal">
                         @csrf
 
-                        <input type="hidden" name="user_role" value="bendahara">
-
                         <div class="card-body">
                           <p class="mb-1">Informasi Umum</p>
                           <hr class="mt-0">
@@ -124,11 +122,11 @@
                           <div class="row">
                             <div class="col-sm-5">
                               <div class="form-group">
-                                <label class="col-sm-6 col-form-label" for="kategori">Kategori Produk</label>
+                                <label class="col-sm-6 col-form-label" for="category_id">Kategori Produk</label>
                                 <div class="col-sm">
                                     <!-- select -->
-                                      <select class="custom-select" id="kategori">
-                                        <option>Silahkan Pilih Kategori Produk</option>
+                                      <select class="custom-select" id="category_id" name="category_id">
+                                        <option selected disabled>Pilih Kategori Produk</option>
                                         @foreach ($categories as $category)
                                           <option value="{{ $category->id }}">{{ ucfirst($category->category_name) }}</option>
                                         @endforeach
@@ -138,10 +136,11 @@
                             </div>
                             <div class="col-sm-7">
                               <div class="form-group">
-                                <label class="col-sm-6 col-form-label" for="supplier">Supplier</label>
+                                <label class="col-sm-6 col-form-label" for="supplier_id">Supplier</label>
                                 <div class="col-sm">
                                     <!-- select -->
-                                    <select class="custom-select" id="kategori">
+                                    <select class="custom-select" id="supplier_id" name="supplier_id">
+                                      <option selected disabled>Pilih supplier</option>
                                       @foreach ($suppliers as $supplier)
                                         <option value="{{ $supplier->id }}">{{ ucfirst($supplier->nama_supplier) }}</option>
                                       @endforeach
@@ -198,11 +197,13 @@
                           </div>
                         </div>
                 
+                  <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Batalkan</button>
+                    <button type="submit" class="btn btn-primary" id="simpan" name="simpan">Simpan</button>
+                  </div>
+                </form>
             </div>
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Batalkan</button>
-              <button type="button" class="btn btn-primary">Simpan</button>
-            </div>
+          
         </div>
         <!-- /.modal-content -->
       </div>
@@ -249,6 +250,19 @@
     });
   });
 </script>
+
+{{-- <script>
+  $(document).ready(function() {
+    var form = $("modal-lg");
+
+    $('#simpan').on('click', function() {
+      $.ajax({
+        type: form.attr("method"),
+        url: form.attr("action"),
+      });
+    });
+  });
+</script> --}}
 
 @endsection
 
