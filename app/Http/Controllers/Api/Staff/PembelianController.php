@@ -88,8 +88,12 @@ class PembelianController extends Controller
 
     public function deleteDetailPembelian($detail_pembelian_id) 
     {
-        $data = DetailPembelian::destroy($detail_pembelian_id);
-        
-        return $this->sendResponse('success', 'Detail pembelian berhasil di hapus', (boolean) $data, 200);
+        $detail_pembelian = DetailPembelian::find($detail_pembelian_id);
+        $pembelian_id = $detail_pembelian->id;
+        $detail_pembelian->delete();
+ 
+        $data = new PembelianResource(Pembelian::find($pembelian_id));
+
+        return $this->sendResponse('success', 'Detail pembelian berhasil di hapus', $data, 200);
     }
 }

@@ -112,8 +112,12 @@ class PenjualanController extends Controller
 
     public function deleteDetailPenjualan($detail_penjualan_id) 
     {
-        $data = DetailPenjualan::destroy($detail_penjualan_id);
+        $detail_penjualan = DetailPenjualan::find($detail_penjualan_id);
+        $penjualan_id = $detail_penjualan->penjualan_id;
+        $detail_penjualan->delete();
+
+        $data = new PenjualanResource(Penjualan::find($penjualan_id));
         
-        return $this->sendResponse('success', 'Detail penjualan berhasil di hapus', (boolean) $data, 200);
+        return $this->sendResponse('success', 'Detail penjualan berhasil di hapus', $data, 200);
     }
 }

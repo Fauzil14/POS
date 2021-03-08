@@ -124,7 +124,8 @@
                               @enderror
                             </div>
                           </div>
-                          <hr>
+                          <p class="mb-0 mt-4">Kalkulasi Harga</p>
+                          <hr class="mt-0 mb-1" >
                           <div class="row">
                             <div class="col-sm-5">
                               <div class="form-group">
@@ -152,6 +153,17 @@
                                 <input type="number" class="form-control" id="diskon" name="diskon">
                                 <div class="input-group-append">
                                   <span class="input-group-text">%</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <div class="col-sm-2">
+                              <label class="col-sm-4 col-form-label" for="diskon">Stok</label>
+                              <div class="input-group">
+                                <input type="number" class="form-control" id="diskon" name="diskon">
+                                <div class="input-group-append">
+                                  <span class="input-group-text">PCS</span>
                                 </div>
                               </div>
                             </div>
