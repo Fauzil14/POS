@@ -55,11 +55,7 @@ class ProductController extends Controller
             'diskon'      => 'nullable',
         ]);
 
-        if($request->wantsJson()) {
-            return response()->json(array_filter($validatedData));
-        }
-
-        $product = Product::create($validatedData);
+        $product = Product::create(array_filter($validatedData));
     
         if($request->wantsJson()) {
             return response()->json($product);
