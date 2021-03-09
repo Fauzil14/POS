@@ -35,7 +35,7 @@ class Product extends Model
 
         static::creating(function($query) {
             $query->business_id = Auth::user()->roles->pluck('pivot.business_id')->first();
-            $query->uid = parent::setKodeProduct($query->supplier_id, $query->category_id);
+            $query->uid = !is_null($query->uid) ? $query->uid : parent::setKodeProduct($query->supplier_id, $query->category_id);
             $query->diskon = !is_null($query->diskon) ? $query->diskon : null;
         });
     }

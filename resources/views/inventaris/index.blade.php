@@ -96,7 +96,6 @@
                             <label class="col-sm-2 col-form-label" for="uid">UID</label>
                             <div class="col-sm-10">
                               <input type="text" class="form-control" name="uid" id="uid" placeholder="Masukkan Kode Produk (Optional)">
-                              {{-- <strong class="alert-message" id="uidError" style="color: red;"></strong> --}}
                               <div class="alert-message" id="uidError" style="color: red;"></div>
                             </div>
                           </div>
@@ -105,10 +104,6 @@
                             <div class="col-sm-10">
                               <input type="text" class="form-control" name="merek" id="merek" placeholder="Masukkan merek Produk">
                               <div class="alert-message" id="merekError" style="color: red;"></div>
-                              {{-- <input type="text" class="form-control @error('merek') is-invalid @enderror" name="merek" id="merek" placeholder="Masukkan merek Produk">
-                              @error('merek')
-                                <strong class="error-message" style="color: red;">{{ $message }}</strong>
-                              @enderror --}}
                             </div>
                           </div>
                           <div class="form-group row">
@@ -116,10 +111,6 @@
                             <div class="col-sm-10">
                               <input type="text" class="form-control" name="nama" id="nama" placeholder="Masukkan nama Produk">
                               <div class="alert-message" id="namaError" style="color: red;"></div>
-                              {{-- <input type="text" class="form-control @error('nama') is-invalid @enderror" name="nama" id="nama" placeholder="Masukkan nama Produk">
-                              @error('nama')
-                                <strong class="error-message" style="color: red;">{{ $message }}</strong>
-                              @enderror --}}
                             </div>
                           </div>
                           <div class="row">
@@ -208,13 +199,27 @@
                   </div>
                 </form>
             </div>
-          
+
+            <div id="toastsContainerTopRight" class="toasts-top-right fixed">
+              <div class="toast bg-success fade" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                  <strong class="mr-auto">Toast Title</strong>
+                  <small>Subtitle</small>
+                  <button data-dismiss="toast" type="button" class="ml-2 mb-1 close" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <div class="toast-body">Lorem ipsum dolor sit amet, consetetur sadipscing elitr.</div>
+              </div>
+            </div>
+
         </div>
         <!-- /.modal-content -->
       </div>
       <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
+   
   </section>
 
 
@@ -259,6 +264,7 @@
 <script>
   $(document).ready(function() {
     var form = $("#tambah");
+    var table = $('example1').DataTable();
 
     $('#simpan').on('click', function(e) {
       e.preventDefault();
@@ -267,7 +273,14 @@
         url: form.attr('action'),
         data: form.serialize(),
         success: function(data) {
-          console.log(data);
+          setTimeout(() => {
+            $(document).Toasts('create', {
+            class: 'bg-success',
+            title: 'Berhasil',
+            body: 'Produk baru berhasil ditambahkan'
+          });
+          },500);
+          table.ajax.reload();
         },
         error: function(data) {
               $('#uidError').text(data.responseJSON.error.uid);
@@ -279,11 +292,13 @@
         });
     });
 
+    $('#simpan').on('click', function() {
+      $('.alert-message').empty();
+    });
     $('#batalkan').on('click', function() {
       $('.alert-message').empty();
     });
   });
 </script>
-
 @endsection
 
