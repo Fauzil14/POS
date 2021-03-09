@@ -95,28 +95,31 @@
                           <div class="form-group row">
                             <label class="col-sm-2 col-form-label" for="uid">UID</label>
                             <div class="col-sm-10">
-                              <input type="text" class="form-control @error('uid', 'tambah') is-invalid @enderror" name="uid" id="uid" placeholder="Masukkan Kode Produk (Optional)">
-                              @error('uid', 'tambah')
-                                <strong class="error-message" style="color: red;">{{ $message }}</strong>
-                              @enderror
+                              <input type="text" class="form-control" name="uid" id="uid" placeholder="Masukkan Kode Produk (Optional)">
+                              {{-- <strong class="alert-message" id="uidError" style="color: red;"></strong> --}}
+                              <div class="alert-message" id="uidError" style="color: red;"></div>
                             </div>
                           </div>
                           <div class="form-group row">
                             <label class="col-sm-2 col-form-label" for="merek">Merek</label>
                             <div class="col-sm-10">
-                              <input type="text" class="form-control @error('merek', 'tambah') is-invalid @enderror" name="merek" id="merek" placeholder="Masukkan merek Produk">
-                              @error('merek', 'tambah')
+                              <input type="text" class="form-control" name="merek" id="merek" placeholder="Masukkan merek Produk">
+                              <div class="alert-message" id="merekError" style="color: red;"></div>
+                              {{-- <input type="text" class="form-control @error('merek') is-invalid @enderror" name="merek" id="merek" placeholder="Masukkan merek Produk">
+                              @error('merek')
                                 <strong class="error-message" style="color: red;">{{ $message }}</strong>
-                              @enderror
+                              @enderror --}}
                             </div>
                           </div>
                           <div class="form-group row">
                             <label class="col-sm-2 col-form-label" for="nama">Nama</label>
                             <div class="col-sm-10">
-                              <input type="text" class="form-control @error('nama', 'tambah') is-invalid @enderror" name="nama" id="nama" placeholder="Masukkan nama Produk">
-                              @error('nama', 'tambah')
+                              <input type="text" class="form-control" name="nama" id="nama" placeholder="Masukkan nama Produk">
+                              <div class="alert-message" id="namaError" style="color: red;"></div>
+                              {{-- <input type="text" class="form-control @error('nama') is-invalid @enderror" name="nama" id="nama" placeholder="Masukkan nama Produk">
+                              @error('nama')
                                 <strong class="error-message" style="color: red;">{{ $message }}</strong>
-                              @enderror
+                              @enderror --}}
                             </div>
                           </div>
                           <div class="row">
@@ -132,6 +135,7 @@
                                         @endforeach
                                       </select>
                                 </div>
+                                <div class="alert-message" id="categoryIdError" style="color: red;"></div>
                               </div>
                             </div>
                             <div class="col-sm-7">
@@ -146,6 +150,7 @@
                                       @endforeach
                                     </select>
                                 </div>
+                                <div class="alert-message" id="supplierIdError" style="color: red;"></div>
                               </div>
                             </div>
                           </div>
@@ -198,7 +203,7 @@
                         </div>
                 
                   <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Batalkan</button>
+                    <button type="button" class="btn btn-default" id="batalkan" data-dismiss="modal">Batalkan</button>
                     <button type="submit" class="btn btn-primary" id="simpan" name="simpan">Simpan</button>
                   </div>
                 </form>
@@ -260,25 +265,22 @@
       $.ajax({
         type: form.attr('method'),
         url: form.attr('action'),
-        // data: {
-        //   'uid': $("#uid").val(),  
-        //   'merek': $("#merek").val(),
-        //   'nama': $("#nama").val(),
-        //   'category_id': $("#category_id").val(),
-        //   'supplier_id': $("#supplier_id").val(),
-        //   'stok': $("#stok").val(),
-        //   'harga_beli': $("#harga_beli").val(),
-        //   'harga_jual': $("#harga_jual").val(),
-        //   'diskon': $("#diskon").val(),
-        // },
         data: form.serialize(),
         success: function(data) {
           console.log(data);
         },
         error: function(data) {
-          console.log(data);
-        }
-      });
+              $('#uidError').text(data.responseJSON.error.uid);
+              $('#merekError').text(data.responseJSON.error.merek);
+              $('#namaError').text(data.responseJSON.error.nama);
+              $('#categoryIdError').text(data.responseJSON.error.category_id);
+              $('#supplierIdError').text(data.responseJSON.error.supplier_id);
+           }
+        });
+    });
+
+    $('#batalkan').on('click', function() {
+      $('.alert-message').empty();
     });
   });
 </script>

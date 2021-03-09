@@ -44,7 +44,7 @@ class ProductController extends Controller
     public function newProduct(Request $request) 
     {
         $validatedData = $request->validate([
-            'uid'         => 'sometimes|unique:products|min:8',
+            'uid'         => 'nullable|unique:products|min:8',
             'merek'       => 'required',
             'nama'        => 'required',
             'category_id' => 'required|exists:categories,id',
@@ -55,7 +55,9 @@ class ProductController extends Controller
             'diskon'      => 'nullable',
         ]);
 
-        dd($validatedData);
+        if($request->wantsJson()) {
+            return response()->json(array_filter($validatedData));
+        }
 
         $product = Product::create($validatedData);
     
