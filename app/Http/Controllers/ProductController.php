@@ -67,7 +67,9 @@ class ProductController extends Controller
 
     public function show($product_id)
     {
-        $product = Product::find($product_id);
+        $product = Product::findOrFail($product_id);
+        
+        return view('inventaris.detail-product', compact('product'));
     }
 
     public function delete($product_id)
