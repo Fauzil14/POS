@@ -47,6 +47,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Two+Tone"
   rel="stylesheet">
 
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
   @yield('styles')
 
 </head>

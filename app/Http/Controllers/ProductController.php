@@ -76,7 +76,7 @@ class ProductController extends Controller
 
         try {
             $product->delete();
-
+    
             Alert::success('Berhasil', 'Data produk berhasil di hapus');
             return back();
         } catch(\Throwable $e) {

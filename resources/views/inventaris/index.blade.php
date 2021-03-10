@@ -65,12 +65,10 @@
                             <td class="text-right py-0 align-middle">
                               <div class="btn-group btn-group-sm">
                                 <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
-                                <a href="{{route('inventaris.delete.product', $product->id)}}"
-                                    onclick="event.preventDefault();
-                                              document.getElementById('delete-product-form-{{$product->id}}').submit();" 
+                                <button onclick="deleteConfirmation({{$product->id}})" 
                                     class="btn btn-danger">
                                   <i class="fas fa-trash"></i>
-                                </a>
+                                </button>
                                 <form id="delete-product-form-{{$product->id}}" class="d-none" action="{{route('inventaris.delete.product', $product->id)}}" method="post">
                                   @method('DELETE')
                                   @csrf 
@@ -318,6 +316,32 @@
       $('.alert-message').empty();
     });
   });
+</script>
+
+<script type="text/javascript">
+  function deleteConfirmation(id) {
+      Swal.fire({
+          title: "Delete?",
+          text: "Please ensure and then confirm!",
+          type: "warning",
+          showCancelButton: !0,
+          confirmButtonText: "Yes, delete it!",
+          cancelButtonText: "No, cancel!",
+          reverseButtons: !0
+      }).then(function (e) {
+
+          if (e.value === true) {
+
+              document.getElementById('delete-product-form-'+id).submit();
+
+          } else {
+              e.dismiss;
+          }
+
+      }, function (dismiss) {
+          return false;
+      })
+  }
 </script>
 @endsection
 
