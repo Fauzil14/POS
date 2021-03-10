@@ -47,6 +47,7 @@
                     <th>Stok</th>
                     <th>Harga Jual</th>
                     <th>Diskon</th>
+                    <th>Aksi</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -61,6 +62,21 @@
                             <td>{{$product->stok}}</td>
                             <td>{{$product->harga_jual}}</td>
                             <td>{{$product->diskon}}</td>
+                            <td class="text-right py-0 align-middle">
+                              <div class="btn-group btn-group-sm">
+                                <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                <a href="{{route('inventaris.delete.product', $product->id)}}"
+                                    onclick="event.preventDefault();
+                                              document.getElementById('delete-product-form-{{$product->id}}').submit();" 
+                                    class="btn btn-danger">
+                                  <i class="fas fa-trash"></i>
+                                </a>
+                                <form id="delete-product-form-{{$product->id}}" class="d-none" action="{{route('inventaris.delete.product', $product->id)}}" method="post">
+                                  @method('DELETE')
+                                  @csrf 
+                                </form>
+                              </div>
+                            </td>
                         </tr>
                     @endforeach
                   </tfoot>

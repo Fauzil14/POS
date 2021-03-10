@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Resources\ProductResource;
+use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller
@@ -58,10 +59,29 @@ class ProductController extends Controller
 
         $product = Product::create($validatedData);
         
-
         if($request->wantsJson()) {
             $product = new ProductResource($product);
             return response()->json($product);
+        }
+    }
+
+    public function show($product_id)
+    {
+        $product = Product::find($product_id);
+    }
+
+    public function delete($product_id)
+    {
+        $product = Product::findOrFail($product_id);
+
+        try {
+            $product->delete();
+
+            Alert::success('Berhasil', 'Data produk berhasil di hapus');
+            return back();
+        } catch(\Throwable $e) {
+            Alert::error('Gagal', 'Data produk gagal di hapus');
+            return back();
         }
     }
 }
