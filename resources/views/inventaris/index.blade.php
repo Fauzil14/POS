@@ -18,14 +18,15 @@
         </div>
         <div class="col-sm-6">
           <div class="d-flex justify-content-end">
-            <a class="btn btn-default ng-binding mr-2">Total Produk : {{ count($products) }}</a>
+            <a class="btn btn-default ng-binding mr-2" onClick="window.location.reload()"> <i class="fas fa-sync-alt"></i> Total Produk : {{ count($products) }}</a>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-lg">
               Tambah Produk
             </button>
           </div>
         </div>
       </div>
-    </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.container-fluid -->
   </section>
 
   <section class="content">
@@ -79,7 +80,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title">Tambah Produk Baru</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -157,6 +158,7 @@
                                   </div>
                                     <input type="number" class="form-control" id="harga_beli" name="harga_beli">
                                   </div>
+                                  <div class="alert-message" id="hargaBeliError" style="color: red;"></div>
                               </div>
                             </div>
                             <div class="col-sm-5">
@@ -167,6 +169,7 @@
                                 </div>
                                 <input type="number" class="form-control" id="harga_jual" name="harga_jual">
                               </div>
+                              <div class="alert-message" id="hargaJualError" style="color: red;"></div>
                             </div>
                             <div class="col-sm-2">
                               <label class="col-sm-4 col-form-label" for="diskon">Diskon</label>
@@ -189,12 +192,13 @@
                                     <span class="input-group-text">PCS</span>
                                   </div>
                                 </div>
+                                <div class="alert-message" id="stokError" style="color: red;"></div>
                               </div>
                           </div>
                         </div>
                 
                   <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" id="batalkan" data-dismiss="modal">Batalkan</button>
+                    <button type="button" class="btn btn-default btn-close" data-dismiss="modal">Batalkan</button>
                     <button type="submit" class="btn btn-primary" id="simpan" name="simpan">Simpan</button>
                   </div>
                 </form>
@@ -264,7 +268,6 @@
 <script>
   $(document).ready(function() {
     var form = $("#tambah");
-    var table = $('example1').DataTable();
 
     $('#simpan').on('click', function(e) {
       e.preventDefault();
@@ -276,11 +279,11 @@
           setTimeout(() => {
             $(document).Toasts('create', {
             class: 'bg-success',
-            title: 'Berhasil',
-            body: 'Produk baru berhasil ditambahkan'
+            title: 'Berhasil Menambahkan produk baru',
+            body: "UID            : "+data.uid+"<br>Merek      : "+data.merek+"<br>Nama       : "+data.nama+"<br>Kategori   : "+data.category_name+"<br>Supplier   : "+data.nama_supplier+"<br>Harga Beli : Rp. "+data.harga_beli+"<br>Harga Jual : Rp. "+data.harga_jual+"<br>Diskon     : "+data.diskon+"<br>Stok       : "+data.stok
           });
           },500);
-          table.ajax.reload();
+          $('.alert-message').empty();
         },
         error: function(data) {
               $('#uidError').text(data.responseJSON.error.uid);
@@ -288,14 +291,14 @@
               $('#namaError').text(data.responseJSON.error.nama);
               $('#categoryIdError').text(data.responseJSON.error.category_id);
               $('#supplierIdError').text(data.responseJSON.error.supplier_id);
+              $('#hargaBeliError').text(data.responseJSON.error.harga_beli);
+              $('#hargaJualError').text(data.responseJSON.error.harga_jual);
+              $('#stokError').text(data.responseJSON.error.stok);
            }
         });
     });
 
-    $('#simpan').on('click', function() {
-      $('.alert-message').empty();
-    });
-    $('#batalkan').on('click', function() {
+    $('.btn-close').on('click', function() {
       $('.alert-message').empty();
     });
   });

@@ -49,7 +49,11 @@ class AppServiceProvider extends ServiceProvider
                 ->line(Lang::get('Abaikan pesan jika anda sudah verifikasi atau belum memiliki akun.'));
         });
 
-        Str::macro('decimalForm', function($value) {            
+        Str::macro('decimalForm', function($value, $is_currency = false) {            
+            if( $is_currency == true ) {
+                return number_format($value, 2, ',', '.');
+            }
+            
             if( is_numeric($value) && floor($value) != $value ) {
                 $decimals = (strlen($value) - strpos($value, '.')) - 1;
                 return number_format($value, $decimals, ',', '.');

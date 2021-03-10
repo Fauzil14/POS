@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\Business;
+use App\Models\Category;
+use App\Models\Supplier;
 use App\Helpers\CodeGenerator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;

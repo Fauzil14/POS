@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Supplier;
@@ -56,8 +57,10 @@ class ProductController extends Controller
         ]);
 
         $product = Product::create($validatedData);
-    
+        
+
         if($request->wantsJson()) {
+            $product = new ProductResource($product);
             return response()->json($product);
         }
     }
