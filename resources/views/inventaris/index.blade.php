@@ -14,7 +14,9 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1>Daftar Produk</h1>
+          <ol class="breadcrumb float-sm-left">
+            <li class="breadcrumb-item"><a href="#"><h3>Daftar Produk</h3></a></li>
+          </ol>
         </div>
         <div class="col-sm-6">
           <div class="d-flex justify-content-end">

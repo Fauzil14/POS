@@ -68,8 +68,27 @@ class ProductController extends Controller
     public function show($product_id)
     {
         $product = Product::findOrFail($product_id);
+        $categories = Category::get();
+        $suppliers = Supplier::get();
         
-        return view('inventaris.detail-product', compact('product'));
+        return view('inventaris.detail-product', compact('product', 'categories', 'suppliers'));
+    }
+
+    public function update(Request $request)
+    {
+        $validatedData = $request->validate([
+            'uid'         => 'nullable|unique:products|min:8',
+            'merek'       => 'required',
+            'nama'        => 'required',
+            'category_id' => 'required|exists:categories,id',
+            'supplier_id' => 'required|exists:suppliers,id', 
+            'stok'        => 'required',
+            'harga_beli'  => 'required',
+            'harga_jual'  => 'required',
+            'diskon'      => 'nullable',
+        ]);
+
+        return response()->json($validatedData);
     }
 
     public function delete($product_id)
