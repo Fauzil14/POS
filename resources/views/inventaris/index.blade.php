@@ -56,7 +56,7 @@
                         <tr>
                             <td>{{ $n++ }}</td>
                             <td>{{$product->uid}}</td>
-                            <td>{{$product->nama}}</td>
+                            <td id="nama-product-{{$product->id}}">{{$product->nama}}</td>
                             <td>{{ucfirst($product->category->category_name)}}</td>
                             <td>{{$product->supplier->nama_supplier}}</td>
                             <td>{{$product->stok}}</td>
@@ -65,8 +65,7 @@
                             <td class="text-right py-0 align-middle">
                               <div class="btn-group btn-group-sm">
                                 <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
-                                <button onclick="deleteConfirmation({{$product->id}})" 
-                                    class="btn btn-danger">
+                                <button onclick="deleteConfirmation({{$product->id}})" class="btn btn-danger">
                                   <i class="fas fa-trash"></i>
                                 </button>
                                 <form id="delete-product-form-{{$product->id}}" class="d-none" action="{{route('inventaris.delete.product', $product->id)}}" method="post">
@@ -320,13 +319,16 @@
 
 <script type="text/javascript">
   function deleteConfirmation(id) {
+      var nama_product = $('#nama-product-'+id).text();
+      console.log(nama_product);
+
       Swal.fire({
-          title: "Delete?",
-          text: "Please ensure and then confirm!",
+          title: "Hapus produk "+nama_product,
+          text: "Menghapus produk juga akan menghapus data terkait dari produk tersebut, Apakah anda tetap ingin melanjutkan?",
           type: "warning",
           showCancelButton: !0,
-          confirmButtonText: "Yes, delete it!",
-          cancelButtonText: "No, cancel!",
+          confirmButtonText: "Ya",
+          cancelButtonText: "Tidak, batalkan!",
           reverseButtons: !0
       }).then(function (e) {
 
