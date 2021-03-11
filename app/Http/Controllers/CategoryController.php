@@ -10,7 +10,7 @@ class CategoryController extends Controller
 {
     public function kategori()
     {
-        $categories = Category::get();
+        $categories = Category::all();
 
         return view('inventaris.kategori', compact('categories'));
     }
@@ -18,6 +18,7 @@ class CategoryController extends Controller
     public function show($category_id)
     {
         $category = Category::findOrFail($category_id);
+        $category->load('product');
         $categories = Category::get();
 
         return view('inventaris.detail-kategori', compact('category', 'categories'));

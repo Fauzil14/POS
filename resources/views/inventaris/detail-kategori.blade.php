@@ -11,8 +11,8 @@
       <div class="row mb-2">
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-left">
-            <li class="breadcrumb-item"><a href="{{route('inventaris')}}"><h3>Daftar Produk</h3></a></li>
-            <li class="breadcrumb-item"><a href="#"><h3>Detail Produk</h3></a></li>
+            <li class="breadcrumb-item"><a href="{{route('inventaris')}}"><h3>Daftar Kategori</h3></a></li>
+            <li class="breadcrumb-item"><a href="#"><h3>Detail Kategori</h3></a></li>
           </ol>
         </div>
         <div class="col-sm-6">
@@ -35,78 +35,30 @@
             <!-- About Me Box -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Informasi Produk</h3>
+                <h3 class="card-title">Informasi Kategori</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <strong>UID</strong>
-
-                <p id="info-uid" class="text-muted">
-                  {{ $product->uid }}
-                </p>
-
-                <hr>
-
-                <strong>Merek</strong>
-
-                <p id="info-merek" class="text-muted">
-                  {{ $product->merek }}
-                </p>
-
-                <hr>
-
-                <strong>Nama</strong>
-
-                <p id="info-nama" class="text-muted">
-                  {{ $product->nama }}
-                </p>
-
-                <hr>
-
-                <strong>Kategori</strong>
+                <strong>Nama Kategori</strong>
 
                 <p id="info-category_name" class="text-muted">
-                  {{ ucfirst($product->category->category_name) }}
+                  {{ ucfirst($category->category_name) }}
                 </p>
 
                 <hr>
 
-                <strong>Supplier</strong>
+                <strong>Jumlah produk</strong>
 
-                <p id="info-nama_supplier" class="text-muted">
-                  {{ $product->supplier->nama_supplier }}
+                <p id="info-merek" class="text-muted">
+                  {{ count($category->product) }}
                 </p>
 
                 <hr>
 
-                <strong>Stok</strong>
+                <strong>Jumlah Supplier</strong>
 
-                <p id="info-stok" class="text-muted">
-                  {{ $product->stok }} PCS
-                </p>
-
-                <hr>
-
-                <strong>Harga Beli</strong>
-
-                <p id="info-harga_beli" class="text-muted">
-                  Rp. {{ Str::decimalForm($product->harga_beli, true) }}
-                </p>
-
-                <hr>
-
-                <strong>Harga Jual</strong>
-
-                <p id="info-harga_jual" class="text-muted">
-                  Rp. {{ Str::decimalForm($product->harga_jual, true) }}
-                </p>
-
-                <hr>
-
-                <strong>Diskon</strong>
-
-                <p id="info-diskon" class="text-muted">
-                  {{ $product->diskon }} %
+                <p id="info-merek" class="text-muted">
+                  {{ count($category->product->groupBy('supplier_id')) }}
                 </p>
 
                 <hr>
@@ -224,121 +176,22 @@
                   <!-- /.tab-pane -->
 
                   <div class="tab-pane active" id="settings">
-                    <form method="POST" action="{{ route('inventaris.update.product') }}" class="form-horizontal" id="update">
+                    <form method="POST" action="{{ route('inventaris.update.kategori') }}" class="form-horizontal" id="update">
                       @method('PUT')
                       @csrf
 
-                      <input type="hidden" name="id" value="{{ $product->id }}">
+                      <input type="hidden" name="id" value="{{ $category->id }}">
 
                       <div class="card-body pt-0">
-                        <p class="mb-1">Informasi Umum</p>
-                        <hr class="mt-0">
-                        <div class="form-group row">
-                          <label class="col-sm-2 col-form-label" for="uid">UID</label>
-                          <div class="col-sm-10">
-                            <input type="text" class="form-control" name="uid" id="uid" value="{{$product->uid}}" placeholder="Masukkan Kode Produk (Optional)">
-                            <div class="alert-message" id="uidError" style="color: red;"></div>
+                        <div class="form-group">
+                          <label class="col col-form-label" for="category_name">Nama Kategori</label>
+                          <div class="col">
+                            <input type="text" class="form-control" name="category_name" id="category_name" placeholder="Masukkan Nama Kategori">
+                            <div class="alert-message" id="category_nameError" style="color: red;"></div>
                           </div>
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-sm-2 col-form-label" for="merek">Merek</label>
-                          <div class="col-sm-10">
-                            <input type="text" class="form-control" name="merek" id="merek" value="{{$product->merek}}" placeholder="Masukkan merek Produk">
-                            <div class="alert-message" id="merekError" style="color: red;"></div>
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-sm-2 col-form-label" for="nama">Nama</label>
-                          <div class="col-sm-10">
-                            <input type="text" class="form-control" name="nama" id="nama" value="{{$product->nama}}" placeholder="Masukkan nama Produk">
-                            <div class="alert-message" id="namaError" style="color: red;"></div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-sm-5">
-                            <div class="form-group">
-                              <label class="col-sm-6 col-form-label" for="category_id">Kategori</label>
-                              <div class="col-sm">
-                                  <!-- select -->
-                                    <select class="custom-select" id="category_id" name="category_id">
-                                      <option disabled>Pilih Kategori Produk</option>
-                                      <option selected value="{{ $product->category_id }}">{{ ucfirst($product->category->category_name) }}</option>
-                                      @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}">{{ ucfirst($category->category_name) }}</option>
-                                      @endforeach
-                                    </select>
-                              </div>
-                              <div class="alert-message" id="categoryIdError" style="color: red;"></div>
-                            </div>
-                          </div>
-                          <div class="col-sm-7">
-                            <div class="form-group">
-                              <label class="col-sm-6 col-form-label" for="supplier_id">Supplier</label>
-                              <div class="col-sm">
-                                  <!-- select -->
-                                  <select class="custom-select" id="supplier_id" name="supplier_id">
-                                    <option disabled>Pilih supplier</option>
-                                    <option selected value="{{ $product->supplier_id }}">{{ $product->supplier->nama_supplier }}</option>
-                                    @foreach ($suppliers as $supplier)
-                                      <option value="{{ $supplier->id }}">{{ ucfirst($supplier->nama_supplier) }}</option>
-                                    @endforeach
-                                  </select>
-                              </div>
-                              <div class="alert-message" id="supplierIdError" style="color: red;"></div>
-                            </div>
-                          </div>
-                        </div>
-                        <p class="mb-0 mt-1">Kalkulasi Harga</p>
-                        <hr class="mt-0 mb-1">
-                        <div class="row">
-                          <div class="col-sm-5">
-                            <div class="form-group">
-                              <label class="col-sm-4 col-form-label" for="harga_beli">Harga beli</label>
-                              <div class="input-group">
-                                <div class="input-group-prepend">
-                                  <span class="input-group-text">Rp.</span>
-                                </div>
-                                  <input type="number" class="form-control" value="{{ $product->harga_beli }}" id="harga_beli" name="harga_beli">
-                                </div>
-                                <div class="alert-message" id="hargaBeliError" style="color: red;"></div>
-                            </div>
-                          </div>
-                          <div class="col-sm-5">
-                            <label class="col-sm-4 col-form-label" for="harga_jual">Harga Jual</label>
-                            <div class="input-group">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text">Rp.</span>
-                              </div>
-                              <input type="number" class="form-control" value="{{ $product->harga_jual }}" id="harga_jual" name="harga_jual">
-                            </div>
-                            <div class="alert-message" id="hargaJualError" style="color: red;"></div>
-                          </div>
-                          <div class="col-sm-2">
-                            <label class="col-sm col-form-label" for="diskon">Diskon</label>
-                            <div class="input-group">
-                              <input type="number" class="form-control" value="{{ $product->diskon }}" id="diskon" name="diskon">
-                              <div class="input-group-append">
-                                <span class="input-group-text">%</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <p class="mb-0 mt-1">Persediaan</p>
-                        <hr class="mt-0">                         
-                        <div class="form-group row mt-3">
-                            <label class="col-sm-2 col-form-label" for="stok">Stok</label>
-                            <div class="col-sm-10">
-                              <div class="input-group">
-                                <input type="number" class="form-control" value="{{ $product->stok }}" id="stok" name="stok">
-                                <div class="input-group-append">
-                                  <span class="input-group-text">PCS</span>
-                                </div>
-                              </div>
-                              <div class="alert-message" id="stokError" style="color: red;"></div>
-                            </div>
                         </div>
                       </div>
-              
+
                       <hr class="mt-0">
                       <div class="row">
                         <div class="col-sm-6">
@@ -346,10 +199,10 @@
                           </form>
                         </div>
                         <div class="col-sm-6">
-                          <button onclick="deleteConfirmation({{$product->id}})" class="btn btn-danger float-right">
+                          <button onclick="deleteConfirmation({{$category->id}})" class="btn btn-danger float-right">
                             <i class="fas fa-trash"></i>
                           </button>
-                          <form id="delete-product-form" class="d-none" action="{{route('inventaris.delete.product', $product->id)}}" method="post">
+                          <form id="delete-kategori-form" class="d-none" action="{{route('inventaris.delete.kategori', $category->id)}}" method="post">
                             @method('DELETE')
                             @csrf 
                           </form>
@@ -388,43 +241,20 @@
         url: form.attr('action'),
         data: form.serialize(),
         success: function(data) {
-          $('#info-uid').text(data.uid);
-          $('#info-merek').text(data.merek);
-          $('#info-nama').text(data.nama);
           $('#info-category_name').text(data.category_name);
-          $('#info-nama_supplier').text(data.nama_supplier);
-          $('#info-harga_beli').text("Rp. "+data.harga_beli);
-          $('#info-harga_jual').text("Rp. "+data.harga_jual);
-          $('#info-diskon').text(data.diskon+" %");
-          $('#info-stok').text(data.stok+" PCS");
           setTimeout(() => {
             $(document).Toasts('create', {
             class: 'bg-info',
-            title: 'Data produk berhasil di ubah',
+            title: 'Data Kategori berhasil di ubah',
             position: 'topLeft',
             autohide: true,
             delay: 10000,
-            body: "UID&emsp;&emsp;&emsp; : &nbsp"+"{{$product->uid}}"+"  =>  "+data.uid+
-                  "<br>Merek&emsp;&emsp; : &nbsp"+"{{$product->merek}}"+"  =>  "+data.merek+
-                  "<br>Nama&emsp;&emsp; : &nbsp"+"{{$product->nama}}"+"  =>  "+data.nama+
-                  "<br>Kategori&emsp; : &nbsp"+"{{ucfirst($product->category->category_name)}}"+"  =>  "+data.category_name+
-                  "<br>Supplier&emsp; : &nbsp"+"{{$product->supplier->nama_supplier}}"+"  =>  "+data.nama_supplier+
-                  "<br>Harga Beli&thinsp; : &nbsp"+"{{$product->harga_beli}}"+"  =>  "+"Rp. "+data.harga_beli+
-                  "<br>Harga Jual : &nbsp"+"{{$product->harga_jual}}"+"  =>  "+"Rp. "+data.harga_jual+
-                  "<br>Diskon&emsp;&nbsp;&thinsp;&thinsp; : &nbsp"+"{{$product->diskon}}"+"  =>  "+data.diskon+
-                  "<br>Stok&emsp;&emsp;&nbsp;&thinsp;&thinsp; : &nbsp"+"{{$product->stok}}"+"  =>  "+data.stok
+            body: "Nama Kategori&emsp;&emsp;&emsp; : &nbsp"+"{{$category->category_name}}"+"  =>  "+data.category_name
           });
           },500);
         },
         error: function(data) {
-              $('#uidError').text(data.responseJSON.error.uid);
-              $('#merekError').text(data.responseJSON.error.merek);
-              $('#namaError').text(data.responseJSON.error.nama);
-              $('#categoryIdError').text(data.responseJSON.error.category_id);
-              $('#supplierIdError').text(data.responseJSON.error.supplier_id);
-              $('#hargaBeliError').text(data.responseJSON.error.harga_beli);
-              $('#hargaJualError').text(data.responseJSON.error.harga_jual);
-              $('#stokError').text(data.responseJSON.error.stok);
+              $('#category_nameError').text(data.responseJSON.error.category_name);
            }
         });
     });
@@ -434,10 +264,10 @@
 <script type="text/javascript">
   function deleteConfirmation(id) {
       event.preventDefault();
-      var nama_product = $('#info-nama').text();
+      var nama_kategori = $('#info-category_name').text();
       Swal.fire({
-          title: "Hapus produk "+nama_product,
-          text: "Menghapus produk juga akan menghapus data terkait dari produk tersebut, Apakah anda tetap ingin melanjutkan?",
+          title: "Hapus Kategori "+nama_kategori,
+          text: "Menghapus Kategori juga akan menghapus data terkait dari Kategori tersebut, Apakah anda tetap ingin melanjutkan?",
           type: "warning",
           showCancelButton: !0,
           confirmButtonText: "Ya",
@@ -447,7 +277,7 @@
 
           if (e.value === true) {
 
-              document.getElementById('delete-product-form').submit();
+              document.getElementById('delete-kategori-form').submit();
 
           } else {
               e.dismiss;

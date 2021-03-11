@@ -59,6 +59,8 @@
                   <tr>
                     <th>No</th>
                     <th>Nama Kategori</th>
+                    <th>Jumlah Produk</th>
+                    <th>Jumlah Supplier</th>
                     <th>Aksi</th>
                   </tr>
                   </thead>
@@ -68,6 +70,8 @@
                         <tr>
                             <td>{{ $n++ }}</td>
                             <td id="nama-kategori-{{$category->id}}">{{ucfirst($category->category_name)}}</td>
+                            <td>{{count($category->product)}}</td>
+                            <td>{{count($category->product->groupBy('supplier_id'))}}</td>
                             <td class="text-left py-0 align-middle">
                               <div class="btn-group btn-group-sm">
                                 <a href="{{ route('inventaris.kategori.show', $category->id) }}" class="btn btn-info"><i class="fas fa-eye"></i></a>
@@ -201,11 +205,10 @@
 
 <script type="text/javascript">
   function deleteConfirmation(id) {
-      var nama_product = $('#nama-kategori-'+id).text();
-      console.log(nama_product);
+      var nama_kategori = $('#nama-kategori-'+id).text();
 
       Swal.fire({
-          title: "Hapus kategori "+nama_product,
+          title: "Hapus kategori "+nama_kategori,
           text: "Menghapus kategori juga akan menghapus data terkait dari kategori tersebut, Apakah anda tetap ingin melanjutkan?",
           type: "warning",
           showCancelButton: !0,
