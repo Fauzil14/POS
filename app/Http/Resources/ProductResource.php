@@ -19,7 +19,7 @@ class ProductResource extends JsonResource
             'uid'           => $this->uid, 
             'merek'         => $this->merek,
             'nama'          => $this->nama,
-            'category_name' => $this->category->category_name,
+            'category_name' => ucfirst($this->category->category_name),
             'nama_supplier' => $this->supplier->nama_supplier,
             'stok'          => $this->stok,
             'harga_beli'    => Str::decimalForm($this->harga_beli, true),

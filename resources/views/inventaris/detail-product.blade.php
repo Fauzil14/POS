@@ -41,7 +41,7 @@
               <div class="card-body">
                 <strong>UID</strong>
 
-                <p class="text-muted">
+                <p id="info-uid" class="text-muted">
                   {{ $product->uid }}
                 </p>
 
@@ -49,45 +49,68 @@
 
                 <strong>Merek</strong>
 
-                <p class="text-muted">{{ $product->merek }}</p>
+                <p id="info-merek" class="text-muted">
+                  {{ $product->merek }}
+                </p>
 
                 <hr>
 
                 <strong>Nama</strong>
 
-                <p class="text-muted">{{ $product->nama }}</p>
+                <p id="info-nama" class="text-muted">
+                  {{ $product->nama }}
+                </p>
 
                 <hr>
 
                 <strong>Kategori</strong>
 
-                <p class="text-muted">{{ ucfirst($product->category->category_name) }}</p>
+                <p id="info-category_name" class="text-muted">
+                  {{ ucfirst($product->category->category_name) }}
+                </p>
 
                 <hr>
 
                 <strong>Supplier</strong>
 
-                <p class="text-muted">{{ $product->supplier->nama_supplier }}</p>
+                <p id="info-nama_supplier" class="text-muted">
+                  {{ $product->supplier->nama_supplier }}
+                </p>
+
+                <hr>
+
+                <strong>Stok</strong>
+
+                <p id="info-stok" class="text-muted">
+                  {{ $product->stok }} PCS
+                </p>
 
                 <hr>
 
                 <strong>Harga Beli</strong>
 
-                <p class="text-muted">Rp. {{ Str::decimalForm($product->harga_beli, true) }}</p>
+                <p id="info-harga_beli" class="text-muted">
+                  Rp. {{ Str::decimalForm($product->harga_beli, true) }}
+                </p>
 
                 <hr>
 
                 <strong>Harga Jual</strong>
 
-                <p class="text-muted">Rp. {{ Str::decimalForm($product->harga_jual, true) }}</p>
+                <p id="info-harga_jual" class="text-muted">
+                  Rp. {{ Str::decimalForm($product->harga_jual, true) }}
+                </p>
 
                 <hr>
 
                 <strong>Diskon</strong>
 
-                <p class="text-muted">{{ $product->diskon }} %</p>
+                <p id="info-diskon" class="text-muted">
+                  {{ $product->diskon }} %
+                </p>
 
                 <hr>
+
               </div>
               <!-- /.card-body -->
             </div>
@@ -99,7 +122,7 @@
               <div class="card-header p-2">
                 <ul class="nav nav-pills">
                   <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Timeline</a></li>
-                  <li class="nav-item"><a class="nav-link active" href="#settings" data-toggle="tab">Settings</a></li>
+                  <li class="nav-item"><a class="nav-link active" href="#settings" data-toggle="tab">Edit</a></li>
                 </ul>
               </div><!-- /.card-header -->
               <div class="card-body">
@@ -201,8 +224,11 @@
                   <!-- /.tab-pane -->
 
                   <div class="tab-pane active" id="settings">
-                    <form method="POST" action="{{ route('inventaris.new-product') }}" class="form-horizontal" id="edit">
+                    <form method="POST" action="{{ route('inventaris.update.product') }}" class="form-horizontal" id="update">
+                      @method('PUT')
                       @csrf
+
+                      <input type="hidden" name="id" value="{{ $product->id }}">
 
                       <div class="card-body pt-0">
                         <p class="mb-1">Informasi Umum</p>
@@ -314,11 +340,21 @@
                       </div>
               
                       <hr class="mt-0">
-                      <div class="justify-content-end">
-                        <button type="button" class="btn btn-default close-tambah" data-dismiss="modal">Batalkan</button>
-                        <button type="submit" class="btn btn-primary" id="simpan" name="simpan">Simpan</button>
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <button type="submit" class="btn btn-primary" id="simpan" name="simpan">Simpan</button>
+                          </form>
+                        </div>
+                        <div class="col-sm-6">
+                          <button onclick="deleteConfirmation({{$product->id}})" class="btn btn-danger float-right">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                          <form id="delete-product-form" class="d-none" action="{{route('inventaris.delete.product', $product->id)}}" method="post">
+                            @method('DELETE')
+                            @csrf 
+                          </form>
+                        </div>
                       </div>
-                    </form>
                   </div>
                   <!-- /.tab-pane -->
                 </div>
@@ -331,6 +367,7 @@
         </div>
         <!-- /.row -->
       </div><!-- /.container-fluid -->
+      
     </section>
     <!-- /.container -->
 
@@ -342,7 +379,7 @@
 
 <script>
   $(document).ready(function() {
-    var form = $("#edit");
+    var form = $("#update");
 
     $('#simpan').on('click', function(e) {
       e.preventDefault();
@@ -351,17 +388,33 @@
         url: form.attr('action'),
         data: form.serialize(),
         success: function(data) {
+          $('#info-uid').text(data.uid);
+          $('#info-merek').text(data.merek);
+          $('#info-nama').text(data.nama);
+          $('#info-category_name').text(data.category_name);
+          $('#info-nama_supplier').text(data.nama_supplier);
+          $('#info-harga_beli').text("Rp. "+data.harga_beli);
+          $('#info-harga_jual').text("Rp. "+data.harga_jual);
+          $('#info-diskon').text(data.diskon+" %");
+          $('#info-stok').text(data.stok+" PCS");
           setTimeout(() => {
             $(document).Toasts('create', {
-            class: 'bg-success',
-            title: 'Berhasil Menambahkan produk baru',
+            class: 'bg-info',
+            title: 'Data produk berhasil di ubah',
             position: 'topLeft',
             autohide: true,
             delay: 10000,
-            body: "UID            : "+data.uid+"<br>Merek      : "+data.merek+"<br>Nama       : "+data.nama+"<br>Kategori   : "+data.category_name+"<br>Supplier   : "+data.nama_supplier+"<br>Harga Beli : Rp. "+data.harga_beli+"<br>Harga Jual : Rp. "+data.harga_jual+"<br>Diskon     : "+data.diskon+"<br>Stok       : "+data.stok
+            body: "UID&emsp;&emsp;&emsp; : &nbsp"+"{{$product->uid}}"+"  =>  "+data.uid+
+                  "<br>Merek&emsp;&emsp; : &nbsp"+"{{$product->merek}}"+"  =>  "+data.merek+
+                  "<br>Nama&emsp;&emsp; : &nbsp"+"{{$product->nama}}"+"  =>  "+data.nama+
+                  "<br>Kategori&emsp; : &nbsp"+"{{ucfirst($product->category->category_name)}}"+"  =>  "+data.category_name+
+                  "<br>Supplier&emsp; : &nbsp"+"{{$product->supplier->nama_supplier}}"+"  =>  "+data.nama_supplier+
+                  "<br>Harga Beli&thinsp; : &nbsp"+"{{$product->harga_beli}}"+"  =>  "+"Rp. "+data.harga_beli+
+                  "<br>Harga Jual : &nbsp"+"{{$product->harga_jual}}"+"  =>  "+"Rp. "+data.harga_jual+
+                  "<br>Diskon&emsp;&nbsp;&thinsp;&thinsp; : &nbsp"+"{{$product->diskon}}"+"  =>  "+data.diskon+
+                  "<br>Stok&emsp;&emsp;&nbsp;&thinsp;&thinsp; : &nbsp"+"{{$product->stok}}"+"  =>  "+data.stok
           });
           },500);
-          $('.alert-message').empty();
         },
         error: function(data) {
               $('#uidError').text(data.responseJSON.error.uid);
@@ -375,18 +428,13 @@
            }
         });
     });
-
-    $('.close-tambah').on('click', function() {
-      $('.alert-message').empty();
-    });
   });
 </script>
 
 <script type="text/javascript">
   function deleteConfirmation(id) {
-      var nama_product = $('#nama-product-'+id).text();
-      console.log(nama_product);
-
+      event.preventDefault();
+      var nama_product = $('#info-nama').text();
       Swal.fire({
           title: "Hapus produk "+nama_product,
           text: "Menghapus produk juga akan menghapus data terkait dari produk tersebut, Apakah anda tetap ingin melanjutkan?",
@@ -399,7 +447,7 @@
 
           if (e.value === true) {
 
-              document.getElementById('delete-product-form-'+id).submit();
+              document.getElementById('delete-product-form').submit();
 
           } else {
               e.dismiss;

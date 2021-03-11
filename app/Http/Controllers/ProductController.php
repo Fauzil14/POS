@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Resources\ProductResource;
@@ -76,19 +77,24 @@ class ProductController extends Controller
 
     public function update(Request $request)
     {
+        $product = Product::findOrFail($request->id);
+        
         $validatedData = $request->validate([
-            'uid'         => 'nullable|unique:products|min:8',
-            'merek'       => 'required',
-            'nama'        => 'required',
-            'category_id' => 'required|exists:categories,id',
-            'supplier_id' => 'required|exists:suppliers,id', 
-            'stok'        => 'required',
-            'harga_beli'  => 'required',
-            'harga_jual'  => 'required',
-            'diskon'      => 'nullable',
+            'uid'         => ['nullable', 'min:8', Rule::unique('products')->ignore($product->id)],
+            'merek'       => ['required'],
+            'nama'        => ['required'],
+            'category_id' => ['required', 'exists:categories,id'],
+            'supplier_id' => ['required', 'exists:suppliers,id'], 
+            'stok'        => ['required'],
+            'harga_beli'  => ['required'],
+            'harga_jual'  => ['required'],
+            'diskon'      => ['nullable'],
         ]);
 
-        return response()->json($validatedData);
+        $product->update($validatedData);
+        $data = new ProductResource($product);
+
+        return response()->json($data);
     }
 
     public function delete($product_id)
@@ -99,7 +105,7 @@ class ProductController extends Controller
             $product->delete();
     
             Alert::success('Berhasil', 'Data produk berhasil di hapus');
-            return back();
+            return redirect()->route('inventaris');
         } catch(\Throwable $e) {
             Alert::error('Gagal', 'Data produk gagal di hapus');
             return back();

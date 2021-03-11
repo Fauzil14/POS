@@ -95,6 +95,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title">Tambah Produk Baru</h4>
+            <a href="#" class="btn btn-default ng-binding mx-2" id="reset-form"> <i class="fas fa-sync-alt"></i> &nbsp; Reset Form</a>
             <button type="button" class="close close-tambah" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
@@ -224,7 +225,7 @@
                 <div class="toast-header">
                   <strong class="mr-auto">Toast Title</strong>
                   <small>Subtitle</small>
-                  <button data-dismiss="toast" type="button" class="ml-2 mb-1 close" aria-label="Close">
+                  <button data-dismiss="toast" type="button" class="ml-2 mb-1 close-tambah" aria-label="Close">
                     <span aria-hidden="true">×</span>
                   </button>
                 </div>
@@ -298,7 +299,16 @@
             position: 'topLeft',
             autohide: true,
             delay: 10000,
-            body: "UID            : "+data.uid+"<br>Merek      : "+data.merek+"<br>Nama       : "+data.nama+"<br>Kategori   : "+data.category_name+"<br>Supplier   : "+data.nama_supplier+"<br>Harga Beli : Rp. "+data.harga_beli+"<br>Harga Jual : Rp. "+data.harga_jual+"<br>Diskon     : "+data.diskon+"<br>Stok       : "+data.stok
+            body: "UID&emsp;&emsp;&emsp; : &nbsp"+data.uid+
+                  "<br>Merek&emsp;&emsp; : &nbsp"+data.merek+
+                  "<br>Nama&emsp;&emsp; : &nbsp"+data.nama+
+                  "<br>Kategori&emsp; : &nbsp"+data.category_name+
+                  "<br>Supplier&emsp; : &nbsp"+data.nama_supplier+
+                  "<br>Harga Beli&thinsp; : &nbsp"+"Rp. "+data.harga_beli+
+                  "<br>Harga Jual : &nbsp"+"Rp. "+data.harga_jual+
+                  "<br>Diskon&emsp;&nbsp;&thinsp;&thinsp; : &nbsp"+data.diskon+
+                  "<br>Stok&emsp;&emsp;&nbsp;&thinsp;&thinsp; : &nbsp"+data.stok
+
           });
           },500);
           $('.alert-message').empty();
@@ -319,8 +329,13 @@
     $('.close-tambah').on('click', function() {
       $('.alert-message').empty();
     });
+    $('#reset-form').on('click', function() {
+      $('#tambah').trigger("reset");
+    });
   });
 </script>
+
+<script></script>
 
 <script type="text/javascript">
   function deleteConfirmation(id) {
