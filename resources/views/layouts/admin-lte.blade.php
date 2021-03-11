@@ -280,6 +280,12 @@
                   <p class="pl-2">Produk</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{ route('inventaris.kategori') }}" class="nav-link">
+                  <i class="fas fa-sort-down fa-rotate-270"></i>
+                  <p class="pl-2">Kategori</p>
+                </a>
+              </li>
             </ul>
           </li>
           <li class="nav-item">
@@ -407,10 +413,6 @@
 <script src="{{ asset('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('dist/js/adminlte.js') }}"></script>
-{{-- <!-- AdminLTE for demo purposes -->
-<script src="{{ asset('dist/js/demo.js') }}"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{ asset('dist/js/pages/dashboard.js') }}"></script> --}}
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
