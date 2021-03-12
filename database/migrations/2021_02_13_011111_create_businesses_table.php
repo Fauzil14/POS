@@ -16,8 +16,8 @@ class CreateBusinessesTable extends Migration
         Schema::create('businesses', function (Blueprint $table) {
             $table->id();
             $table->string('nama_bisnis', 50)->default('Outlet 1');
-            $table->foreignId('admin_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('pimpinan_id')->nullable()->constrained('users')->onDelete('cascade');
+            $table->foreignId('admin_id')->nullable()->constrained('users')->onDelete('SET NULL');
+            $table->foreignId('pimpinan_id')->nullable()->constrained('users')->onDelete('SET NULL');
             $table->string('alamat_bisnis', 100)->nullable();            
             $table->string('telepon')->nullable();            
             $table->string('logo_bisnis')->nullable();            

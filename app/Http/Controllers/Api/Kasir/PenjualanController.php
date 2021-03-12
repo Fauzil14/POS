@@ -32,7 +32,7 @@ class PenjualanController extends Controller
         $penjualan = Penjualan::find($validatedData['penjualan_id']);
         $penjualan->detail_penjualan()->updateOrCreate([
             'product_id'     => $validatedData['product_id'],
-        ],[ 
+        ],[    
             'quantity'       => $validatedData['quantity'],
             'harga_jual'     => $product->harga_jual,
             'diskon'         => $product->diskon ,
@@ -40,10 +40,8 @@ class PenjualanController extends Controller
                                 ? $validatedData['quantity'] * $product->harga_jual 
                                 : ($validatedData['quantity'] * $product->harga_jual) - (($product->harga_jual * $product->diskon) / 100),
         ]);
-        $penjualan->total_price = $penjualan->detail_penjualan()->sum('subtotal_harga');
-        $penjualan->update();
-        // event('eloquent.updated: App\Models\Penjualan', $penjualan);
-        $data = new PenjualanResource($penjualan);
+
+        $data = new PenjualanResource($penjualan->fresh()); // fresh the model to get event change
 
         return response()->json($data);
     }

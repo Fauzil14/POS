@@ -11,7 +11,7 @@
       <div class="row mb-2">
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-left">
-            <li class="breadcrumb-item"><a href="{{route('inventaris')}}"><h3>Daftar Kategori</h3></a></li>
+            <li class="breadcrumb-item"><a href="{{route('inventaris.kategori')}}"><h3>Daftar Kategori</h3></a></li>
             <li class="breadcrumb-item"><a href="#"><h3>Detail Kategori</h3></a></li>
           </ol>
         </div>
@@ -30,7 +30,6 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-3">
-
 
             <!-- About Me Box -->
             <div class="card card-primary">
@@ -186,7 +185,7 @@
                         <div class="form-group">
                           <label class="col col-form-label" for="category_name">Nama Kategori</label>
                           <div class="col">
-                            <input type="text" class="form-control" name="category_name" id="category_name" placeholder="Masukkan Nama Kategori">
+                            <input type="text" class="form-control" name="category_name" id="category_name" value="{{ $category->category_name }}" placeholder="Masukkan Nama Kategori">
                             <div class="alert-message" id="category_nameError" style="color: red;"></div>
                           </div>
                         </div>

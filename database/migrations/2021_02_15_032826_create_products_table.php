@@ -19,8 +19,8 @@ class CreateProductsTable extends Migration
             $table->string('uid', 13)->unique();
             $table->string('merek');
             $table->string('nama');
-            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
-            $table->foreignId('supplier_id')->constrained('suppliers')->onDelete('cascade');
+            $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('SET NULL');
+            $table->foreignId('supplier_id')->nullable()->constrained('suppliers')->onDelete('SET NULL');
             $table->integer('stok');
             $table->decimal('harga_beli', 15, 2);
             $table->decimal('harga_jual', 15, 2);

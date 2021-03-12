@@ -16,7 +16,7 @@ class CreatePengeluaransTable extends Migration
         Schema::create('pengeluarans', function (Blueprint $table) {
             $table->id();
             $table->date('tanggal');
-            $table->foreignId('business_id')->constrained('businesses');
+            $table->foreignId('business_id')->constrained('businesses')->onDelete('cascade');
             $table->decimal('total_pengeluaran', 15, 2)->default(0);
             $table->timestamp('updated_at');
         });

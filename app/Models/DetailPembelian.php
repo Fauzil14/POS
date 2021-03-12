@@ -18,12 +18,23 @@ class DetailPembelian extends Model
     protected static function boot() {
         parent::boot();
 
+        static::created(function($model) {
+            $pembelian = Pembelian::find($model->pembelian_id);
+            $pembelian->update(['total_price' => $pembelian->detail_pembelian->sum('subtotal_harga')]);
+        });
+
+        static::updated(function($model) {
+            $pembelian = Pembelian::find($model->pembelian_id);
+            $pembelian->update(['total_price' => $pembelian->detail_pembelian->sum('subtotal_harga')]);
+        });
+
         static::deleted(function($model) {
             $pembelian = Pembelian::find($model->pembelian_id);
             $pembelian->total_price = $pembelian->detail_pembelian()->sum('subtotal_harga');
             $pembelian->update();
         });
     }
+    
 
     public function product() {
         return $this->hasOne('App\Models\Product', 'id', 'product_id');

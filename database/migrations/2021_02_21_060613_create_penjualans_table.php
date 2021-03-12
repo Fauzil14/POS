@@ -17,8 +17,8 @@ class CreatePenjualansTable extends Migration
             $table->id();
             $table->string('kode_transaksi');
             $table->foreignId('business_id')->constrained('businesses')->onDelete('cascade');
-            $table->foreignId('kasir_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('member_id')->nullable()->constrained('members')->onDelete('cascade');
+            $table->foreignId('kasir_id')->nullable()->constrained('users')->onDelete('SET NULL');
+            $table->foreignId('member_id')->nullable()->constrained('members')->onDelete('SET NULL');
             $table->decimal('total_price', 15, 2)->default(0);
             $table->enum('jenis_pembayaran', ['tunai', 'debit']);
             $table->decimal('dibayar', 15, 2)->default(0);

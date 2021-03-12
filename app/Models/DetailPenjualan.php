@@ -15,10 +15,18 @@ class DetailPenjualan extends Model
                             ,'subtotal_harga'
                          ];
 
-    // protected $touches = ['Penjualan'];
-
     protected static function boot() {
         parent::boot();
+
+        static::created(function($model) {
+            $penjualan = Penjualan::find($model->penjualan_id);
+            $penjualan->update(['total_price' => $penjualan->detail_penjualan->sum('subtotal_harga')]);
+        });
+
+        static::updated(function($model) {
+            $penjualan = Penjualan::find($model->penjualan_id);
+            $penjualan->update(['total_price' => $penjualan->detail_penjualan->sum('subtotal_harga')]);
+        });
 
         static::deleted(function($model) {
             $penjualan = Penjualan::find($model->penjualan_id);

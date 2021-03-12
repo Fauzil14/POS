@@ -16,8 +16,8 @@ class CreateDetailPengeluaransTable extends Migration
         Schema::create('detail_pengeluarans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('pengeluaran_id')->constrained('pengeluarans')->onDelete('cascade');
-            $table->foreignId('pegawai_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('beban_id')->constrained('bebans')->onDelete('cascade');
+            $table->foreignId('pegawai_id')->nullable()->constrained('users')->onDelete('SET NULL');
+            $table->foreignId('beban_id')->nullable()->constrained('bebans')->onDelete('SET NULL');
             $table->text('deskripsi')->nullable();
             $table->decimal('subtotal_pengeluaran', 15, 2);
             $table->timestamps();

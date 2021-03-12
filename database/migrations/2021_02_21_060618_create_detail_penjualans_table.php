@@ -16,7 +16,7 @@ class CreateDetailPenjualansTable extends Migration
         Schema::create('detail_penjualans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('penjualan_id')->constrained('penjualans')->onDelete('cascade');
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            $table->foreignId('product_id')->constrained('products')->onDelete('NO ACTION');
             $table->integer('quantity');
             $table->decimal('harga_jual', 15, 2);
             $table->tinyInteger('diskon')->nullable();

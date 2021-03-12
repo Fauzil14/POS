@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class CategoryController extends Controller
@@ -33,6 +34,19 @@ class CategoryController extends Controller
         $category = Category::create($validatedData);
 
         return response()->json($category);
+    }
+
+    public function update(Request $request)
+    {
+        $category = Category::findOrFail($request->id);
+        
+        $validatedData = $request->validate([
+            'category_name'   => ['required', 'max:50'],
+        ]);
+
+        $category->update($validatedData);
+
+        return response()->json($category->refresh());
     }
 
     public function delete($category_id)

@@ -35,10 +35,7 @@ class PembelianController extends Controller
             'subtotal_harga' => $validatedData['quantity'] * $validatedData['harga_beli'],
         ]);
 
-        $pembelian->total_price = $pembelian->detail_pembelian()->sum('subtotal_harga');
-        $pembelian->update();
-        
-        $data = new PembelianResource($pembelian);
+        $data = new PembelianResource($pembelian->fresh());
 
         return response()->json($data);
     }
@@ -94,6 +91,6 @@ class PembelianController extends Controller
  
         $data = new PembelianResource(Pembelian::find($pembelian_id));
 
-        return $this->sendResponse('success', 'Detail pembelian berhasil di hapus', $data, 200);
+    return $this->sendResponse('success', 'Detail pembelian berhasil di hapus', $data, 200);
     }
 }

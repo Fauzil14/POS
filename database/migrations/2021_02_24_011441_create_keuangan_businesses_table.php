@@ -15,7 +15,7 @@ class CreateKeuanganBusinessesTable extends Migration
     {
         Schema::create('keuangan_businesses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('business_id')->constrained('businesses');
+            $table->foreignId('business_id')->constrained('businesses')->onDelete('cascade');
             $table->double('pemasukan', 20, 2)->default(0);
             $table->double('pengeluaran', 20, 2)->default(0);
             $table->double('saldo', 20, 2)->default(10000000);
