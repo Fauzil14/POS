@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Product;
 use App\Models\Pembelian;
 use App\Models\Penjualan;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -68,17 +69,7 @@ class LaporanController extends Controller
                     return $penjualan->created_at->format('W'); // weeks
                 });
                 $penjualan = $penjualan->map(function($item, $key) {
-                    $new = [
-                        'minggu_ke' => $key,
-                        'jumlah_penjualan' => count($item),
-                        'jumlah_kasir' => count($item->groupBy('kasir_id')),
-                        'transaksi_member' => $item->where('member_id', '!=', null)->count(),
-                        'transaksi_non_member' => $item->where('member_id', null)->count(),
-                        'total_penjualan' => $item->sum('total_price'),
-                        'total_dibayar' => $item->sum('dibayar'),
-                        'jumlah_tunai' => $item->where('jenis_pembayaran', 'tunai')->count(),
-                        'jumlah_debit' => $item->where('jenis_pembayaran', 'debit')->count(),
-                    ];
+                    $new = array_merge([ 'minggu_ke' => $key ], $this->processPenjualan($item));
                     return $new;
                 })->values()->all();
                 $waktu = "bulan " . Carbon::parse($waktu)->translatedFormat('F Y');
@@ -90,20 +81,9 @@ class LaporanController extends Controller
                     return $penjualan->created_at->format('Y-m'); // month
                 });
                 $penjualan = $penjualan->map(function($item, $key) {
-                    $new = [
-                        'bulan' => Carbon::parse($key)->translatedFormat('F'),
-                        'jumlah_penjualan' => count($item),
-                        'jumlah_kasir' => count($item->groupBy('kasir_id')),
-                        'transaksi_member' => $item->where('member_id', '!=', null)->count(),
-                        'transaksi_non_member' => $item->where('member_id', null)->count(),
-                        'total_penjualan' => $item->sum('total_price'),
-                        'total_dibayar' => $item->sum('dibayar'),
-                        'jumlah_tunai' => $item->where('jenis_pembayaran', 'tunai')->count(),
-                        'jumlah_debit' => $item->where('jenis_pembayaran', 'debit')->count(),
-                    ];
+                    $new = array_merge([ 'bulan' => Carbon::parse($key)->translatedFormat('F') ], $this->processPenjualan($item));
                     return $new;
                 })->values()->all();
-                dd($penjualan);
                 $waktu = "tahun " . Carbon::parse($waktu)->translatedFormat('Y');
                 break;
         }
@@ -118,8 +98,8 @@ class LaporanController extends Controller
                 'jumlah_kasir' => count($penjualan->groupBy('kasir_id')),
                 'transaksi_member' => $penjualan->where('member_id', '!=', null)->count(),
                 'transaksi_non_member' => $penjualan->where('member_id', null)->count(),
-                'total_penjualan' => $penjualan->sum('total_price'),
-                'total_dibayar' => $penjualan->sum('dibayar'),
+                'total_penjualan' => Str::decimalForm($penjualan->sum('total_price'), true),
+                'total_dibayar' => Str::decimalForm($penjualan->sum('dibayar'), true),
                 'jumlah_tunai' => $penjualan->where('jenis_pembayaran', 'tunai')->count(),
                 'jumlah_debit' => $penjualan->where('jenis_pembayaran', 'debit')->count(),
         ];
