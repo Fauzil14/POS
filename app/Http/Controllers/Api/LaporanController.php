@@ -99,7 +99,6 @@ class LaporanController extends Controller
                 'transaksi_member' => $penjualan->where('member_id', '!=', null)->count(),
                 'transaksi_non_member' => $penjualan->where('member_id', null)->count(),
                 'total_penjualan' => Str::decimalForm($penjualan->sum('total_price'), true),
-                'total_dibayar' => Str::decimalForm($penjualan->sum('dibayar'), true),
                 'jumlah_tunai' => $penjualan->where('jenis_pembayaran', 'tunai')->count(),
                 'jumlah_debit' => $penjualan->where('jenis_pembayaran', 'debit')->count(),
         ];
