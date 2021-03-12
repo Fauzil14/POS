@@ -50,8 +50,9 @@ class PengeluaranController extends Controller
             'deskripsi'             => $validatedData['deskripsi'],
             'subtotal_pengeluaran'  => $validatedData['subtotal_pengeluaran'],
         ]);
-        event('eloquent.updated: App\Models\Pengeluaran', $pengeluaran);
 
+        $pengeluaran->fresh();
+        
         if( $request->wantsJson() ) {
             return response()->json($pengeluaran->load('detail_pengeluaran'));
         }
