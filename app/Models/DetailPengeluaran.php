@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Pengeluaran;
 use Illuminate\Database\Eloquent\Model;
 
 class DetailPengeluaran extends Model
@@ -14,15 +15,20 @@ class DetailPengeluaran extends Model
         ,'subtotal_pengeluaran'
     ];
 
-    protected static function boot() {
 
+    protected static function boot()
+    {
         parent::boot();
 
         static::created(function($model) {
             $pengeluaran = Pengeluaran::find($model->pengeluaran_id);
-            $pengeluaran->update(['total_price' => $pengeluaran->detail_pengeluaran()->sum('subtotal_pengeluaran')]);
+            $pengeluaran->update([ 'total_pengeluaran' => $pengeluaran->detail_pengeluaran()->sum('subtotal_pengeluaran') ]);
         });
 
+        static::updated(function($model) {
+            $pengeluaran = Pengeluaran::find($model->pengeluaran_id);
+            $pengeluaran->update([ 'total_pengeluaran' => $pengeluaran->detail_pengeluaran()->sum('subtotal_pengeluaran') ]);
+        });
     }
 
     public function pengeluaran() {

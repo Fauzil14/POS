@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PengeluaranResource;
 use App\Models\RoleUser;
 use App\Models\Pengeluaran;
 use Illuminate\Http\Request;
@@ -51,10 +52,10 @@ class PengeluaranController extends Controller
             'subtotal_pengeluaran'  => $validatedData['subtotal_pengeluaran'],
         ]);
 
-        $pengeluaran->fresh();
         
         if( $request->wantsJson() ) {
-            return response()->json($pengeluaran->load('detail_pengeluaran'));
+            $data = new PengeluaranResource($pengeluaran->fresh());
+            return response()->json($data);
         }
     }
    
