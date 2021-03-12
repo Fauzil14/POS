@@ -11,7 +11,7 @@ class PembelianController extends Controller
 {
     public function getFormPembelian($supplier_id, Pembelian $pembelian) 
     {
-        $kode_transaksi = $pembelian->kodeTransaksi();
+        $kode_transaksi = $pembelian->kodeTransaksi(Auth::id());
 
         $user = User::findOrFail(Auth::id());
 

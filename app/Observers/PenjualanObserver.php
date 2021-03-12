@@ -19,29 +19,12 @@ class PenjualanObserver
             $penjualan->update();
         } else {
             $penjualan->jenis_pembayaran = 'tunai';
+            $penjualan->status = 'unfinished';
         }
     }
 
-    // public function updating(Penjualan $penjualan) {
-    //     if( $penjualan->detail_penjualan->count() > 0 ) {
-    //         $penjualan->total_price = $penjualan->detail_penjualan->sum('subtotal_harga');
-    //     }
-    // }
-
     public function updated(Penjualan $penjualan)
     {
-        // if( $penjualan->detail_penjualan->count() > 0 ) {
-        //     if( $penjualan->total_price != $penjualan->detail_penjualan->sum('subtotal_harga')) {
-        //         if( $penjualan->total_price < $penjualan->detail_penjualan->sum('subtotal_harga')) {
-        //             $plus = $penjualan->detail_penjualan->sum('subtotal_harga') - $penjualan->total_price; 
-        //             $penjualan->increment('total_price', $plus);
-        //         }
-        //         if( $penjualan->total_price > $penjualan->detail_penjualan->sum('subtotal_harga')) {
-        //             $minus = $penjualan->total_price - $penjualan->detail_penjualan->sum('subtotal_harga'); 
-        //             $penjualan->decrement('total_price', $minus);
-        //         }
-        //     }
-        // }
 
         if( $penjualan->status == 'finished' ) {
             $product = new Product;

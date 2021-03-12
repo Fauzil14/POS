@@ -22,18 +22,25 @@ class Penjualan extends Model
                             ,'dibayar'
                             ,'kembalian'
                             ,'status'
+                            ,'created_at'
+                            ,'updated_at'
                           ];
+    public function scopeFinished($query) {
+        $query->where('status', 'finished');
+    }
 
     public function scopeDate($query, $tanggal) {
         $query->whereDate('created_at', $tanggal);
     }
     
-    public function scopeHarian($query, $bulan = null) {
-        $query->whereMonth('created_at', is_null($bulan) ? now()->month() : $bulan);
+    public function scopeMonth($query, $bulan) {
+        $bulan = explode('-', $bulan);
+        $query->whereYear('created_at', $bulan[0])
+                ->whereMonth('created_at', $bulan[1]);
     }
 
-    public function scopeBulanan($query, $tahun = null) {
-        $query->whereYear('created_at', is_null($tahun) ? now()->year() : $tahun);
+    public function scopeYear($query, $tahun) {
+        $query->whereYear('created_at', $tahun);
     }
 
     public function penjualan_product() {

@@ -17,12 +17,12 @@ trait CodeGenerator {
         return $role_id . sprintf("%03d", $count);
     }
 
-    public function kodeTransaksi() {
-        $user = User::find(Auth::id());
+    public function kodeTransaksi($user_id) {
+        $user = User::find($user_id);
 
         if($user->role != 'admin') {
             switch (TRUE) {
-                case request()->is('*/penjualan/*') : // asterrisk for wildcard
+                case $user->role == 'kasir' : // asterrisk for wildcard
                     $prenumb = 1;
                     $kode_user = $user->kasir()->first()->kode_user;
                     if(static::where('kasir_id', $user->id)->exists()) {
@@ -31,7 +31,7 @@ trait CodeGenerator {
                         $last_number = 1;
                     }
                     break;
-                case request()->is('*/pembelian/*') : 
+                case $user->role == 'staff': 
                     $prenumb = 2;
                     $kode_user = $user->staff()->first()->kode_user;
                     if(static::where('staff_id', $user->id)->exists()) {

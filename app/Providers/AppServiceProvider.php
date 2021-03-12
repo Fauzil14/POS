@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Pembelian;
 use App\Models\Penjualan;
 use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
 use App\Observers\PembelianObserver;
 use App\Observers\PenjualanObserver;
 use App\Validation\BailingValidator;
@@ -27,7 +28,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        config(['app.locale' => 'id']);
+        Carbon::setLocale('id');
+        date_default_timezone_set('Asia/Jakarta');
     }
 
     /**

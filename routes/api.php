@@ -79,7 +79,7 @@ Route::middleware('jwt.verify')->group(function() {
         });
     });
 
-    Route::prefix('pimpinan')->middleware('can:pimpinan')->group(function() {
+    Route::prefix('pimpinan')->middleware('can:admin-pimpinan')->group(function() {
         Route::get('laporan/{jenis_laporan}/{waktu}', 'Api\LaporanController@getLaporan');
     });
 });

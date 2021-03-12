@@ -35,13 +35,19 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('admin-kasir', function($user) {
             return $user->hasAnyRoles(['admin', 'kasir']) 
                                     ? Response::allow() 
-                                    : Response::deny("Anda harus login sebagain admin untuk mengakses halaman ini");
+                                    : Response::deny("Anda harus login sebagain admin atau kasir untuk mengakses halaman ini");
         });
 
         Gate::define('admin-staff', function($user) {
             return $user->hasAnyRoles(['admin', 'staff']) 
                                     ? Response::allow() 
-                                    : Response::deny("Anda harus login sebagain admin untuk mengakses halaman ini");
+                                    : Response::deny("Anda harus login sebagain admin atau staff untuk mengakses halaman ini");
+        });
+
+        Gate::define('admin-pimpinan', function($user) {
+            return $user->hasAnyRoles(['admin', 'pimpinan']) 
+                                    ? Response::allow() 
+                                    : Response::deny("Anda harus login sebagain admin atau pimpinan untuk mengakses halaman ini");
         });
 
         Gate::define('admin', function($user) {

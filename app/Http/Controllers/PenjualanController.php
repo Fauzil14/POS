@@ -11,7 +11,7 @@ class PenjualanController extends Controller
 {
     public function getFormPenjualan(Penjualan $penjualan) 
     {
-        $kode_transaksi = $penjualan->kodeTransaksi();
+        $kode_transaksi = $penjualan->kodeTransaksi(Auth::id());
 
         $user = User::findOrFail(Auth::id());
 
