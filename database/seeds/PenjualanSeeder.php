@@ -15,6 +15,8 @@ class PenjualanSeeder extends Seeder
      */
     public function run()
     {
+        dd($product = Product::withoutGlobalScope('business')->where('business_id', 2)->where('stok', '>', 0)->get());
+
         $penjualan = new Penjualan;
         $kasir_id = rand(4,5);
 
