@@ -32,7 +32,9 @@ class Product extends Model
         parent::boot();
 
         static::addGlobalScope('business', function(Builder $builder) {
-            $builder->where('business_id', Auth::user()->roles->pluck('pivot.business_id')->first());
+            if(!empty(Auth::user())) {
+                $builder->where('business_id', Auth::user()->roles->pluck('pivot.business_id')->first());
+            }
         });
 
         static::creating(function($query) {

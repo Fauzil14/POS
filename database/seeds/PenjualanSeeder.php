@@ -15,7 +15,7 @@ class PenjualanSeeder extends Seeder
      */
     public function run()
     {
-
+        
         $penjualan = new Penjualan;
         $kasir_id = rand(4,5);
 
@@ -49,7 +49,7 @@ class PenjualanSeeder extends Seeder
 
             for($i = 0; $i <= 2; $i++) {
 
-                $product = Product::withoutGlobalScope('business')->where('business_id', 2)->where('stok', '>', 0)->inRandomOrder()->first();
+                $product = Product::withoutGlobalScope('business')->where('business_id', 2)->where('stok', '>', 0)->where('stok', '>', 0)->inRandomOrder()->first();
                 $quantity = rand(1,5);
                 
                 $penjualan->detail_penjualan()->updateOrCreate([
