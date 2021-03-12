@@ -64,11 +64,46 @@ class LaporanController extends Controller
             case 7 : // full set month
                 $penjualan = Penjualan::finished()->month($waktu)->get();
                 $processed = $this->processPenjualan($penjualan);
+                $penjualan = $penjualan->groupBy(function($penjualan) {
+                    return $penjualan->created_at->format('W'); // weeks
+                });
+                $penjualan = $penjualan->map(function($item, $key) {
+                    $new = [
+                        'minggu_ke' => $key,
+                        'jumlah_penjualan' => count($item),
+                        'jumlah_kasir' => count($item->groupBy('kasir_id')),
+                        'transaksi_member' => $item->where('member_id', '!=', null)->count(),
+                        'transaksi_non_member' => $item->where('member_id', null)->count(),
+                        'total_penjualan' => $item->sum('total_price'),
+                        'total_dibayar' => $item->sum('dibayar'),
+                        'jumlah_tunai' => $item->where('jenis_pembayaran', 'tunai')->count(),
+                        'jumlah_debit' => $item->where('jenis_pembayaran', 'debit')->count(),
+                    ];
+                    return $new;
+                })->values()->all();
                 $waktu = "bulan " . Carbon::parse($waktu)->translatedFormat('F Y');
                 break;
             case 4 : // year
                 $penjualan = Penjualan::finished()->year($waktu)->get();
                 $processed = $this->processPenjualan($penjualan);
+                $penjualan = $penjualan->groupBy(function($penjualan) {
+                    return $penjualan->created_at->format('Y-m'); // month
+                });
+                $penjualan = $penjualan->map(function($item, $key) {
+                    $new = [
+                        'bulan' => Carbon::parse($key)->translatedFormat('F'),
+                        'jumlah_penjualan' => count($item),
+                        'jumlah_kasir' => count($item->groupBy('kasir_id')),
+                        'transaksi_member' => $item->where('member_id', '!=', null)->count(),
+                        'transaksi_non_member' => $item->where('member_id', null)->count(),
+                        'total_penjualan' => $item->sum('total_price'),
+                        'total_dibayar' => $item->sum('dibayar'),
+                        'jumlah_tunai' => $item->where('jenis_pembayaran', 'tunai')->count(),
+                        'jumlah_debit' => $item->where('jenis_pembayaran', 'debit')->count(),
+                    ];
+                    return $new;
+                })->values()->all();
+                dd($penjualan);
                 $waktu = "tahun " . Carbon::parse($waktu)->translatedFormat('Y');
                 break;
         }
