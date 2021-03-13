@@ -142,35 +142,39 @@ class PenjualanSeeder extends Seeder
                 'status' => 'finished',
             ]);
 
-            // Pembelian
-            $pembelian = $pembelian->create([
-                'kode_transaksi' => $pembelian->kodeTransaksi($staff_id),
-                'business_id' => 2,
-                'staff_id' => $staff_id,
-                'created_at' => $value
-            ]);
-
-            for($i = 0; $i <= 1; $i++) {
-
-                $product = Product::withoutGlobalScope('business')
-                                    ->where('business_id', 2)
-                                    ->inRandomOrder()->first();
-                $quantity = rand(1,5);
-                $harga_beli = rand($product->harga_beli, rand(1000, 75000));
+            if( $value->isSaturday() || $value->isThursday() ) { 
+                $n = $value->isSaturday() ? 4 : 2;
                 
-                $pembelian->detail_pembelian()->updateOrCreate([
-                    'product_id'     => $product->id,
-                ],[    
-                    'quantity'       => $quantity,
-                    'harga_beli'     => $harga_beli,
-                    'subtotal_harga' => $quantity * $harga_beli 
+                // Pembelian
+                $pembelian = $pembelian->create([
+                    'kode_transaksi' => $pembelian->kodeTransaksi($staff_id),
+                    'business_id' => 2,
+                    'staff_id' => $staff_id,
+                    'created_at' => $value
+                ]);
+
+                for($i = 0; $i <= $n; $i++) {
+
+                    $product = Product::withoutGlobalScope('business')
+                                        ->where('business_id', 2)
+                                        ->inRandomOrder()->first();
+                    $quantity = rand(1,5);
+                    $harga_beli = rand($product->harga_beli, rand(1000, 75000));
+                    
+                    $pembelian->detail_pembelian()->updateOrCreate([
+                        'product_id'     => $product->id,
+                    ],[    
+                        'quantity'       => $quantity,
+                        'harga_beli'     => $harga_beli,
+                        'subtotal_harga' => $quantity * $harga_beli 
+                    ]);
+                }
+
+                $pembelian->refresh();
+                $pembelian->update([
+                    'status' => 'finished',
                 ]);
             }
-
-            $pembelian->refresh();
-            $pembelian->update([
-                'status' => 'finished',
-            ]);
         } 
     }
 }
