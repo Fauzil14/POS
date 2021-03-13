@@ -107,7 +107,7 @@ class TransaksiSeeder extends Seeder
                                                             ->orWhere('stok', '>=', 100);
                                         })
                                         ->inRandomOrder()->first();
-                    $quantity = rand(50, 5000);
+                    $quantity = rand(10, 100);
                     $harga_beli = rand($product_pembelian->harga_beli - rand(1000, 3000), $product_pembelian->harga_beli + rand(1000, 3000));
 
                     $pembelian->detail_pembelian()->updateOrCreate([

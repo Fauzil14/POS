@@ -19,7 +19,7 @@ class CreateShiftsTable extends Migration
             $table->timestamp('start_time');
             $table->timestamp('end_time')->nullable();
             $table->integer('transaction_on_shift');
-            $table->double('total_penjualan_on_shift', 20, 2);
+            $table->decimal('total_penjualan_on_shift', 20, 2);
         });
     }
 
