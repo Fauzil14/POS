@@ -99,21 +99,25 @@ class TransaksiSeeder extends Seeder
 
                 for($b = 0; $b <= $n; $b++) {
 
-                    $product = Product::withoutGlobalScope('business')
+                    $product_pembelian = Product::withoutGlobalScope('business')
                                         ->where('business_id', 2)
-                                        ->where('stok', '<', 20)
+                                        ->where(function($query) {
+                                            return $query->where('stok', '<', 20)
+                                                            ->orWhere('stok', '<', 100)
+                                                            ->orWhere('stok', '>=', 100);
+                                        })
                                         ->inRandomOrder()->first();
                     $quantity = rand(50, 5000);
-                    $harga_beli = rand($product->harga_beli - rand(1000, 3000), $product->harga_beli + rand(1000, 3000));
-                    
+                    $harga_beli = rand($product_pembelian->harga_beli - rand(1000, 3000), $product_pembelian->harga_beli + rand(1000, 3000));
+
                     $pembelian->detail_pembelian()->updateOrCreate([
-                        'product_id'     => $product->id,
+                        'product_id'     => $product_pembelian->id,
                     ],[    
                         'quantity'       => $quantity,
                         'harga_beli'     => $harga_beli,
-                        'harga_jual'     => empty($product->diskon) 
+                        'harga_jual'     => empty($product_pembelian->diskon) 
                                                 ? $harga_beli + 3000 
-                                                : $harga_beli + (($harga_beli * ($product->diskon + 10) / 100)),
+                                                : $harga_beli + (($harga_beli * ($product_pembelian->diskon + 10) / 100)),
                         'subtotal_harga' => $quantity * $harga_beli 
                     ]);
                 }
