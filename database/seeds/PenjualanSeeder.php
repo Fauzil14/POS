@@ -144,7 +144,7 @@ class PenjualanSeeder extends Seeder
 
             // Pembelian
             $pembelian = $pembelian->create([
-                'kode_transaksi' => $pembelian->kodeTransaksi($kasir_id),
+                'kode_transaksi' => $pembelian->kodeTransaksi($staff_id),
                 'business_id' => 2,
                 'staff_id' => $staff_id,
                 'created_at' => $value
