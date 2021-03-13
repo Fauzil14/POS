@@ -86,8 +86,8 @@ class TransaksiSeeder extends Seeder
                 ]);
             }
 
-            if( $value->isSaturday() || $value->isThursday() ) { 
-                $n = $value->isSaturday() ? 4 : 2;
+            if( $value->isThursday() ) { 
+                $n = rand(1,4);
                 
                 // Pembelian
                 $pembelian = $pembelian->create([
