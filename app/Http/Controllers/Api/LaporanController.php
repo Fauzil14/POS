@@ -66,10 +66,14 @@ class LaporanController extends Controller
             case 7 : // full set month
                 $keluar = DetailPenjualan::whereHas('penjualan', function($q) use ($waktu) {
                     return $q->finished()->month($waktu);
-                })->select('product_id', 'quantity', 'created_at')->get();
+                })->select('product_id', 'quantity', 'created_at')->get()->groupBy(function($penjualan) {
+                    return $penjualan->created_at->format('W'); // month
+                });;
                 $masuk = DetailPembelian::whereHas('pembelian', function($q) use ($waktu) {
                     return $q->finished()->month($waktu);
-                })->select('product_id', 'quantity', 'created_at')->get();
+                })->select('product_id', 'quantity', 'created_at')->get()->groupBy(function($penjualan) {
+                    return $penjualan->created_at->format('W'); // month
+                });;
                 $keluar = $keluar->map(function($item, $key) {
                     $new = array_merge([ 'minggu_ke' => $key ], $this->processStokBarang($item));
                     return $new;
