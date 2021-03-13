@@ -137,7 +137,7 @@ class TransaksiSeeder extends Seeder
                 6.'Harga Pokok Penjualan',
                 7.'Beban Lain-Lain',
             */
-            if( $value->isSaturday('last week of ' . $value->format('F Y'))) {
+            if( $value == $value->lastOfMonth(Carbon::SATURDAY) ) {
                 $desc = [
                     'Beban Gaji Karyawan',
                     'Beban Listrik',
