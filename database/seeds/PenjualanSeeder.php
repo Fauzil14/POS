@@ -158,7 +158,7 @@ class PenjualanSeeder extends Seeder
                 $quantity = rand(1,5);
                 $harga_beli = rand($product->harga_beli, rand(1000, 75000));
                 
-                $pembelian->detail_penjualan()->updateOrCreate([
+                $pembelian->detail_pembelian()->updateOrCreate([
                     'product_id'     => $product->id,
                 ],[    
                     'quantity'       => $quantity,
