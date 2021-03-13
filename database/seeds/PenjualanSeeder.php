@@ -128,13 +128,23 @@ class PenjualanSeeder extends Seeder
             */
             if( $value->isSaturday('last week of ' . $value->format('F Y'))) {
                 $desc = [
-                    'Beban Gaji Karyawan' => 1000000,
-                    'Beban Listrik' => 500000,
-                    'Beban Air' => 200000,
-                    'Beban Penyewaan Gedung' => 1000000,
-                    'Beban Angkut Penjualan' => 750000,
-                    'Harga Pokok Penjualan' => 0,
-                    'Beban Lain-Lain' => 157000,
+                    'Beban Gaji Karyawan',
+                    'Beban Listrik',
+                    'Beban Air',
+                    'Beban Penyewaan Gedung',
+                    'Beban Angkut Penjualan',
+                    'Harga Pokok Penjualan',
+                    'Beban Lain-Lain',
+                ];
+
+                $sbt = [
+                    1000000,
+                    500000,
+                    200000,
+                    1000000,
+                    750000,
+                    0,
+                    157000,
                 ];
                 
                 $pengeluaran = Pengeluaran::firstOrCreate([
@@ -147,8 +157,8 @@ class PenjualanSeeder extends Seeder
                         $pengeluaran->detail_pengeluaran()->updateOrCreate([
                             'pegawai_id' => $staff_id,
                             'beban_id' => $i+1,
-                            'deskripsi' => array_search($desc[$i], $desc), // return key of the array
-                            'subtotal_pengeluaran' => $desc[$i],
+                            'deskripsi' => $desc[$i], // return key of the array
+                            'subtotal_pengeluaran' => $sbt[$i],
                         ]);
                     } else {
                         continue;
