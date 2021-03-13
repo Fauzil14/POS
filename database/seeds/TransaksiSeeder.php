@@ -104,13 +104,16 @@ class TransaksiSeeder extends Seeder
                                         ->where('stok', '<', 20)
                                         ->inRandomOrder()->first();
                     $quantity = rand(50, 5000);
-                    $harga_beli = rand($product->harga_beli, rand(1000, 75000));
+                    $harga_beli = rand($product->harga_beli - rand(1000, 3000), $product->harga_beli + rand(1000, 3000));
                     
                     $pembelian->detail_pembelian()->updateOrCreate([
                         'product_id'     => $product->id,
                     ],[    
                         'quantity'       => $quantity,
                         'harga_beli'     => $harga_beli,
+                        'harga_jual'     => empty($product->diskon) 
+                                                ? $harga_beli + 3000 
+                                                : $harga_beli + (($harga_beli * ($product->diskon + 10) / 100)),
                         'subtotal_harga' => $quantity * $harga_beli 
                     ]);
                 }
