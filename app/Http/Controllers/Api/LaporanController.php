@@ -22,7 +22,7 @@ class LaporanController extends Controller
     */
     public function getLaporan($jenis_laporan, $waktu) 
     {
-
+        
         switch ($jenis_laporan) {
             case $jenis_laporan == 'stok_barang' :
                 $result = $this->laporanStokBarang($waktu);
