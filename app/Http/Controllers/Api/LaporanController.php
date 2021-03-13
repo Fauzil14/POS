@@ -78,7 +78,7 @@ class LaporanController extends Controller
                     $new = array_merge([ 'minggu_ke' => $key ], $this->processStokBarang($item));
                     return $new;
                 })->values()->all()->toArray();
-                $stok = array_merge($keluar, $masuk));
+                $stok = array_merge($keluar, $masuk);
                 $waktu = "bulan " . Carbon::parse($waktu)->translatedFormat('F Y');
                 break;
             case 4 : // year
