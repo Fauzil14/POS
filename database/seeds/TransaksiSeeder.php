@@ -86,7 +86,7 @@ class TransaksiSeeder extends Seeder
                 ]);
             }
 
-            if( $value->isThursday() ) { 
+            if( $value->isThursday() || $value->isSaturday() ) { 
                 $n = rand(1,4);
                 
                 // Pembelian
@@ -149,9 +149,9 @@ class TransaksiSeeder extends Seeder
                 ];
 
                 $sbt = [
+                    750000,
                     500000,
-                    250000,
-                    100000,
+                    150000,
                     750000,
                     500000,
                     0,
