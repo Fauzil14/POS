@@ -20,7 +20,8 @@ class DetailPenjualan extends Model
         parent::boot();
 
         static::creating(function($model) {
-            $model->created_at = $model->penjualan()->created_at;
+            $penjualan = Penjualan::find($model->penjualan_id);
+            $model->created_at = $penjualan->created_at;
         });
 
         static::created(function($model) {

@@ -19,7 +19,8 @@ class DetailPembelian extends Model
         parent::boot();
 
         static::creating(function($model) {
-            $model->created_at = $model->pembelian()->created_at;
+            $pembelian = Pembelian::find($model->pembelian_id);
+            $model->created_at = $pembelian->created_at;
         });
 
         static::created(function($model) {

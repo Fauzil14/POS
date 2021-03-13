@@ -70,7 +70,6 @@ class LaporanController extends Controller
                 $masuk = DetailPembelian::whereHas('pembelian', function($q) use ($waktu) {
                     return $q->finished()->month($waktu);
                 })->get();
-                dd($keluar);
                 // $keluar = $keluar->map(function($item, $key) {
                 //     $new = array_merge([ 'minggu_ke' => $key ], $this->processStokBarang($item));
                 //     return $new;
