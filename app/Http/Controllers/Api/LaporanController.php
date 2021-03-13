@@ -9,6 +9,7 @@ use App\Models\Penjualan;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\LaporanPembelianResource;
 use App\Http\Resources\LaporanPenjualanResource;
 
 class LaporanController extends Controller
