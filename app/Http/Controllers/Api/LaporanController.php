@@ -8,6 +8,7 @@ use App\Models\Pembelian;
 use App\Models\Penjualan;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\BusinessTransaction;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\LaporanPembelianResource;
 use App\Http\Resources\LaporanPenjualanResource;
@@ -29,6 +30,7 @@ class LaporanController extends Controller
                 $result = $this->laporanStokBarang($waktu);
                 return $this->sendResponse('success', 'Laporan stok barang ' . $result[0], $result[1], 200);
                 break;
+                $result = $this->laporanStokBarang($waktu);
             case $jenis_laporan == 'transaksi_pembelian' : 
                 $result = $this->laporanPembelian($waktu);
                 return $this->sendResponse('success', 'Laporan transaksi pembelian ' . $result[0], $result[1], 200);
@@ -37,7 +39,7 @@ class LaporanController extends Controller
                 $result = $this->laporanPenjualan($waktu);
                 return $this->sendResponse('success', 'Laporan transaksi penjualan ' . $result[0], $result[1], 200);
                 break;
-            case $jenis_laporan == 'laba_rugi';
+            case $jenis_laporan == 'laba_rugi' :
                 $result = $this->laporanLabaRugi($waktu);
                 return $this->sendResponse('success', 'Laporan laba rugi ' . $result[0], $result[1], 200);                
                 break;
@@ -153,7 +155,53 @@ class LaporanController extends Controller
 
     public function laporanLabaRugi($waktu) 
     {
-        $message = 'laporanLabaRugi here';
-        return $message;
+        switch (strlen($waktu)) {
+            case 10 : // full set date
+                $transaksi = BusinessTransaction::date($waktu)->get();
+                $processed = $this->processLabaRugi($transaksi);
+                // $transaksi = LaporanPembelianResource::collection($transaksi);
+                $waktu = "tanggal " . Carbon::parse($waktu)->translatedFormat('d F Y');
+                break;
+            case 7 : // full set month
+                $transaksi = BusinessTransaction::month($waktu)->get();
+                $processed = $this->processLabaRugi($transaksi);
+                $transaksi = $transaksi->groupBy(function($transaksi) {
+                    return $transaksi->created_at->format('W'); // weeks
+                });
+                $transaksi = $transaksi->map(function($item, $key) {
+                    $new = array_merge([ 'minggu_ke' => $key ], $this->processLabaRugi($item));
+                    return $new;
+                })->values()->all();
+                $waktu = "bulan " . Carbon::parse($waktu)->translatedFormat('F Y');
+                break;
+            case 4 : // year
+                $transaksi = BusinessTransaction::year($waktu)->get();
+                $processed = $this->processLabaRugi($transaksi);
+                $transaksi = $transaksi->groupBy(function($transaksi) {
+                    return $transaksi->created_at->format('Y-m'); // month
+                });
+                $transaksi = $transaksi->map(function($item, $key) {
+                    $new = array_merge([ 'bulan' => Carbon::parse($key)->translatedFormat('F') ], $this->processLabaRugi($item));
+                    return $new;
+                })->values()->all();
+                $waktu = "tahun " . Carbon::parse($waktu)->translatedFormat('Y');
+                break;
+        }
+        
+        return [$waktu, array_merge($processed, [ 'transaksi' => $transaksi ])];
     }
+
+    public function processLabaRugi($transaksi) 
+    {
+        return [
+                'jumlah_pembelian' => count($transaksi),
+                'jumlah_produk_dibeli' => $transaksi->sum('total_produk'),
+                'total_pembelian' => Str::decimalForm($transaksi->sum('total_price'), true),
+                'jumlah_penjualan' => count($transaksi),
+                'jumlah_produk_terjual' => $transaksi->sum('total_produk'),
+                'total_penjualan' => Str::decimalForm($transaksi->sum('total_price'), true),
+
+        ];
+    }
+
 }

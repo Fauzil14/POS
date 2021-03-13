@@ -16,7 +16,22 @@ class BusinessTransaction extends Model
         ,'pemasukan'
         ,'pengeluaran'
         ,'saldo_transaksi'
+        ,'created_at'
     ];
+
+    public function scopeDate($query, $tanggal) {
+        $query->whereDate('created_at', $tanggal);
+    }
+    
+    public function scopeMonth($query, $bulan) {
+        $bulan = explode('-', $bulan);
+        $query->whereYear('created_at', $bulan[0])
+                ->whereMonth('created_at', $bulan[1]);
+    }
+
+    public function scopeYear($query, $tahun) {
+        $query->whereYear('created_at', $tahun);
+    }
 
     public function penjualan() {
         return $this->hasOne(Penjualan::class, 'id', 'transaction_id');

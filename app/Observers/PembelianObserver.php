@@ -31,7 +31,8 @@ class PembelianObserver
                 'transaction_id'    => $pembelian->id,
                 'jenis_transaksi'   => 'pembelian',
                 'pengeluaran'       => $pembelian->total_price,
-                'saldo_transaksi'   => $pembelian->business->keuangan->saldo - $pembelian->total_price
+                'saldo_transaksi'   => $pembelian->business->keuangan->saldo - $pembelian->total_price,
+                'created_at'        => $pembelian->created_at
             ]);
             $pembelian->business->keuangan->increment('pengeluaran', $pembelian->total_price);
             $pembelian->business->keuangan->decrement('saldo', $pembelian->total_price);

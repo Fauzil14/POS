@@ -170,6 +170,7 @@ class TransaksiSeeder extends Seeder
                             'beban_id' => $c+1,
                             'deskripsi' => $desc[$c], // return key of the array
                             'subtotal_pengeluaran' => $sbt[$c],
+                            'created_at' => $value,
                         ]);
                     } else {
                         continue;
