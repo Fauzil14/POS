@@ -23,8 +23,6 @@ class DetailPenjualanResource extends JsonResource
             "harga_jual" => $this->harga_jual,
             "diskon" => $this->diskon,
             "subtotal_harga" => $this->subtotal_harga,
-            "created_at" => $this->created_at,
-            "updated_at" => $this->updated_at
         ];
     }
 }

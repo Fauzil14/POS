@@ -25,6 +25,13 @@ class Penjualan extends Model
                             ,'created_at'
                             ,'updated_at'
                           ];
+
+    protected $appends = [ 'total_produk' ];
+
+    public function getTotalProdukAttribute() {
+        return $this->attributes['total_produk'] = $this->detail_penjualan()->sum('quantity');
+    }
+
     public function scopeFinished($query) {
         $query->where('status', 'finished');
     }

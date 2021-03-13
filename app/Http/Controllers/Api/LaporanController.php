@@ -9,6 +9,7 @@ use App\Models\Penjualan;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\LaporanPenjualanResource;
 
 class LaporanController extends Controller
 {
@@ -60,6 +61,7 @@ class LaporanController extends Controller
             case 10 : // full set date
                 $penjualan = Penjualan::finished()->date($waktu)->get();
                 $processed = $this->processPenjualan($penjualan);
+                $penjualan = LaporanPenjualanResource::collection($penjualan);
                 $waktu = "tanggal " . Carbon::parse($waktu)->translatedFormat('d F Y');
                 break;
             case 7 : // full set month
@@ -98,6 +100,7 @@ class LaporanController extends Controller
                 'jumlah_kasir' => count($penjualan->groupBy('kasir_id')),
                 'transaksi_member' => $penjualan->where('member_id', '!=', null)->count(),
                 'transaksi_non_member' => $penjualan->where('member_id', null)->count(),
+                'jumlah_produk_terjual' => $penjualan->sum('total_produk'),
                 'total_penjualan' => Str::decimalForm($penjualan->sum('total_price'), true),
                 'jumlah_tunai' => $penjualan->where('jenis_pembayaran', 'tunai')->count(),
                 'jumlah_debit' => $penjualan->where('jenis_pembayaran', 'debit')->count(),
