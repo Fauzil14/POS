@@ -33,6 +33,10 @@ class BusinessTransaction extends Model
         $query->whereYear('created_at', $tahun);
     }
 
+    public function jenisTransaksi($jenis_transaksi) {
+        return $this->where('jenis_transaksi', $jenis_transaksi);
+    }
+
     public function penjualan() {
         return $this->hasOne(Penjualan::class, 'id', 'transaction_id');
     }

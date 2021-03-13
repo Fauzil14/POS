@@ -194,12 +194,10 @@ class LaporanController extends Controller
     public function processLabaRugi($transaksi) 
     {
         return [
-                'jumlah_pembelian' => count($transaksi),
-                'jumlah_produk_dibeli' => $transaksi->sum('total_produk'),
-                'total_pembelian' => Str::decimalForm($transaksi->sum('total_price'), true),
-                'jumlah_penjualan' => count($transaksi),
-                'jumlah_produk_terjual' => $transaksi->sum('total_produk'),
-                'total_penjualan' => Str::decimalForm($transaksi->sum('total_price'), true),
+                'jumlah_penjualan' => count($transaksi->where('jenis_transaksi', 'penjualan')),
+                'total_penjualan' => Str::decimalForm($transaksi->where('jenis_transaksi', 'penjualan')->sum('pemasukan'), true),
+                'jumlah_pembelian' => count($transaksi->where('jenis_transaksi', 'pembelian')),
+                'total_pembelian' => Str::decimalForm($transaksi->where('jenis_transaksi', 'pembelian')->sum('pengeluaran'), true),
 
         ];
     }
