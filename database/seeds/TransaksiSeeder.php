@@ -101,6 +101,7 @@ class TransaksiSeeder extends Seeder
 
                     $product = Product::withoutGlobalScope('business')
                                         ->where('business_id', 2)
+                                        ->where('stok', '<', 20)
                                         ->inRandomOrder()->first();
                     $quantity = rand(50, 5000);
                     $harga_beli = rand($product->harga_beli, rand(1000, 75000));
