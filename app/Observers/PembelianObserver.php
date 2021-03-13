@@ -8,6 +8,11 @@ use App\Models\Product;
 class PembelianObserver
 {
 
+    public function creating(Pembelian $pembelian)
+    {
+        $pembelian->status = 'unfinished';
+    }
+
     public function updated(Pembelian $pembelian) 
     {
         
