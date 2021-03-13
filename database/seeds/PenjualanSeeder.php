@@ -53,7 +53,7 @@ class PenjualanSeeder extends Seeder
                     'created_at' => $value
                 ]);
     
-                for($i = 0; $i <= 2; $i++) {
+                for($a = 0; $a <= 2; $a++) {
     
                     $product = Product::withoutGlobalScope('business')
                                         ->where('business_id', 2)
@@ -96,7 +96,7 @@ class PenjualanSeeder extends Seeder
                     'created_at' => $value
                 ]);
 
-                for($i = 0; $i <= $n; $i++) {
+                for($b = 0; $b <= $n; $b++) {
 
                     $product = Product::withoutGlobalScope('business')
                                         ->where('business_id', 2)
@@ -154,13 +154,13 @@ class PenjualanSeeder extends Seeder
                     'business_id' => 2,
                 ]);
 
-                for($i = 0; $i <= 6; $i++) {
-                    if( $i != 5 ) {
+                for($c = 0; $c <= 6; $c++) {
+                    if( $c != 5 ) {
                         $pengeluaran->detail_pengeluaran()->updateOrCreate([
                             'pegawai_id' => $staff_id,
-                            'beban_id' => $i+1,
-                            'deskripsi' => $desc[$i], // return key of the array
-                            'subtotal_pengeluaran' => $sbt[$i],
+                            'beban_id' => $c+1,
+                            'deskripsi' => $desc[$c], // return key of the array
+                            'subtotal_pengeluaran' => $sbt[$c],
                         ]);
                     } else {
                         continue;
