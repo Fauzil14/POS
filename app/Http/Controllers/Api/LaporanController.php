@@ -49,12 +49,6 @@ class LaporanController extends Controller
         return $stok;
     }
 
-    public function laporanPembelian($waktu) 
-    {
-        $pembelian = Pembelian::get();
-        return $pembelian;
-    }
-
     public function laporanPenjualan($waktu) 
     {
         switch (strlen($waktu)) {
@@ -104,6 +98,54 @@ class LaporanController extends Controller
                 'total_penjualan' => Str::decimalForm($penjualan->sum('total_price'), true),
                 'jumlah_tunai' => $penjualan->where('jenis_pembayaran', 'tunai')->count(),
                 'jumlah_debit' => $penjualan->where('jenis_pembayaran', 'debit')->count(),
+        ];
+    }
+
+    public function laporanPembelian($waktu) 
+    {
+        switch (strlen($waktu)) {
+            case 10 : // full set date
+                $pembelian = Pembelian::finished()->date($waktu)->get();
+                $processed = $this->processPembelian($pembelian);
+                $pembelian = LaporanPenjualanResource::collection($pembelian);
+                $waktu = "tanggal " . Carbon::parse($waktu)->translatedFormat('d F Y');
+                break;
+            case 7 : // full set month
+                $pembelian = Pembelian::finished()->month($waktu)->get();
+                $processed = $this->processPembelian($pembelian);
+                $pembelian = $pembelian->groupBy(function($pembelian) {
+                    return $pembelian->created_at->format('W'); // weeks
+                });
+                $pembelian = $pembelian->map(function($item, $key) {
+                    $new = array_merge([ 'minggu_ke' => $key ], $this->processPembelian($item));
+                    return $new;
+                })->values()->all();
+                $waktu = "bulan " . Carbon::parse($waktu)->translatedFormat('F Y');
+                break;
+            case 4 : // year
+                $pembelian = Pembelian::finished()->year($waktu)->get();
+                $processed = $this->processPembelian($pembelian);
+                $pembelian = $pembelian->groupBy(function($pembelian) {
+                    return $pembelian->created_at->format('Y-m'); // month
+                });
+                $pembelian = $pembelian->map(function($item, $key) {
+                    $new = array_merge([ 'bulan' => Carbon::parse($key)->translatedFormat('F') ], $this->processPembelian($item));
+                    return $new;
+                })->values()->all();
+                $waktu = "tahun " . Carbon::parse($waktu)->translatedFormat('Y');
+                break;
+        }
+        
+        return [$waktu, array_merge($processed, [ 'pembelian' => $pembelian ])];
+    }
+
+    public function processPembelian($pembelian) 
+    {
+        return [
+                'jumlah_pembelian' => count($pembelian),
+                'jumlah_staff' => count($pembelian->groupBy('staff_id')),
+                'jumlah_produk_dibeli' => $pembelian->sum('total_produk'),
+                'total_pembelian' => Str::decimalForm($pembelian->sum('total_price'), true),
         ];
     }
 

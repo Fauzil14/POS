@@ -17,12 +17,17 @@ class Pengeluaran extends Model
         ,'total_pengeluaran'
     ];
 
+
     public function detail_pengeluaran() {
         return $this->hasMany('App\Models\DetailPengeluaran', 'pengeluaran_id', 'id');
     }
 
     public function business_transaction() {
         return $this->hasOne(BusinessTransaction::class, 'transcaction_id', 'id');
+    }
+
+    public function business() {
+        return $this->hasOne(Business::class, 'id', 'business_id');
     }
 
 }

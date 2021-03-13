@@ -51,7 +51,6 @@ class PengeluaranController extends Controller
             'deskripsi'             => $validatedData['deskripsi'],
             'subtotal_pengeluaran'  => $validatedData['subtotal_pengeluaran'],
         ]);
-
         
         if( $request->wantsJson() ) {
             $data = new PengeluaranResource($pengeluaran->fresh());
