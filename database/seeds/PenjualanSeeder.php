@@ -147,8 +147,8 @@ class PenjualanSeeder extends Seeder
                         $pengeluaran->detail_pengeluaran()->updateOrCreate([
                             'pegawai_id' => $staff_id,
                             'beban_id' => $i+1,
-                            'deskripsi' => array_search($desc[$i+1], $desc),
-                            'subtotal_pengeluaran' => $desc[$i+1],
+                            'deskripsi' => array_search($desc[$i], $desc), // return key of the array
+                            'subtotal_pengeluaran' => $desc[$i],
                         ]);
                     } else {
                         continue;
