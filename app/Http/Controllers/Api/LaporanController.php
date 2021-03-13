@@ -203,8 +203,8 @@ class LaporanController extends Controller
                 'total_penjualan' => Str::decimalForm($total_penjualan, true),
                 'jumlah_pembelian' => count($transaksi->where('jenis_transaksi', 'pembelian')),
                 'total_pembelian' => Str::decimalForm($total_pembelian, true),
-                'jumlah_pembelian' => count($transaksi->where('jenis_transaksi', 'pengeluaran')),
-                'total_pembelian' => Str::decimalForm($total_pengeluaran, true),
+                'jumlah_pengeluaran' => count($transaksi->where('jenis_transaksi', 'pengeluaran')),
+                'total_pengeluaran' => Str::decimalForm($total_pengeluaran, true),
                 'laba_rugi' => Str::decimalForm($laba_rugi, true)
         ];
     }
