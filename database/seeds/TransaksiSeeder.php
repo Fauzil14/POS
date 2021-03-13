@@ -1,14 +1,14 @@
 <?php
 
+use Carbon\Carbon;
 use App\Models\Member;
 use App\Models\Product;
 use App\Models\Pembelian;
 use App\Models\Penjualan;
 use App\Models\Pengeluaran;
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Seeder;
 
-class PenjualanSeeder extends Seeder
+class TransaksiSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,6 +17,7 @@ class PenjualanSeeder extends Seeder
      */
     public function run()
     {
+        
 
         $first_day = Carbon::parse('first day of January 2021');
         $last_day  = Carbon::parse('last day of February 2021');
@@ -54,13 +55,13 @@ class PenjualanSeeder extends Seeder
                 ]);
     
                 for($a = 0; $a <= 2; $a++) {
+
+                    $quantity = rand(1,3);
     
                     $product = Product::withoutGlobalScope('business')
                                         ->where('business_id', 2)
-                                        ->where('stok', '>', 0)
+                                        ->where('stok', '>=', $quantity)
                                         ->inRandomOrder()->first();
-                                        
-                    $quantity = rand(1,5);
                     
                     $penjualan->detail_penjualan()->updateOrCreate([
                         'product_id'     => $product->id,
@@ -101,7 +102,7 @@ class PenjualanSeeder extends Seeder
                     $product = Product::withoutGlobalScope('business')
                                         ->where('business_id', 2)
                                         ->inRandomOrder()->first();
-                    $quantity = rand(1,5);
+                    $quantity = rand(1, 50);
                     $harga_beli = rand($product->harga_beli, rand(1000, 75000));
                     
                     $pembelian->detail_pembelian()->updateOrCreate([
@@ -167,6 +168,6 @@ class PenjualanSeeder extends Seeder
                     }
                 }
             }
-        } 
+        }
     }
 }

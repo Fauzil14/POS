@@ -74,7 +74,7 @@ class ProductSeeder extends Seeder
                         'category_id' => $raw[1],
                         'supplier_id' => rand(1, 19),
                         'merek' => $raw[2],
-                        'stok' => rand(0, 50),
+                        'stok' => rand(20, 100),
                         'diskon' => $diskon,
                         'created_at' => now(),
                         'updated_at' => now(),
