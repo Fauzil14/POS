@@ -146,12 +146,12 @@ class PenjualanSeeder extends Seeder
                     'business_id' => 2,
                 ]);
 
-                for($i = 1; $i <= 7; $i++) {
-                    if( $i != 7 ) {
+                for($i = 0; $i <= 6; $i++) {
+                    if( $i != 5 ) {
                         $pengeluaran->detail_pengeluaran()->updateOrCreate([
                             'pegawai_id' => $staff_id,
-                            'beban_id' => $i,
-                            'deskripsi' => array_search($desc[$i], $desc),
+                            'beban_id' => $i+1,
+                            'deskripsi' => array_search($desc[$i+1], $desc),
                             'subtotal_pengeluaran' => $desc[$i+1],
                         ]);
                     } else {
