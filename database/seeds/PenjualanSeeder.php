@@ -44,8 +44,9 @@ class PenjualanSeeder extends Seeder
         $staff_id = rand(6,7);
 
         foreach($dateRange as $key => $value) {
-
-                $penjualan = $penjualan->create([
+            $x = rand(3, 6);
+            for($i = 1; $i <=$x; $i++) {
+                $penjualan = $penjualan->firstOrCreate([
                     'kode_transaksi' => $penjualan->kodeTransaksi($kasir_id),
                     'business_id' => 2,
                     'kasir_id' => $kasir_id,
@@ -82,6 +83,7 @@ class PenjualanSeeder extends Seeder
                     'dibayar' => $penjualan->total_price,
                     'status' => 'finished',
                 ]);
+            }
 
             if( $value->isSaturday() || $value->isThursday() ) { 
                 $n = $value->isSaturday() ? 4 : 2;
