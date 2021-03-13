@@ -66,19 +66,19 @@ class LaporanController extends Controller
             case 7 : // full set month
                 $keluar = DetailPenjualan::whereHas('penjualan', function($q) use ($waktu) {
                     return $q->finished()->month($waktu);
-                })->get();
+                })->select('product_id', 'quantity', 'created_at')->get();
                 $masuk = DetailPembelian::whereHas('pembelian', function($q) use ($waktu) {
                     return $q->finished()->month($waktu);
-                })->get();
-                // $keluar = $keluar->map(function($item, $key) {
-                //     $new = array_merge([ 'minggu_ke' => $key ], $this->processStokBarang($item));
-                //     return $new;
-                // })->values()->all();
-                // $masuk = $masuk->map(function($item, $key) {
-                //     $new = array_merge([ 'minggu_ke' => $key ], $this->processStokBarang($item));
-                //     return $new;
-                // })->values()->all();
-                $stok = $this->processStokBarang($keluar, $masuk);
+                })->select('product_id', 'quantity', 'created_at')->get();
+                $keluar = $keluar->map(function($item, $key) {
+                    $new = array_merge([ 'minggu_ke' => $key ], $this->processStokBarang($item));
+                    return $new;
+                })->values()->all()->toArray();
+                $masuk = $masuk->map(function($item, $key) {
+                    $new = array_merge([ 'minggu_ke' => $key ], $this->processStokBarang($item));
+                    return $new;
+                })->values()->all()->toArray();
+                $stok = array_merge($keluar, $masuk));
                 $waktu = "bulan " . Carbon::parse($waktu)->translatedFormat('F Y');
                 break;
             case 4 : // year
@@ -97,24 +97,38 @@ class LaporanController extends Controller
         return [$waktu, $stok];
     }
 
-    public function processStokBarang($keluar, $masuk) 
+    public function processStokBarang($keluar = null, $masuk = null) 
     {
-        return [
-            'stok_keluar' => $keluar->groupBy('product_id')->map(function($item, $key) {
+        if ( $keluar != null ) {
+            $stok_keluar = ['stok_keluar' => $keluar->groupBy('product_id')->map(function($item, $key) {
                                 $product = Product::find($key);
                                 return [ 
                                     'nama_produk' => empty($product) ? 'Produk sudah di hapus' : $product->nama,
                                     'total_keluar' => $item->sum('quantity')
                                 ];
-                            })->values()->all(),
-            'stok_masuk' => $masuk->groupBy('product_id')->map(function($item, $key) {
+                            })->values()->all()];
+            
+            if( $masuk == null ) {
+                return $stok_keluar;
+            }
+            
+        }
+
+        if ( $masuk != null ) {
+            $stok_masuk = ['stok_masuk' => $masuk->groupBy('product_id')->map(function($item, $key) {
                                 $product = Product::find($key);
                                 return [ 
                                     'nama_produk' => empty($product) ? 'Produk sudah di hapus' : $product->nama,
                                     'total_masuk' => $item->sum('quantity')
                                 ];
-                            })->values()->all()
-        ];
+                            })->values()->all()];
+
+            if( $keluar == null ) {
+                return $stok_masuk;
+            }
+        }
+
+        return array_merge($stok_keluar, $stok_masuk);
     }
 
     public function laporanPenjualan($waktu) 
