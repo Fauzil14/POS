@@ -77,12 +77,12 @@ class LaporanController extends Controller
                 $keluar = $keluar->map(function($item, $key) {
                     $new = array_merge([ 'minggu_ke' => $key ], $this->processStokBarang($item));
                     return $new;
-                })->values()->all()->toArray();
+                })->values()->all();
                 $masuk = $masuk->map(function($item, $key) {
                     $new = array_merge([ 'minggu_ke' => $key ], $this->processStokBarang($item));
                     return $new;
-                })->values()->all()->toArray();
-                $stok = array_merge($keluar, $masuk);
+                })->values()->all();
+                $stok = array_merge_recursive($keluar, $masuk);
                 $waktu = "bulan " . Carbon::parse($waktu)->translatedFormat('F Y');
                 break;
             case 4 : // year
