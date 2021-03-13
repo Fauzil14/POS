@@ -45,8 +45,8 @@ class TransaksiSeeder extends Seeder
         $staff_id = rand(6,7);
 
         foreach($dateRange as $key => $value) {
-            $x = rand(3, 6);
-            for($i = 1; $i <=$x; $i++) {
+            $x = rand(1, 4);
+            for($i = 1; $i <= $x; $i++) {
                 $penjualan = $penjualan->firstOrCreate([
                     'kode_transaksi' => $penjualan->kodeTransaksi($kasir_id),
                     'business_id' => 2,
@@ -102,7 +102,7 @@ class TransaksiSeeder extends Seeder
                     $product = Product::withoutGlobalScope('business')
                                         ->where('business_id', 2)
                                         ->inRandomOrder()->first();
-                    $quantity = rand(1, 50);
+                    $quantity = rand(50, 5000);
                     $harga_beli = rand($product->harga_beli, rand(1000, 75000));
                     
                     $pembelian->detail_pembelian()->updateOrCreate([
