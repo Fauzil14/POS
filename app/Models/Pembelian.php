@@ -22,6 +22,30 @@ class Pembelian extends Model
         ,'updated_at'
     ];
 
+    protected $appends = [ 'total_produk' ];
+
+    public function getTotalProdukAttribute() {
+        return $this->attributes['total_produk'] = $this->detail_pembelian()->sum('quantity');
+    }
+
+    public function scopeFinished($query) {
+        $query->where('status', 'finished');
+    }
+
+    public function scopeDate($query, $tanggal) {
+        $query->whereDate('created_at', $tanggal);
+    }
+    
+    public function scopeMonth($query, $bulan) {
+        $bulan = explode('-', $bulan);
+        $query->whereYear('created_at', $bulan[0])
+                ->whereMonth('created_at', $bulan[1]);
+    }
+
+    public function scopeYear($query, $tahun) {
+        $query->whereYear('created_at', $tahun);
+    }
+
     public function pembelian_product() {
         return $this->belongsToMany('App\Models\Product', 'detail_pembelians')->withPivot('pembelian_id', 'product_id', 'quantity', 'harga_beli', 'subtotal_harga');
     }

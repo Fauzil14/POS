@@ -44,8 +44,6 @@ class PenjualanSeeder extends Seeder
         $staff_id = rand(6,7);
 
         foreach($dateRange as $key => $value) {
-            $x = rand(3, 6);
-            for($i = 0; $i <= $x; $i++) {
 
                 $penjualan = $penjualan->create([
                     'kode_transaksi' => $penjualan->kodeTransaksi($kasir_id),
@@ -84,7 +82,6 @@ class PenjualanSeeder extends Seeder
                     'dibayar' => $penjualan->total_price,
                     'status' => 'finished',
                 ]);
-            }
 
             if( $value->isSaturday() || $value->isThursday() ) { 
                 $n = $value->isSaturday() ? 4 : 2;
@@ -119,7 +116,6 @@ class PenjualanSeeder extends Seeder
                     'status' => 'finished',
                 ]);
             }
-    
             
             /* Note: Beban
                 1.'Beban Gaji Karyawan',
