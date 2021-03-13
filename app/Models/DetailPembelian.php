@@ -18,6 +18,10 @@ class DetailPembelian extends Model
     protected static function boot() {
         parent::boot();
 
+        static::creating(function($model) {
+            $model->created_at = $model->pembelian()->created_at;
+        });
+
         static::created(function($model) {
             $pembelian = Pembelian::find($model->pembelian_id);
             $pembelian->update(['total_price' => $pembelian->detail_pembelian->sum('subtotal_harga')]);

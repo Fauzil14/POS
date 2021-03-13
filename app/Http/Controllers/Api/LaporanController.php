@@ -8,6 +8,8 @@ use App\Models\Pembelian;
 use App\Models\Penjualan;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\DetailPembelian;
+use App\Models\DetailPenjualan;
 use App\Models\BusinessTransaction;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\LaporanPembelianResource;
@@ -49,7 +51,71 @@ class LaporanController extends Controller
     public function laporanStokBarang($waktu) 
     {
         $stok = Product::get();
-        return $stok;
+
+        switch (strlen($waktu)) {
+            case 10 : // full set date
+                $keluar = DetailPenjualan::whereHas('penjualan', function($q) use ($waktu) {
+                    return $q->finished()->date($waktu);
+                })->select('product_id', 'quantity')->get();
+                $masuk = DetailPembelian::whereHas('pembelian', function($q) use ($waktu) {
+                    return $q->finished()->date($waktu);
+                })->select('product_id', 'quantity')->get();
+                $stok = $this->processStokBarang($keluar, $masuk);
+                $waktu = "tanggal " . Carbon::parse($waktu)->translatedFormat('d F Y');
+                break;
+            case 7 : // full set month
+                $keluar = DetailPenjualan::whereHas('penjualan', function($q) use ($waktu) {
+                    return $q->finished()->month($waktu);
+                })->get();
+                $masuk = DetailPembelian::whereHas('pembelian', function($q) use ($waktu) {
+                    return $q->finished()->month($waktu);
+                })->get();
+                dd($keluar);
+                // $keluar = $keluar->map(function($item, $key) {
+                //     $new = array_merge([ 'minggu_ke' => $key ], $this->processStokBarang($item));
+                //     return $new;
+                // })->values()->all();
+                // $masuk = $masuk->map(function($item, $key) {
+                //     $new = array_merge([ 'minggu_ke' => $key ], $this->processStokBarang($item));
+                //     return $new;
+                // })->values()->all();
+                $stok = $this->processStokBarang($keluar, $masuk);
+                $waktu = "bulan " . Carbon::parse($waktu)->translatedFormat('F Y');
+                break;
+            case 4 : // year
+                $penjualan = Penjualan::finished()->year($waktu)->get();
+                $penjualan = $penjualan->groupBy(function($penjualan) {
+                    return $penjualan->created_at->format('Y-m'); // month
+                });
+                $penjualan = $penjualan->map(function($item, $key) {
+                    $new = array_merge([ 'bulan' => Carbon::parse($key)->translatedFormat('F') ], $this->processPenjualan($item));
+                    return $new;
+                })->values()->all();
+                $waktu = "tahun " . Carbon::parse($waktu)->translatedFormat('Y');
+                break;
+        }
+
+        return [$waktu, $stok];
+    }
+
+    public function processStokBarang($keluar, $masuk) 
+    {
+        return [
+            'stok_keluar' => $keluar->groupBy('product_id')->map(function($item, $key) {
+                                $product = Product::find($key);
+                                return [ 
+                                    'nama_produk' => empty($product) ? 'Produk sudah di hapus' : $product->nama,
+                                    'total_keluar' => $item->sum('quantity')
+                                ];
+                            })->values()->all(),
+            'stok_masuk' => $masuk->groupBy('product_id')->map(function($item, $key) {
+                                $product = Product::find($key);
+                                return [ 
+                                    'nama_produk' => empty($product) ? 'Produk sudah di hapus' : $product->nama,
+                                    'total_masuk' => $item->sum('quantity')
+                                ];
+                            })->values()->all()
+        ];
     }
 
     public function laporanPenjualan($waktu) 

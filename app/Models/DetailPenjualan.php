@@ -13,10 +13,15 @@ class DetailPenjualan extends Model
                             ,'harga_jual'
                             ,'diskon'
                             ,'subtotal_harga'
+                            ,'created_at'
                          ];
 
     protected static function boot() {
         parent::boot();
+
+        static::creating(function($model) {
+            $model->created_at = $model->penjualan()->created_at;
+        });
 
         static::created(function($model) {
             $penjualan = Penjualan::find($model->penjualan_id);
