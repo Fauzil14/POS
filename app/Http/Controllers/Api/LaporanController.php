@@ -107,7 +107,7 @@ class LaporanController extends Controller
             case 10 : // full set date
                 $pembelian = Pembelian::finished()->date($waktu)->get();
                 $processed = $this->processPembelian($pembelian);
-                $pembelian = LaporanPenjualanResource::collection($pembelian);
+                $pembelian = LaporanPembelianResource::collection($pembelian);
                 $waktu = "tanggal " . Carbon::parse($waktu)->translatedFormat('d F Y');
                 break;
             case 7 : // full set month
@@ -144,6 +144,7 @@ class LaporanController extends Controller
         return [
                 'jumlah_pembelian' => count($pembelian),
                 'jumlah_staff' => count($pembelian->groupBy('staff_id')),
+                'jumlah_supplier' => count($pembelian->groupBy('supplier_id')),
                 'jumlah_produk_dibeli' => $pembelian->sum('total_produk'),
                 'total_pembelian' => Str::decimalForm($pembelian->sum('total_price'), true),
         ];
