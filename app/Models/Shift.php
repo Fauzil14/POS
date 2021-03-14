@@ -35,6 +35,20 @@ class Shift extends Model
         });
     }
 
+    public function scopeDate($query, $tanggal) {
+        $query->whereDate('created_at', $tanggal);
+    }
+    
+    public function scopeMonth($query, $bulan) {
+        $bulan = explode('-', $bulan);
+        $query->whereYear('created_at', $bulan[0])
+                ->whereMonth('created_at', $bulan[1]);
+    }
+
+    public function scopeYear($query, $tahun) {
+        $query->whereYear('created_at', $tahun);
+    }
+
     public function user() {
         return $this->hasOne(User::class, 'id', 'kasir_id');
     }
