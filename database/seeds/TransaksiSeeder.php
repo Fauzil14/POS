@@ -93,7 +93,7 @@ class TransaksiSeeder extends Seeder
             }
 
             $shift->update([
-                'end_time' => Carbon::createFromFormat('Y-m-d H', $value->toDateString() . ' 07'),
+                'end_time' => Carbon::createFromFormat('Y-m-d H', $value->toDateString() . ' 17'),
             ]);
 
             if( $value->isThursday() || $value->isSaturday() ) { 
