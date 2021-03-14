@@ -348,7 +348,7 @@ class LaporanController extends Controller
                         $new = $this->processAbsensiKasirByDay($item->where('kasir_id', $key)->first());
                         return $new;
                     });
-                    $new = array_merge([ 'minggu_ke' => $key ], $shift_by_day);
+                    $new = array_merge([ 'minggu_ke' => $key ], $shift_by_day->values()->all());
                     return $new;
                 })->values()->all();
                 $waktu = "bulan " . Carbon::parse($waktu)->translatedFormat('F Y');
