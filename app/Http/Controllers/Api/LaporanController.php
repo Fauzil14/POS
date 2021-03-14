@@ -67,12 +67,12 @@ class LaporanController extends Controller
                 $keluar = DetailPenjualan::whereHas('penjualan', function($q) use ($waktu) {
                     return $q->finished()->month($waktu);
                 })->select('product_id', 'quantity', 'created_at')->get()->groupBy(function($penjualan) {
-                    return $penjualan->created_at->format('W'); // month
+                    return $penjualan->created_at->format('W'); // weeks
                 });;
                 $masuk = DetailPembelian::whereHas('pembelian', function($q) use ($waktu) {
                     return $q->finished()->month($waktu);
                 })->select('product_id', 'quantity', 'created_at')->get()->groupBy(function($penjualan) {
-                    return $penjualan->created_at->format('W'); // month
+                    return $penjualan->created_at->format('W'); // weeks
                 });;
                 $keluar = $keluar->map(function($item, $key) {
                     $new = array_merge([ 'minggu_ke' => $key ], $this->processStokBarang($item));
@@ -86,14 +86,25 @@ class LaporanController extends Controller
                 $waktu = "bulan " . Carbon::parse($waktu)->translatedFormat('F Y');
                 break;
             case 4 : // year
-                $penjualan = Penjualan::finished()->year($waktu)->get();
-                $penjualan = $penjualan->groupBy(function($penjualan) {
-                    return $penjualan->created_at->format('Y-m'); // month
-                });
-                $penjualan = $penjualan->map(function($item, $key) {
-                    $new = array_merge([ 'bulan' => Carbon::parse($key)->translatedFormat('F') ], $this->processPenjualan($item));
+                $keluar = DetailPenjualan::whereHas('penjualan', function($q) use ($waktu) {
+                    return $q->finished()->year($waktu);
+                })->select('product_id', 'quantity', 'created_at')->get()->groupBy(function($penjualan) {
+                    return $penjualan->created_at->format('Y-m'); // months
+                });;
+                $masuk = DetailPembelian::whereHas('pembelian', function($q) use ($waktu) {
+                    return $q->finished()->year($waktu);
+                })->select('product_id', 'quantity', 'created_at')->get()->groupBy(function($penjualan) {
+                    return $penjualan->created_at->format('Y-m'); // months
+                });;
+                $keluar = $keluar->map(function($item, $key) {
+                    $new = array_merge([ 'bulan' => Carbon::parse($key)->translatedFormat('F') ], $this->processStokBarang($item));
                     return $new;
                 })->values()->all();
+                $masuk = $masuk->map(function($item, $key) {
+                    $new = array_merge([ 'bulan' => Carbon::parse($key)->translatedFormat('F') ], $this->processStokBarang($item));
+                    return $new;
+                })->values()->all();
+                $stok = array_merge_recursive($keluar, $masuk);
                 $waktu = "tahun " . Carbon::parse($waktu)->translatedFormat('Y');
                 break;
         }

@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Pembelian;
 use App\Models\Penjualan;
 use App\Models\Pengeluaran;
+use App\Models\Shift;
 use Illuminate\Database\Seeder;
 
 class TransaksiSeeder extends Seeder
@@ -18,7 +19,6 @@ class TransaksiSeeder extends Seeder
     public function run()
     {
         
-
         $first_day = Carbon::parse('first day of January 2021');
         $last_day  = Carbon::parse('last day of February 2021');
 
@@ -45,6 +45,13 @@ class TransaksiSeeder extends Seeder
         $staff_id = rand(6,7);
 
         foreach($dateRange as $key => $value) {
+            // start kasir shift
+            $shift = Shift::create([
+                'kasir_id' => $kasir_id,
+                'start_time' => Carbon::create($value->format('y'), $value->format('M'), $value->format('d'), 7, 0, 0),
+            ]);
+            
+            
             $x = rand(1, 4);
             for($i = 1; $i <= $x; $i++) {
                 $penjualan = $penjualan->firstOrCreate([
@@ -85,6 +92,10 @@ class TransaksiSeeder extends Seeder
                     'status' => 'finished',
                 ]);
             }
+
+            $shift->update([
+                'end_time' => Carbon::create($value->format('y'), $value->format('M'), $value->format('d'), 18, 0, 0),
+            ]);
 
             if( $value->isThursday() || $value->isSaturday() ) { 
                 $n = rand(1,4);
@@ -177,6 +188,7 @@ class TransaksiSeeder extends Seeder
                     }
                 }
             }
+
         }
     }
 }
