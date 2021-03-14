@@ -35,7 +35,11 @@ class Shift extends Model
         });
     }
 
+    public function user() {
+        return $this->hasOne(User::class, 'id', 'kasir_id');
+    }
+
     public function kasir() {
-        return $this->hasOne(Kasir::class, 'id', 'kasir_id');
+        return $this->hasOne(Kasir::class, 'user_id', 'kasir_id');
     }
 }
