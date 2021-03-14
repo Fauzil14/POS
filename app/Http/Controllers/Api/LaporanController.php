@@ -327,7 +327,7 @@ class LaporanController extends Controller
     {
         switch (strlen($waktu)) {
             case 10 : // full set date
-                $shift = Shift::date($waktu)->get();
+                $shift = Shift::date($waktu)->first();
                 $shift = $this->processAbsensiKasirByDay($shift);
                 $waktu = "tanggal " . Carbon::parse($waktu)->translatedFormat('d F Y');
                 break;
