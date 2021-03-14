@@ -357,7 +357,9 @@ class LaporanController extends Controller
     }
 
     public function processAbsensiKasirByDay($shift) {
-        $shift = $shift->first()->map(function($item,$key) {
+        $new = [];
+        foreach($shift as $key => $value) {
+            dd($key, $value);
             $user = User::find($item->kasir_id);
             $start_time = Carbon::parse($item->start_time);
             $new = [
@@ -368,10 +370,9 @@ class LaporanController extends Controller
                 'transaction_on_shift' => $item->transaction_on_shift,
                 'total_penjualan_on_shift' => Str::decimalForm($item->total_penjualan_on_shift, true)
             ];
-            return $new;
-        });
+        }
 
-        return $shift;
+        return $new;
     }
 
 

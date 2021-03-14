@@ -85,7 +85,7 @@
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Tambah Produk Baru</h4>
+            <h4 class="modal-title">Tambah Supplier Baru</h4>
             <a href="#" class="btn btn-default ng-binding mx-2" id="reset-form"> <i class="fas fa-sync-alt"></i> &nbsp; Reset Form</a>
             <button type="button" class="close close-tambah" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
@@ -101,17 +101,17 @@
                           <p class="mb-1">Informasi Umum</p>
                           <hr class="mt-0">
                           <div class="form-group row">
-                            <label class="col-sm-2 col-form-label" for="uid">UID</label>
+                            <label class="col-sm-2 col-form-label" for="nama_supplier">Nama Supplier</label>
                             <div class="col-sm-10">
-                              <input type="text" class="form-control" name="uid" id="uid" placeholder="Masukkan Kode Produk (Optional)">
-                              <div class="alert-message" id="uidError" style="color: red;"></div>
+                              <input type="text" class="form-control" name="nama_supplier" id="nama_supplier" placeholder="Masukkan Nama Supplier">
+                              <div class="alert-message" id="nama_supplierError" style="color: red;"></div>
                             </div>
                           </div>
                           <div class="form-group row">
-                            <label class="col-sm-2 col-form-label" for="merek">Merek</label>
+                            <label class="col-sm-2 col-form-label" for="alamat_supplier">Alamat Supplier</label>
                             <div class="col-sm-10">
-                              <input type="text" class="form-control" name="merek" id="merek" placeholder="Masukkan merek Produk">
-                              <div class="alert-message" id="merekError" style="color: red;"></div>
+                              <input type="text" class="form-control" name="alamat_supplier" id="alamat_supplier" placeholder="Masukkan Alamat Supplier">
+                              <div class="alert-message" id="alamat_supplierError" style="color: red;"></div>
                             </div>
                           </div>
                           <div class="form-group row">
@@ -121,88 +121,6 @@
                               <div class="alert-message" id="namaError" style="color: red;"></div>
                             </div>
                           </div>
-                          <div class="row">
-                            <div class="col-sm-5">
-                              <div class="form-group">
-                                <label class="col-sm-6 col-form-label" for="category_id">Kategori</label>
-                                <div class="col-sm">
-                                    <!-- select -->
-                                      <select class="custom-select" id="category_id" name="category_id">
-                                        <option selected disabled>Pilih Kategori Produk</option>
-                                        @foreach ($categories as $category)
-                                          <option value="{{ $category->id }}">{{ ucfirst($category->category_name) }}</option>
-                                        @endforeach
-                                      </select>
-                                </div>
-                                <div class="alert-message" id="categoryIdError" style="color: red;"></div>
-                              </div>
-                            </div>
-                            <div class="col-sm-7">
-                              <div class="form-group">
-                                <label class="col-sm-6 col-form-label" for="supplier_id">Supplier</label>
-                                <div class="col-sm">
-                                    <!-- select -->
-                                    <select class="custom-select" id="supplier_id" name="supplier_id">
-                                      <option selected disabled>Pilih supplier</option>
-                                      @foreach ($suppliers as $supplier)
-                                        <option value="{{ $supplier->id }}">{{ ucfirst($supplier->nama_supplier) }}</option>
-                                      @endforeach
-                                    </select>
-                                </div>
-                                <div class="alert-message" id="supplierIdError" style="color: red;"></div>
-                              </div>
-                            </div>
-                          </div>
-                          <p class="mb-0 mt-4">Kalkulasi Harga</p>
-                          <hr class="mt-0 mb-1">
-                          <div class="row">
-                            <div class="col-sm-5">
-                              <div class="form-group">
-                                <label class="col-sm-4 col-form-label" for="harga_beli">Harga beli</label>
-                                <div class="input-group">
-                                  <div class="input-group-prepend">
-                                    <span class="input-group-text">Rp.</span>
-                                  </div>
-                                    <input type="number" class="form-control" id="harga_beli" name="harga_beli">
-                                  </div>
-                                  <div class="alert-message" id="hargaBeliError" style="color: red;"></div>
-                              </div>
-                            </div>
-                            <div class="col-sm-5">
-                              <label class="col-sm-4 col-form-label" for="harga_jual">Harga Jual</label>
-                              <div class="input-group">
-                                <div class="input-group-prepend">
-                                  <span class="input-group-text">Rp.</span>
-                                </div>
-                                <input type="number" class="form-control" id="harga_jual" name="harga_jual">
-                              </div>
-                              <div class="alert-message" id="hargaJualError" style="color: red;"></div>
-                            </div>
-                            <div class="col-sm-2">
-                              <label class="col-sm-4 col-form-label" for="diskon">Diskon</label>
-                              <div class="input-group">
-                                <input type="number" class="form-control" id="diskon" name="diskon">
-                                <div class="input-group-append">
-                                  <span class="input-group-text">%</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <p class="mb-0 mt-3">Persediaan</p>
-                          <hr class="mt-0">                         
-                          <div class="form-group row mt-3">
-                              <label class="col-sm-2 col-form-label" for="stok">Stok</label>
-                              <div class="col-sm-10">
-                                <div class="input-group">
-                                  <input type="number" class="form-control" id="stok" name="stok">
-                                  <div class="input-group-append">
-                                    <span class="input-group-text">PCS</span>
-                                  </div>
-                                </div>
-                                <div class="alert-message" id="stokError" style="color: red;"></div>
-                              </div>
-                          </div>
-                        </div>
                 
                   <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default close-tambah" data-dismiss="modal">Batalkan</button>
@@ -290,8 +208,8 @@
             position: 'topLeft',
             autohide: true,
             delay: 10000,
-            body: "UID&emsp;&emsp;&emsp; : &nbsp"+data.uid+
-                  "<br>Merek&emsp;&emsp; : &nbsp"+data.merek+
+            body: "nama_supplier&emsp;&emsp;&emsp; : &nbsp"+data.nama_supplier+
+                  "<br>alamat_supplier&emsp;&emsp; : &nbsp"+data.alamat_supplier+
                   "<br>Nama&emsp;&emsp; : &nbsp"+data.nama+
                   "<br>Kategori&emsp; : &nbsp"+data.category_name+
                   "<br>Supplier&emsp; : &nbsp"+data.nama_supplier+
@@ -305,8 +223,8 @@
           $('.alert-message').empty();
         },
         error: function(data) {
-              $('#uidError').text(data.responseJSON.error.uid);
-              $('#merekError').text(data.responseJSON.error.merek);
+              $('#nama_supplierError').text(data.responseJSON.error.nama_supplier);
+              $('#alamat_supplierError').text(data.responseJSON.error.alamat_supplier);
               $('#namaError').text(data.responseJSON.error.nama);
               $('#categoryIdError').text(data.responseJSON.error.category_id);
               $('#supplierIdError').text(data.responseJSON.error.supplier_id);
