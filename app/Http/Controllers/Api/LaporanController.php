@@ -357,8 +357,7 @@ class LaporanController extends Controller
     }
 
     public function processAbsensiKasirByDay($shift) {
-        $shift = $shift->map(function($item,$key) {
-            dd($item);
+        $shift = $shift->first()->map(function($item,$key) {
             $user = User::find($item->kasir_id);
             $start_time = Carbon::parse($item->start_time);
             $new = [
