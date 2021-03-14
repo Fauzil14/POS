@@ -340,7 +340,7 @@ class LaporanController extends Controller
                 $shift = Shift::month($waktu)->get();
                 $processed = $this->processAbsensiKasir($shift);
                 $shift = $shift->map(function($item,$key) {
-                    $new = $this->processAbsensiKasirByDay($item->first());
+                    $new = $this->processAbsensiKasirByDay(collect($item->toArray()));
                     return $new;
                 });
                 $waktu = "bulan " . Carbon::parse($waktu)->translatedFormat('F Y');
@@ -351,7 +351,7 @@ class LaporanController extends Controller
 
     public function processAbsensiKasir($shift) {
         return [
-            'sum_transaction_on_shift' => Str::decimalForm($shift->sum('transaction_on_shift'), true),
+            'sum_transaction_on_shift' => $shift->sum('transaction_on_shift'),
             'sum_total_penjualan_on_shift' => Str::decimalForm($shift->sum('total_penjualan_on_shift'), true)
         ];
     }

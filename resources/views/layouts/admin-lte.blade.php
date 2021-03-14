@@ -340,6 +340,15 @@
               </li>
             </ul>
           </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="fas fa-truck-moving"></i>
+              <p>
+                Supplier
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+          </li>
           <li class="nav-header">Action</li>
           <li class="nav-item">
             <a class="nav-link" href="{{ route('logout') }}"
