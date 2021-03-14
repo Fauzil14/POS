@@ -21,6 +21,8 @@ class Kasir extends Model
     }
 
     public function shift() {
-      return $this->hasMany(Shift::class, 'kasir_id', 'id');
+      return $this->hasMany(Shift::class, 'kasir_id', 'user_id');
     }
+
+
 }
