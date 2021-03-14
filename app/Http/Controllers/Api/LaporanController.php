@@ -344,10 +344,11 @@ class LaporanController extends Controller
                 });
                 $shift = $shift->map(function($item, $key) {
                     $kasir = $item->groupBy('kasir_id');
-                    // $shift_by_day[] = $kasir->map(function($item,$key) {
-                    //     $new = $item->
-                    // });
-                    $new = array_merge([ 'minggu_ke' => $key ], );
+                    $shift_by_day = $kasir->map(function($item,$key) {
+                        $new = $this->processAbsensiKasirByDay($item->where('kasir_id', $key)->first());
+                        return $new;
+                    });
+                    $new = array_merge([ 'minggu_ke' => $key ], $shift_by_day);
                     return $new;
                 })->values()->all();
                 $waktu = "bulan " . Carbon::parse($waktu)->translatedFormat('F Y');
