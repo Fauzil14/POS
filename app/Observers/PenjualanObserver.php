@@ -42,11 +42,11 @@ class PenjualanObserver
             $penjualan->business->keuangan->increment('saldo', $penjualan->total_price);
 
             if( $penjualan->user->role == 'kasir' ) {
-                $penjualan->kasir->increment('number_of_transaction', 1);
-                $penjualan->kasir->increment('total_penjualan', $penjualan->total_price);
-                if( $penjualan->kasir->status == 'on_shift' ) {
-                    $penjualan->kasir->shift->where('end_time', null)->first()->increment('transaction_on_shift', 1);
-                    $penjualan->kasir->shift->where('end_time', null)->first()->increment('total_penjualan_on_shift', $penjualan->total_price);
+                $penjualan->user->kasir->increment('number_of_transaction', 1);
+                $penjualan->user->kasir->increment('total_penjualan', $penjualan->total_price);
+                if( $penjualan->user->kasir->status == 'on_shift' ) {
+                    $penjualan->user->kasir->shift->where('end_time', null)->first()->increment('transaction_on_shift', 1);
+                    $penjualan->user->kasir->shift->where('end_time', null)->first()->increment('total_penjualan_on_shift', $penjualan->total_price);
                 };
             }
         }
