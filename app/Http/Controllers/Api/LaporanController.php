@@ -331,7 +331,7 @@ class LaporanController extends Controller
                 $processed = $this->processAbsensiKasir($shift);
                 $shift = $shift->groupBy('kasir_id');
                 $shift = $shift->map(function($item,$key) {
-                    $new[] = $this->processAbsensiKasirByDay($item->where('kasir_id', $key)->first());
+                    $new = $this->processAbsensiKasirByDay($item->where('kasir_id', $key)->first());
                     return $new;
                 })->values();
                 $waktu = "tanggal " . Carbon::parse($waktu)->translatedFormat('d F Y');
