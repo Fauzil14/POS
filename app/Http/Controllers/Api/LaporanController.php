@@ -329,9 +329,11 @@ class LaporanController extends Controller
             case 10 : // full set date
                 $shift = Shift::date($waktu)->get();
                 $processed = $this->processAbsensiKasir($shift);
-                $shift = $shift->groupBy('kasir_id')->map(function($item,$key) {
-                    dd($item);
-                    return $this->processAbsensiKasirByDay($item);
+                $shift = $shift->groupBy('kasir_id');
+                return response()->json($shift);
+                $shift = $shift->map(function($item,$key) {
+                    $new[] = $this->processAbsensiKasirByDay($item);
+                    return $new;
                 });
                 $waktu = "tanggal " . Carbon::parse($waktu)->translatedFormat('d F Y');
                 break;
@@ -342,7 +344,7 @@ class LaporanController extends Controller
                     return Carbon::parse($shift->start_time)->format('W'); // weeks
                 });
                 $shift = $shift->map(function($item, $key) {
-                    $new = array_merge([ 'minggu_ke' => $key ], $this->processAbsensiKasirByDay($item));
+                    $new = array_merge([ 'minggu_ke' => $key ], $this->processAbsensiKasirByDay($item->first()));
                     return $new;
                 })->values()->all();
                 $waktu = "bulan " . Carbon::parse($waktu)->translatedFormat('F Y');
@@ -354,7 +356,7 @@ class LaporanController extends Controller
                     return Carbon::parse($shift->start_time)->format('Y-m'); // month
                 });
                 $shift = $shift->map(function($item, $key) {
-                    $new = array_merge([ 'bulan' => Carbon::parse($key)->translatedFormat('F') ], $this->processAbsensiKasirByDay($item));
+                    $new = array_merge([ 'bulan' => Carbon::parse($key)->translatedFormat('F') ], $this->processAbsensiKasirByDay($item->first()));
                     return $new;
                 })->values()->all();
                 $waktu = "tahun " . Carbon::parse($waktu)->translatedFormat('Y');
