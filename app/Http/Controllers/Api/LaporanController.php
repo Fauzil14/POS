@@ -333,7 +333,7 @@ class LaporanController extends Controller
                 $shift = $shift->map(function($item,$key) {
                     $new[] = $this->processAbsensiKasirByDay($item->where('kasir_id', $key)->first());
                     return $new;
-                });
+                })->values()->all();
                 $waktu = "tanggal " . Carbon::parse($waktu)->translatedFormat('d F Y');
                 break;
             case 7 : // full set month
