@@ -330,7 +330,7 @@ class LaporanController extends Controller
                 $shift = Shift::date($waktu)->get();
                 $processed = $this->processAbsensiKasir($shift);
                 $shift = $shift->groupBy('kasir_id');
-                return response()->json($shift);
+                dd($shift);
                 $shift = $shift->map(function($item,$key) {
                     $new[] = $this->processAbsensiKasirByDay($item);
                     return $new;
