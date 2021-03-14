@@ -331,6 +331,7 @@ class LaporanController extends Controller
                 $processed = $this->processAbsensiKasir($shift);
                 
                 $shift = $shift->map(function($item,$key) {
+                    dd($item);
                     $new = $this->processAbsensiKasirByDay($item);
                     return $new;
                 })->values();
