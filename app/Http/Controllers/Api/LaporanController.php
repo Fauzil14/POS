@@ -49,7 +49,7 @@ class LaporanController extends Controller
                 break;
             case $jenis_laporan == 'absensi_kasir' :
                 $result = $this->laporanAbsensiKasir($waktu) ;
-                return;
+                return $this->sendResponse('success', 'Laporan absensi kasir ' . $result[0], $result[1], 200);                
                 break;
         }
     }
@@ -335,7 +335,7 @@ class LaporanController extends Controller
                 $shift = Shift::month($waktu)->get();
                 $processed = $this->processAbsensiKasir($shift);
                 $shift = $shift->groupBy(function($shift) {
-                    return $shift->start_time->format('W'); // weeks
+                    return Carbon::parse($shift->start_time)->format('W'); // weeks
                 });
                 $shift = $shift->map(function($item, $key) {
                     $new = array_merge([ 'minggu_ke' => $key ], $this->processAbsensiKasirByDay($item));
@@ -347,7 +347,7 @@ class LaporanController extends Controller
                 $shift = Shift::year($waktu)->get();
                 $processed = $this->processAbsensiKasir($shift);
                 $shift = $shift->groupBy(function($shift) {
-                    return $shift->start_time->format('Y-m'); // month
+                    return Carbon::parse($shift->start_time)->format('Y-m'); // month
                 });
                 $shift = $shift->map(function($item, $key) {
                     $new = array_merge([ 'bulan' => Carbon::parse($key)->translatedFormat('F') ], $this->processAbsensiKasirByDay($item));
