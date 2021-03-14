@@ -48,9 +48,8 @@ class TransaksiSeeder extends Seeder
             // start kasir shift
             $shift = Shift::create([
                 'kasir_id' => $kasir_id,
-                'start_time' => Carbon::create($value->format('y'), $value->format('M'), $value->format('d'), 7, 0, 0),
+                'start_time' => Carbon::createFromFormat('Y-m-d H', $value->toDateString() . ' 07')
             ]);
-            
             
             $x = rand(1, 4);
             for($i = 1; $i <= $x; $i++) {
@@ -94,7 +93,7 @@ class TransaksiSeeder extends Seeder
             }
 
             $shift->update([
-                'end_time' => Carbon::create($value->format('y'), $value->format('M'), $value->format('d'), 18, 0, 0),
+                'end_time' => Carbon::createFromFormat('Y-m-d H', $value->toDateString() . ' 07'),
             ]);
 
             if( $value->isThursday() || $value->isSaturday() ) { 

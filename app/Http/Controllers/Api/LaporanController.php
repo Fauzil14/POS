@@ -45,6 +45,10 @@ class LaporanController extends Controller
                 $result = $this->laporanLabaRugi($waktu);
                 return $this->sendResponse('success', 'Laporan laba rugi ' . $result[0], $result[1], 200);                
                 break;
+            case $jenis_laporan == 'absensi_kasir' :
+                $result = $this->laporanAbsensiKasir($waktu) ;
+                return;
+                break;
         }
     }
 
