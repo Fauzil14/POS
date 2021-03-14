@@ -53,8 +53,8 @@
                     @foreach($suppliers as $supplier)
                         <tr>
                             <td>{{ $n++ }}</td>
-                            <td>{{$supplier->nama_supplier}}</td>
-                            <td id="nama-supplier-{{$supplier->id}}">{{$supplier->alamat_supplier}}</td>
+                            <td id="nama-supplier-{{$supplier->id}}">{{$supplier->nama_supplier}}</td>
+                            <td>{{$supplier->alamat_supplier}}</td>
                             <td>{{$supplier->telepon_supplier}}</td>
                             <td class="text-right py-0 align-middle">
                               <div class="btn-group btn-group-sm">
@@ -62,7 +62,7 @@
                                 <button onclick="deleteConfirmation({{$supplier->id}})" class="btn btn-danger">
                                   <i class="fas fa-trash"></i>
                                 </button>
-                                <form id="delete-supplier-form-{{$supplier->id}}" class="d-none" action="{{route('inventaris.delete.product', $supplier->id)}}" method="post">
+                                <form id="delete-supplier-form-{{$supplier->id}}" class="d-none" action="{{route('supplier.delete', $supplier->id)}}" method="post">
                                   @method('DELETE')
                                   @csrf 
                                 </form>
@@ -238,7 +238,7 @@
 
 <script type="text/javascript">
   function deleteConfirmation(id) {
-      var nama_product = $('#nama-supplier-'+id).text();
+      var nama_supplier = $('#nama-supplier-'+id).text();
       console.log(nama_supplier);
 
       Swal.fire({

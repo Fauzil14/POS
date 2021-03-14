@@ -342,10 +342,9 @@
           </li>
           <li class="nav-item">
             <a href="{{ route('supplier') }}" class="nav-link">
-              <i class="fas fa-truck-moving"></i>
-              <p class="pl-2">
+              <i class="nav-icon fas fa-truck-moving"></i>
+              <p>
                 Supplier
-                <i class="right fas fa-angle-left"></i>
               </p>
             </a>
           </li>

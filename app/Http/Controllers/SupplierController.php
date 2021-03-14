@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Validation\ValidationException;
 
 class SupplierController extends Controller
@@ -47,6 +48,29 @@ class SupplierController extends Controller
         $supplier = Supplier::create($validatedData);
 
         return response()->json($supplier);
+    }
+
+    public function show($supplier_id)
+    {
+        $supplier = Supplier::findOrFail($supplier_id);
+        $supplier->load('product');
+
+        return view('supplier.detail-supplier', compact('supplier'));
+    }
+
+    public function delete($supplier_id)
+    {
+        $supplier = Supplier::findOrFail($supplier_id);
+
+        try {
+            $supplier->delete();
+    
+            Alert::success('Berhasil', 'Supplier berhasil di hapus');
+            return redirect()->route('supplier');
+        } catch(\Throwable $e) {
+            Alert::error('Gagal', 'Supplier gagal di hapus');
+            return back();
+        }
     }
 
 }
