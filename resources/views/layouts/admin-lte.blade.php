@@ -341,9 +341,9 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="" class="nav-link">
               <i class="fas fa-truck-moving"></i>
-              <p>
+              <p class="pl-2">
                 Supplier
                 <i class="right fas fa-angle-left"></i>
               </p>

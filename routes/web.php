@@ -45,4 +45,8 @@ Route::prefix('dashboard')->middleware(['verified'])->group(function() {
         Route::delete('/delete-kategori/{category_id}', 'CategoryController@delete')->name('inventaris.delete.kategori');
 
     });
+
+    Route::prefix('supplier')->group(function() {
+        Route::get('/', 'SupplierController@index')->name('supplier');
+    });
 });

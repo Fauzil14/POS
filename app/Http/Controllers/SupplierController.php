@@ -9,6 +9,13 @@ use Illuminate\Validation\ValidationException;
 
 class SupplierController extends Controller
 {
+    public function index() 
+    {
+        $suppliers = Supplier::get();
+
+        return view('supplier.index')
+    }
+
     public function cariSupplier($keyword = null) {
 
         $data = Supplier::where(function($query) use ($keyword) {
@@ -28,4 +35,5 @@ class SupplierController extends Controller
         } 
         dd('data to view');
     }
+
 }
