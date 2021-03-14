@@ -104,7 +104,7 @@ class LaporanController extends Controller
                     $new = array_merge([ 'bulan' => Carbon::parse($key)->translatedFormat('F') ], $this->processStokBarang($item));
                     return $new;
                 })->values()->all();
-                $stok = array_merge_recursive($keluar, $masuk);
+                $stok = array_merge($keluar, $masuk);
                 $waktu = "tahun " . Carbon::parse($waktu)->translatedFormat('Y');
                 break;
         }
