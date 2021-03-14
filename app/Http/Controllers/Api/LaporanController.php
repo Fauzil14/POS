@@ -344,7 +344,7 @@ class LaporanController extends Controller
                 });
                 $shift = $shift->map(function($item, $key) {
                     $kasir = $item->groupBy('kasir_id');
-                    $shift_by_day = $kasir->map(function($item,$key) {
+                    $shift_by_day[] = $kasir->map(function($item,$key) {
                         $new = $this->processAbsensiKasirByDay($item->where('kasir_id', $key)->first());
                         return $new;
                     });
