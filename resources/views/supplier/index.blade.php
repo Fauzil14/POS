@@ -15,14 +15,14 @@
       <div class="row mb-2">
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-left">
-            <li class="breadcrumb-item"><a href="#"><h3>Daftar Produk</h3></a></li>
+            <li class="breadcrumb-item"><a href="#"><h3>Daftar Supplier</h3></a></li>
           </ol>
         </div>
         <div class="col-sm-6">
           <div class="d-flex justify-content-end">
-            <a class="btn btn-default ng-binding mr-2" onClick="window.location.reload()"> <i class="fas fa-sync-alt"></i> Total Produk : {{ count($products) }}</a>
+            <a class="btn btn-default ng-binding mr-2" onClick="window.location.reload()"> <i class="fas fa-sync-alt"></i> Total Supplier : {{ count($suppliers) }}</a>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-lg">
-              Tambah Produk
+              Tambah Supplier
             </button>
           </div>
         </div>
@@ -42,35 +42,26 @@
                   <thead>
                   <tr>
                     <th>No</th>
-                    <th>UID</th>
-                    <th>Nama</th>
-                    <th>Kategori</th>
-                    <th>Supplier</th>
-                    <th>Stok</th>
-                    <th>Harga Jual</th>
-                    <th>Diskon</th>
-                    <th>Aksi</th>
+                    <th>Nama Supplier</th>
+                    <th>Alamat Supplier</th>
+                    <th>Telepon Supplier</th>
                   </tr>
                   </thead>
                   <tbody>
                     @php $n = 1 @endphp
-                    @foreach($products as $product)
+                    @foreach($suppliers as $supplier)
                         <tr>
                             <td>{{ $n++ }}</td>
-                            <td>{{$product->uid}}</td>
-                            <td id="nama-product-{{$product->id}}">{{$product->nama}}</td>
-                            <td>{{ucfirst($product->category->category_name)}}</td>
-                            <td>{{$product->supplier->nama_supplier}}</td>
-                            <td>{{$product->stok}}</td>
-                            <td>{{$product->harga_jual}}</td>
-                            <td>{{$product->diskon}}</td>
+                            <td>{{$supplier->nama_supplier}}</td>
+                            <td id="nama-supplier-{{$supplier->id}}">{{$supplier->alamat_supplier}}</td>
+                            <td>{{$supplier->telepon_supplier}}</td>
                             <td class="text-right py-0 align-middle">
                               <div class="btn-group btn-group-sm">
-                                <a href="{{ route('inventaris.show.product', $product->id) }}" class="btn btn-info"><i class="fas fa-eye"></i></a>
-                                <button onclick="deleteConfirmation({{$product->id}})" class="btn btn-danger">
+                                <a href="{{ route('inventaris.show.product', $supplier->id) }}" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                <button onclick="deleteConfirmation({{$supplier->id}})" class="btn btn-danger">
                                   <i class="fas fa-trash"></i>
                                 </button>
-                                <form id="delete-product-form-{{$product->id}}" class="d-none" action="{{route('inventaris.delete.product', $product->id)}}" method="post">
+                                <form id="delete-product-form-{{$supplier->id}}" class="d-none" action="{{route('inventaris.delete.product', $supplier->id)}}" method="post">
                                   @method('DELETE')
                                   @csrf 
                                 </form>

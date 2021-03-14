@@ -370,18 +370,8 @@ class LaporanController extends Controller
             ];
             return $new;
         });
-        $user = User::find($shift->kasir_id);
-        $start_time = Carbon::parse($shift->start_time);
-        $new = [
-            'nama_kasir' => empty($user) ? 'Data kasir sudah tidak ada' : $user->name,
-            'tanggal' => $start_time->translatedFormat('l d F Y'),
-            'start_time' => $start_time->translatedFormat('H:i:s'),
-            'end_time' => Carbon::parse($shift->end_time)->translatedFormat('H:i:s'),
-            'transaction_on_shift' => $shift->transaction_on_shift,
-            'total_penjualan_on_shift' => Str::decimalForm($shift->total_penjualan_on_shift, true)
-        ];
 
-        return $new;
+        return $shift;
     }
 
 

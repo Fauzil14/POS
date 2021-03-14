@@ -13,7 +13,7 @@ class SupplierController extends Controller
     {
         $suppliers = Supplier::get();
 
-        return view('supplier.index')
+        return view('supplier.index', compact('suppliers'));
     }
 
     public function cariSupplier($keyword = null) {
