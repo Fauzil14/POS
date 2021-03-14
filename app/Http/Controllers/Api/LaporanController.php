@@ -329,10 +329,11 @@ class LaporanController extends Controller
             case 10 : // full set date
                 $shift = Shift::date($waktu)->get();
                 $processed = $this->processAbsensiKasir($shift);
+                
                 $shift = $shift->map(function($item,$key) {
                     $new = $this->processAbsensiKasirByDay($item);
                     return $new;
-                })->values()->all();
+                })->values();
                 $waktu = "tanggal " . Carbon::parse($waktu)->translatedFormat('d F Y');
                 break;
             case 7 : // full set month
@@ -355,16 +356,17 @@ class LaporanController extends Controller
     }
 
     public function processAbsensiKasirByDay($shift) {
-        $shift = collect($shift->toArray())->map(function($item,$key) {
-            $user = User::find($item['kasir_id']);
-            $start_time = Carbon::parse($item['start_time']);
+        dd($shift);
+        $shift = $shift->map(function($item,$key) {
+            $user = User::find($item->kasir_id);
+            $start_time = Carbon::parse($item->start_time);
             $new = [
                 'nama_kasir' => empty($user) ? 'Data kasir sudah tidak ada' : $user->name,
                 'tanggal' => $start_time->translatedFormat('l d F Y'),
                 'start_time' => $start_time->translatedFormat('H:i:s'),
-                'end_time' => Carbon::parse($item['end_time'])->translatedFormat('H:i:s'),
-                'transaction_on_shift' => $item['transaction_on_shift'],
-                'total_penjualan_on_shift' => Str::decimalForm($item['total_penjualan_on_shift'], true)
+                'end_time' => Carbon::parse($shift->end_time)->translatedFormat('H:i:s'),
+                'transaction_on_shift' => $shift->transaction_on_shift,
+                'total_penjualan_on_shift' => Str::decimalForm($shift->total_penjualan_on_shift, true)
             ];
             return $new;
         });
