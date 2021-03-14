@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Shift;
 use App\Models\Product;
 use App\Models\Pembelian;
 use App\Models\Penjualan;
@@ -321,6 +323,61 @@ class LaporanController extends Controller
         ];
     }
 
+    public function laporanAbsensiKasir($waktu) 
+    {
+        switch (strlen($waktu)) {
+            case 10 : // full set date
+                $shift = Shift::date($waktu)->get();
+                $waktu = "tanggal " . Carbon::parse($waktu)->translatedFormat('d F Y');
+                break;
+            case 7 : // full set month
+                $shift = Shift::month($waktu)->get();
+                $processed = $this->processAbsensiKasir($shift);
+                $shift = $shift->groupBy(function($shift) {
+                    return $shift->start_time->format('W'); // weeks
+                });
+                $shift = $shift->map(function($item, $key) {
+                    $new = array_merge([ 'minggu_ke' => $key ], $this->processAbsensiKasirByDay($item));
+                    return $new;
+                })->values()->all();
+                $waktu = "bulan " . Carbon::parse($waktu)->translatedFormat('F Y');
+                break;
+            case 4 : // year
+                $shift = Shift::year($waktu)->get();
+                $processed = $this->processAbsensiKasir($shift);
+                $shift = $shift->groupBy(function($shift) {
+                    return $shift->start_time->format('Y-m'); // month
+                });
+                $shift = $shift->map(function($item, $key) {
+                    $new = array_merge([ 'bulan' => Carbon::parse($key)->translatedFormat('F') ], $this->processAbsensiKasirByDay($item));
+                    return $new;
+                })->values()->all();
+                $waktu = "tahun " . Carbon::parse($waktu)->translatedFormat('Y');
+                break;
     
+            }
+            return [$waktu, array_merge($processed, [ 'shift' => $shift ])];
+    }
+
+    public function processAbsensiKasir($shift) {
+        return [
+            'sum_transaction_on_shift' => $shift->sum('transaction_on_shift'),
+            'sum_total_penjualan_on_shift' => $shift->sum('total_penjualan_on_shift')
+        ];
+    }
+
+    public function processAbsensiKasirByDay($shift) {
+        $user = User::find($shift->kasir_id);
+        $start_time = Carbon::parse($shift->start_time);
+        return [
+            'nama_kasir' => empty($user) ? 'Data kasir sudah tidak ada' : $user->name,
+            'tanggal' => $start_time->translatedFormat('l d F Y'),
+            'start_time' => $start_time->translatedFormat('H:i:s'),
+            'end_time' => Carbon::parse($shift->end_time)->translatedFormat('H:i:s'),
+            'transaction_on_shift' => Str::decimalForm($shift->transaction_on_shift),
+            'total_penjualan_on_shift' => $shift->penjualan_on_shift
+        ];
+    }
+
 
 }
