@@ -76,14 +76,14 @@ class LaporanController extends Controller
                 });
 
                 $keluar = $keluar->map(function($item, $key) {
-                    $new = array_merge([ 'minggu_ke' => $key ], $this->processStokBarang($item));
+                    $new = array_merge([ 'minggu_ke' => $key ], $this->processStokBarang($item, null));
                     return $new;
                 })->values()->all();
                 $masuk = $masuk->map(function($item, $key) {
-                    $new = array_merge([ 'minggu_ke' => $key ], $this->processStokBarang($item));
+                    $new = array_merge([ 'minggu_ke' => $key ], $this->processStokBarang(null, $item));
                     return $new;
                 })->values()->all();
-                
+
                 $stok = array_merge_recursive($keluar, $masuk);
                 $waktu = "bulan " . Carbon::parse($waktu)->translatedFormat('F Y');
                 break;
@@ -100,11 +100,11 @@ class LaporanController extends Controller
                 });
 
                 $keluar = $keluar->map(function($item, $key) {
-                    $new = array_merge([ 'bulan_ke' => $key ], $this->processStokBarang($item));
+                    $new = array_merge([ 'bulan_ke' => $key ], $this->processStokBarang($item, null));
                     return $new;
                 })->values()->all();
                 $masuk = $masuk->map(function($item, $key) {
-                    $new = array_merge([ 'bulan_ke' => $key ], $this->processStokBarang($item));
+                    $new = array_merge([ 'bulan_ke' => $key ], $this->processStokBarang(null, $item));
                     return $new;
                 })->values()->all();
 
