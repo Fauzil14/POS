@@ -69,22 +69,27 @@ class LaporanController extends Controller
                 })->select('product_id', 'quantity', 'created_at')->get()->groupBy(function($q) {
                     return $q->created_at->format('W'); // weeks
                 });
-                $masuk = DetailPembelian::whereHas('pembelian', function($q) use ($waktu) {
-                    return $q->finished()->month($waktu);
-                })->select('product_id', 'quantity', 'created_at')->get()->groupBy(function($q) {
-                    return $q->created_at->format('W'); // weeks
-                });
+
+                    $masuk = DetailPembelian::whereHas('pembelian', function($q) use ($waktu) {
+                        return $q->finished()->month($waktu);
+                    })->select('product_id', 'quantity', 'created_at')->get()->groupBy(function($q) {
+                        return $q->created_at->format('W'); // weeks
+                    });
 
                 $keluar = $keluar->map(function($item, $key) {
                     $new = array_merge([ 'minggu_ke' => $key ], $this->processStokBarang($item, null));
                     return $new;
                 })->values()->all();
-                $masuk = $masuk->map(function($item, $key) {
-                    $new = array_merge([ 'minggu_ke' => $key ], $this->processStokBarang(null, $item));
-                    return $new;
-                })->values()->all();
 
-                $stok = array_merge_recursive($keluar, $masuk);
+                    $masuk = $masuk->map(function($item, $key) {
+                        $new = array_merge([ 'minggu_ke' => $key ], $this->processStokBarang(null, $item));
+                        return $new;
+                    })->values()->all();
+
+                $stok = [];
+                foreach ($keluar as $key => $value){
+                    $stok[] = array_merge((array)$masuk[$key], (array)$value);
+                }
                 $waktu = "bulan " . Carbon::parse($waktu)->translatedFormat('F Y');
                 break;
             case 4 : // year
@@ -93,22 +98,27 @@ class LaporanController extends Controller
                 })->select('product_id', 'quantity', 'created_at')->get()->groupBy(function($q) {
                     return $q->created_at->format('Y-m'); // months
                 });
-                $masuk = DetailPembelian::whereHas('pembelian', function($q) use ($waktu) {
-                    return $q->finished()->year($waktu);
-                })->select('product_id', 'quantity', 'created_at')->get()->groupBy(function($q) {
-                    return $q->created_at->format('Y-m'); // months
-                });
+
+                    $masuk = DetailPembelian::whereHas('pembelian', function($q) use ($waktu) {
+                        return $q->finished()->year($waktu);
+                    })->select('product_id', 'quantity', 'created_at')->get()->groupBy(function($q) {
+                        return $q->created_at->format('Y-m'); // months
+                    });
 
                 $keluar = $keluar->map(function($item, $key) {
                     $new = array_merge([ 'bulan_ke' => $key ], $this->processStokBarang($item, null));
                     return $new;
                 })->values()->all();
-                $masuk = $masuk->map(function($item, $key) {
-                    $new = array_merge([ 'bulan_ke' => $key ], $this->processStokBarang(null, $item));
-                    return $new;
-                })->values()->all();
 
-                $stok = array_merge_recursive($keluar, $masuk);
+                    $masuk = $masuk->map(function($item, $key) {
+                        $new = array_merge([ 'bulan_ke' => $key ], $this->processStokBarang(null, $item));
+                        return $new;
+                    })->values()->all();
+
+                $stok = [];
+                foreach ($keluar as $key => $value){
+                    $stok[] = array_merge((array)$masuk[$key], (array)$value);
+                }
                 $waktu = "tahun " . Carbon::parse($waktu)->translatedFormat('Y');
                 break;
         }
