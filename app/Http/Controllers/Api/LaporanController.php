@@ -362,8 +362,8 @@ class LaporanController extends Controller
 
     public function processAbsensiKasir($shift) {
         return [
-            'sum_transaction_on_shift' => $shift->sum('transaction_on_shift'),
-            'sum_total_penjualan_on_shift' => $shift->sum('total_penjualan_on_shift')
+            'sum_transaction_on_shift' => Str::decimalForm($shift->sum('transaction_on_shift'), true),
+            'sum_total_penjualan_on_shift' => Str::decimalForm($shift->sum('total_penjualan_on_shift'), true)
         ];
     }
 
@@ -375,8 +375,8 @@ class LaporanController extends Controller
             'tanggal' => $start_time->translatedFormat('l d F Y'),
             'start_time' => $start_time->translatedFormat('H:i:s'),
             'end_time' => Carbon::parse($shift->end_time)->translatedFormat('H:i:s'),
-            'transaction_on_shift' => Str::decimalForm($shift->transaction_on_shift),
-            'total_penjualan_on_shift' => $shift->total_penjualan_on_shift
+            'transaction_on_shift' => $shift->transaction_on_shift,
+            'total_penjualan_on_shift' => Str::decimalForm($shift->total_penjualan_on_shift, true)
         ];
     }
 
