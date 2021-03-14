@@ -324,20 +324,6 @@
                 Member
               </p>
             </a>
-            <ul class="nav nav-treeview" style="display: none;">
-              <li class="nav-item">
-                <a href="charts/chartjs.html" class="nav-link">
-                  <i class="fas fa-sort-down fa-rotate-270"></i>
-                  <p class="pl-2">Pimpinan</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="charts/flot.html" class="nav-link">
-                  <i class="fas fa-sort-down fa-rotate-270"></i>
-                  <p class="pl-2">Kasir</p>
-                </a>
-              </li>
-            </ul>
           </li>
           <li class="nav-item">
             <a href="{{ route('supplier') }}" class="nav-link">

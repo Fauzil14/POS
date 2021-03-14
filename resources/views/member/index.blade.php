@@ -20,7 +20,7 @@
         </div>
         <div class="col-sm-6">
           <div class="d-flex justify-content-end">
-            <a class="btn btn-default ng-binding mr-2" onClick="window.location.reload()"> <i class="fas fa-sync-alt"></i> Total Supplier : {{ count($suppliers) }}</a>
+            <a class="btn btn-default ng-binding mr-2" onClick="window.location.reload()"> <i class="fas fa-sync-alt"></i> Total Member : {{ count($members) }}</a>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-lg">
               Tambah Member
             </button>
@@ -211,7 +211,7 @@
           setTimeout(() => {
             $(document).Toasts('create', {
             class: 'bg-success',
-            title: 'Berhasil Menambahkan supplier baru',
+            title: 'Berhasil Menambahkan member baru',
             position: 'topLeft',
             autohide: true,
             delay: 10000,
@@ -240,16 +240,15 @@
   });
 </script>
 
-<script></script>
 
 <script type="text/javascript">
   function deleteConfirmation(id) {
-      var nama_supplier = $('#nama-supplier-'+id).text();
-      console.log(nama_supplier);
+      var nama_member = $('#nama-member-'+id).text();
+      console.log(nama_member);
 
       Swal.fire({
-          title: "Hapus supplier "+nama_supplier,
-          text: "Menghapus supplier juga akan menghapus data terkait dari supplier tersebut, Apakah anda tetap ingin melanjutkan ?",
+          title: "Hapus supplier "+nama_member,
+          text: "Menghapus member juga akan menghapus data terkait dari member tersebut, Apakah anda tetap ingin melanjutkan ?",
           type: "warning",
           showCancelButton: !0,
           confirmButtonText: "Ya",
@@ -259,7 +258,7 @@
 
           if (e.value === true) {
 
-              document.getElementById('delete-supplier-form-'+id).submit();
+              document.getElementById('delete-member-form-'+id).submit();
 
           } else {
               e.dismiss;
