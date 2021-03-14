@@ -331,16 +331,17 @@ class LaporanController extends Controller
                 $processed = $this->processAbsensiKasir($shift);
                 
                 $shift = $shift->map(function($item,$key) {
-                    $new[] = $this->processAbsensiKasirByDay($item->first());
+                    $new = $this->processAbsensiKasirByDay($item->first());
                     return $new;
-                })->values();
+                })->values()->all();
                 $waktu = "tanggal " . Carbon::parse($waktu)->translatedFormat('d F Y');
                 break;
             case 7 : // full set month
                 $shift = Shift::month($waktu)->get();
                 $processed = $this->processAbsensiKasir($shift);
                 $shift = $shift->map(function($item,$key) {
-                    dd($item);
+                    $new = $this->processAbsensiKasirByDay($item->first());
+                    return $new;
                 });
                 $waktu = "bulan " . Carbon::parse($waktu)->translatedFormat('F Y');
                 break;
