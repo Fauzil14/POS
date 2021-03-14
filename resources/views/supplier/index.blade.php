@@ -45,6 +45,7 @@
                     <th>Nama Supplier</th>
                     <th>Alamat Supplier</th>
                     <th>Telepon Supplier</th>
+                    <th>Aksi</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -61,7 +62,7 @@
                                 <button onclick="deleteConfirmation({{$supplier->id}})" class="btn btn-danger">
                                   <i class="fas fa-trash"></i>
                                 </button>
-                                <form id="delete-product-form-{{$supplier->id}}" class="d-none" action="{{route('inventaris.delete.product', $supplier->id)}}" method="post">
+                                <form id="delete-supplier-form-{{$supplier->id}}" class="d-none" action="{{route('inventaris.delete.product', $supplier->id)}}" method="post">
                                   @method('DELETE')
                                   @csrf 
                                 </form>
@@ -101,24 +102,24 @@
                           <p class="mb-1">Informasi Umum</p>
                           <hr class="mt-0">
                           <div class="form-group row">
-                            <label class="col-sm-2 col-form-label" for="nama_supplier">Nama Supplier</label>
-                            <div class="col-sm-10">
+                            <label class="col-sm-3 col-form-label" for="nama_supplier">Nama Supplier</label>
+                            <div class="col-sm-9">
                               <input type="text" class="form-control" name="nama_supplier" id="nama_supplier" placeholder="Masukkan Nama Supplier">
                               <div class="alert-message" id="nama_supplierError" style="color: red;"></div>
                             </div>
                           </div>
                           <div class="form-group row">
-                            <label class="col-sm-2 col-form-label" for="alamat_supplier">Alamat Supplier</label>
-                            <div class="col-sm-10">
+                            <label class="col-sm-3 col-form-label" for="alamat_supplier">Alamat Supplier</label>
+                            <div class="col-sm-9">
                               <input type="text" class="form-control" name="alamat_supplier" id="alamat_supplier" placeholder="Masukkan Alamat Supplier">
                               <div class="alert-message" id="alamat_supplierError" style="color: red;"></div>
                             </div>
                           </div>
                           <div class="form-group row">
-                            <label class="col-sm-2 col-form-label" for="nama">Nama</label>
-                            <div class="col-sm-10">
-                              <input type="text" class="form-control" name="nama" id="nama" placeholder="Masukkan nama Produk">
-                              <div class="alert-message" id="namaError" style="color: red;"></div>
+                            <label class="col-sm-3 col-form-label" for="telepon_supplier">Telepon Supplier</label>
+                            <div class="col-sm-9">
+                              <input type="text" class="form-control" name="telepon_supplier" id="telepon_supplier" placeholder="Masukkan nomor telepon supplier">
+                              <div class="alert-message" id="telepon_supplierError" style="color: red;"></div>
                             </div>
                           </div>
                 
@@ -204,20 +205,13 @@
           setTimeout(() => {
             $(document).Toasts('create', {
             class: 'bg-success',
-            title: 'Berhasil Menambahkan produk baru',
+            title: 'Berhasil Menambahkan supplier baru',
             position: 'topLeft',
             autohide: true,
             delay: 10000,
-            body: "nama_supplier&emsp;&emsp;&emsp; : &nbsp"+data.nama_supplier+
+            body: "Nama Supplier&emsp;&emsp;&emsp; : &nbsp"+data.nama_supplier+
                   "<br>alamat_supplier&emsp;&emsp; : &nbsp"+data.alamat_supplier+
-                  "<br>Nama&emsp;&emsp; : &nbsp"+data.nama+
-                  "<br>Kategori&emsp; : &nbsp"+data.category_name+
-                  "<br>Supplier&emsp; : &nbsp"+data.nama_supplier+
-                  "<br>Harga Beli&thinsp; : &nbsp"+"Rp. "+data.harga_beli+
-                  "<br>Harga Jual : &nbsp"+"Rp. "+data.harga_jual+
-                  "<br>Diskon&emsp;&nbsp;&thinsp;&thinsp; : &nbsp"+data.diskon+
-                  "<br>Stok&emsp;&emsp;&nbsp;&thinsp;&thinsp; : &nbsp"+data.stok
-
+                  "<br>telepon_supplier&emsp;&emsp; : &nbsp"+data.telepon_supplier+
           });
           },500);
           $('.alert-message').empty();
@@ -225,12 +219,7 @@
         error: function(data) {
               $('#nama_supplierError').text(data.responseJSON.error.nama_supplier);
               $('#alamat_supplierError').text(data.responseJSON.error.alamat_supplier);
-              $('#namaError').text(data.responseJSON.error.nama);
-              $('#categoryIdError').text(data.responseJSON.error.category_id);
-              $('#supplierIdError').text(data.responseJSON.error.supplier_id);
-              $('#hargaBeliError').text(data.responseJSON.error.harga_beli);
-              $('#hargaJualError').text(data.responseJSON.error.harga_jual);
-              $('#stokError').text(data.responseJSON.error.stok);
+              $('#telepon_supplierError').text(data.responseJSON.error.telepon_supplier);
            }
         });
     });
@@ -248,12 +237,12 @@
 
 <script type="text/javascript">
   function deleteConfirmation(id) {
-      var nama_product = $('#nama-product-'+id).text();
-      console.log(nama_product);
+      var nama_product = $('#nama-supplier-'+id).text();
+      console.log(nama_supplier);
 
       Swal.fire({
-          title: "Hapus produk "+nama_product,
-          text: "Menghapus produk juga akan menghapus data terkait dari produk tersebut, Apakah anda tetap ingin melanjutkan?",
+          title: "Hapus supplier "+nama_supplier,
+          text: "Menghapus supplier juga akan menghapus data terkait dari supplier tersebut, Apakah anda tetap ingin melanjutkan ?",
           type: "warning",
           showCancelButton: !0,
           confirmButtonText: "Ya",
@@ -263,7 +252,7 @@
 
           if (e.value === true) {
 
-              document.getElementById('delete-product-form-'+id).submit();
+              document.getElementById('delete-supplier-form-'+id).submit();
 
           } else {
               e.dismiss;
