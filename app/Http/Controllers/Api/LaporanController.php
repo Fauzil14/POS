@@ -328,6 +328,7 @@ class LaporanController extends Controller
         switch (strlen($waktu)) {
             case 10 : // full set date
                 $shift = Shift::date($waktu)->get();
+                $shift = $this->processAbsensiKasirByDay($shift);
                 $waktu = "tanggal " . Carbon::parse($waktu)->translatedFormat('d F Y');
                 break;
             case 7 : // full set month
@@ -356,7 +357,7 @@ class LaporanController extends Controller
                 break;
     
             }
-            return [$waktu, array_merge($processed, [ 'shift' => $shift ])];
+            return [$waktu, isset($processed) ? array_merge($processed, [ 'shift' => $shift ]) : [ 'shift' => $shift ]];
     }
 
     public function processAbsensiKasir($shift) {
