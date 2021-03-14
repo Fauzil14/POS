@@ -333,14 +333,14 @@ class LaporanController extends Controller
                 $shift = $shift->map(function($item,$key) {
                     $new[] = $this->processAbsensiKasirByDay($item->first());
                     return $new;
-                })->values()->all();
+                })->values();
                 $waktu = "tanggal " . Carbon::parse($waktu)->translatedFormat('d F Y');
                 break;
             case 7 : // full set month
                 $shift = Shift::month($waktu)->get();
                 $processed = $this->processAbsensiKasir($shift);
-                $shift = $shift->groupBy(function($shift) {
-                    return Carbon::parse($shift->start_time)->format('W'); // weeks
+                $shift = $shift->map(function($item,$key) {
+                    dd($item);
                 });
                 $waktu = "bulan " . Carbon::parse($waktu)->translatedFormat('F Y');
                 break;
