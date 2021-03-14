@@ -95,7 +95,7 @@
             <div class="modal-body">
 
                       <!-- form start -->
-                      <form method="POST" action="{{ route('inventaris.new-product') }}" class="form-horizontal" id="tambah">
+                      <form method="POST" action="{{ route('supplier.new-supplier') }}" class="form-horizontal" id="tambah">
                         @csrf
 
                         <div class="card-body">
@@ -209,9 +209,9 @@
             position: 'topLeft',
             autohide: true,
             delay: 10000,
-            body: "Nama Supplier&emsp;&emsp;&emsp; : &nbsp"+data.nama_supplier+
-                  "<br>alamat_supplier&emsp;&emsp; : &nbsp"+data.alamat_supplier+
-                  "<br>telepon_supplier&emsp;&emsp; : &nbsp"+data.telepon_supplier+
+            body: "Nama Supplier&emsp;&emsp; : &nbsp"+data.nama_supplier+
+                  "<br>Alamat Supplier&emsp;&ensp; : &nbsp"+data.alamat_supplier+
+                  "<br>Telepon Supplier&emsp; : &nbsp"+data.telepon_supplier
           });
           },500);
           $('.alert-message').empty();
@@ -229,6 +229,7 @@
     });
     $('#reset-form').on('click', function() {
       $('#tambah').trigger("reset");
+      $('.alert-message').empty();
     });
   });
 </script>

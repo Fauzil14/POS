@@ -48,5 +48,7 @@ Route::prefix('dashboard')->middleware(['verified'])->group(function() {
 
     Route::prefix('supplier')->group(function() {
         Route::get('/', 'SupplierController@index')->name('supplier');
+        Route::post('/new-supplier', 'SupplierController@newSupplier')->name('supplier.new-supplier');
+
     });
 });

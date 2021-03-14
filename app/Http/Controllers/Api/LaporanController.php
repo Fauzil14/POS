@@ -358,18 +358,18 @@ class LaporanController extends Controller
 
     public function processAbsensiKasirByDay($shift) {
         $new = [];
-        dd($shift->toArray());
-        foreach($shift as $key => $value) {
+        $arr = $shift->toArray();
+        foreach($arr as $key => $value) {
             
-            $user = User::find($item->kasir_id);
-            $start_time = Carbon::parse($item->start_time);
+            $user = User::find($arr['kasir_id']);
+            $start_time = Carbon::parse($arr['start_time']);
             $new = [
                 'nama_kasir' => empty($user) ? 'Data kasir sudah tidak ada' : $user->name,
                 'tanggal' => $start_time->translatedFormat('l d F Y'),
                 'start_time' => $start_time->translatedFormat('H:i:s'),
-                'end_time' => Carbon::parse($item->end_time)->translatedFormat('H:i:s'),
-                'transaction_on_shift' => $item->transaction_on_shift,
-                'total_penjualan_on_shift' => Str::decimalForm($item->total_penjualan_on_shift, true)
+                'end_time' => Carbon::parse($arr['end_time'])->translatedFormat('H:i:s'),
+                'transaction_on_shift' => $arr['transaction_on_shift'],
+                'total_penjualan_on_shift' => Str::decimalForm($arr['total_penjualan_on_shift'], true)
             ];
         }
 

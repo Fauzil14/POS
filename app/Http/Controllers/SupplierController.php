@@ -36,4 +36,17 @@ class SupplierController extends Controller
         dd('data to view');
     }
 
+    public function newSupplier(Request $request)
+    {
+        $validatedData = $request->validate([
+            'nama_supplier' => 'required|max:20',
+            'alamat_supplier' => 'required|max:50',
+            'telepon_supplier' => 'required|unique:suppliers',
+        ]);
+
+        $supplier = Supplier::create($validatedData);
+
+        return response()->json($supplier);
+    }
+
 }
