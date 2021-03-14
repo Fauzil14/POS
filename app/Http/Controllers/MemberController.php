@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Member;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class MemberController extends Controller
 {
@@ -56,6 +57,29 @@ class MemberController extends Controller
 
         if ($request->wantsJson()) {
             return $this->sendResponse('success', 'Member successfully created', $member, 200);
+        }
+    }
+
+    public function show($member_id)
+    {
+        $member = Member::findOrFail($member_id);
+        $member->load('penjualan');
+
+        return view('member.detail-member', compact('member'));
+    }
+
+    public function delete($member_id)
+    {
+        $member = Member::findOrFail($member_id);
+
+        try {
+            $member->delete();
+    
+            Alert::success('Berhasil', 'Member berhasil di hapus');
+            return redirect()->route('member');
+        } catch(\Throwable $e) {
+            Alert::error('Gagal', 'Member gagal di hapus');
+            return back();
         }
     }
 }

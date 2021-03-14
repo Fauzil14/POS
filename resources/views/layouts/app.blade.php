@@ -40,7 +40,7 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         {{-- Dashboard Link --}}
-                        @can('admin')
+                        @can('has-any-role')
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a>
                             </li>

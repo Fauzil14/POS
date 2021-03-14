@@ -60,7 +60,7 @@
                             <td id="nama-member-{{$member->id}}">{{$member->nama}}</td>
                             <td>{{$member->no_telephone}}</td>
                             @can('admin')
-                            <td>{{Str::decimalForm($member->saldo)}}</td>
+                            <td>{{Str::decimalForm($member->saldo, true)}}</td>
                             @endcan
                             <td class="text-right py-0 align-middle">
                               <div class="btn-group btn-group-sm">
@@ -108,23 +108,23 @@
                           <p class="mb-1">Informasi Umum</p>
                           <hr class="mt-0">
                           <div class="form-group row">
-                            <label class="col-sm-3 col-form-label" for="nama">Nama Supplier</label>
+                            <label class="col-sm-3 col-form-label" for="nama">Nama Member</label>
                             <div class="col-sm-9">
-                              <input type="text" class="form-control" name="nama" id="nama" placeholder="Masukkan Nama Supplier">
+                              <input type="text" class="form-control" name="nama" id="nama" placeholder="Masukkan Nama Member">
                               <div class="alert-message" id="namaError" style="color: red;"></div>
                             </div>
                           </div>
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label" for="no_telephone">No Telephone</label>
                             <div class="col-sm-9">
-                              <input type="text" class="form-control" name="no_telephone" id="no_telephone" placeholder="Masukkan Alamat Supplier">
+                              <input type="text" class="form-control" name="no_telephone" id="no_telephone" placeholder="Masukkan nomor telepon">
                               <div class="alert-message" id="no_telephoneError" style="color: red;"></div>
                             </div>
                           </div>
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label" for="saldo">Saldo</label>
                             <div class="col-sm-9">
-                              <input type="text" class="form-control" name="saldo" id="saldo" placeholder="Masukkan nomor telepon supplier">
+                              <input type="text" class="form-control" name="saldo" id="saldo" placeholder="Masukkan saldo awal member">
                               <div class="alert-message" id="saldoError" style="color: red;"></div>
                             </div>
                           </div>
@@ -215,9 +215,9 @@
             position: 'topLeft',
             autohide: true,
             delay: 10000,
-            body: "Nama Member&emsp;&emsp; : &nbsp"+data.nama+
-                  "<br>No Telephone&emsp;&ensp; : &nbsp"+data.no_telephone+
-                  "<br>Saldo&emsp; : &nbsp"+data.saldo
+            body: "Nama Member&emsp;&emsp; : &nbsp"+data.data.nama+
+                  "<br>No Telephone&emsp;&ensp; : &nbsp"+data.data.no_telephone+
+                  "<br>Saldo&emsp; : &nbsp"+data.data.saldo
           });
           },500);
           $('.alert-message').empty();
@@ -244,10 +244,9 @@
 <script type="text/javascript">
   function deleteConfirmation(id) {
       var nama_member = $('#nama-member-'+id).text();
-      console.log(nama_member);
 
       Swal.fire({
-          title: "Hapus supplier "+nama_member,
+          title: "Hapus member "+nama_member,
           text: "Menghapus member juga akan menghapus data terkait dari member tersebut, Apakah anda tetap ingin melanjutkan ?",
           type: "warning",
           showCancelButton: !0,

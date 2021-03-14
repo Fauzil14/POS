@@ -11,8 +11,8 @@
       <div class="row mb-2">
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-left">
-            <li class="breadcrumb-item"><a href="{{route('supplier')}}"><h3>Daftar Supplier</h3></a></li>
-            <li class="breadcrumb-item"><a href="#"><h3>Detail Supplier</h3></a></li>
+            <li class="breadcrumb-item"><a href="{{route('member')}}"><h3>Daftar Member</h3></a></li>
+            <li class="breadcrumb-item"><a href="#"><h3>Detail Member</h3></a></li>
           </ol>
         </div>
         <div class="col-sm-6">
@@ -34,36 +34,52 @@
             <!-- About Me Box -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Informasi Supplier</h3>
+                <h3 class="card-title">Informasi Member</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <strong>Nama Supplier</strong>
+                <strong>Nama Member</strong>
 
-                <p id="info-nama_supplier" class="text-muted">
-                  {{ ucfirst($supplier->nama_supplier) }}
+                <p id="info-kode_member" class="text-muted">
+                  {{ $member->kode_member) }}
                 </p>
 
                 <hr>
 
-                <strong>Alamat Supplier</strong>
+                <strong>Nama Member</strong>
 
-                <p id="info-alamat_supplier" class="text-muted">
-                  {{ ucfirst($supplier->alamat_supplier) }}
+                <p id="info-nama" class="text-muted">
+                  {{ $member->nama }}
                 </p>
 
-                <strong>Telepon Supplier</strong>
+                <strong>No Telepon</strong>
 
-                <p id="info-telepon_supplier" class="text-muted">
-                  {{ ucfirst($supplier->telepon_supplier) }}
+                <p id="info-no_telephone" class="text-muted">
+                  {{ $member->no_telephone) }}
                 </p>
 
                 <hr>
 
-                <strong>Jumlah produk</strong>
+                <strong>Saldo</strong>
 
-                <p id="info-produk" class="text-muted">
-                  {{ count($supplier->product) }}
+                <p id="info-saldo" class="text-muted">
+                  {{ Str::decimalForm($member->saldo, true) }}
+                </p>
+
+                <hr>
+
+                <strong>Jumlah Transaksi</strong>
+
+                <p id="info-jumlah_transaksi" class="text-muted">
+                  {{ count($member->penjualan) }}
+                </p>
+
+                <hr>
+
+                <strong>Total Pembelian</strong>
+
+                <p id="info-jumlah_pembelian" class="text-muted">
+                  {{ $member->penjualan->sum('total_price') }}
                 </p>
 
                 <hr>
@@ -262,9 +278,9 @@
         url: form.attr('action'),
         data: form.serialize(),
         success: function(data) {
-          $('#info-nama_supplier').text(data.nama_supplier);
-          $('#info-alamat_supplier').text(data.alamat_supplier);
-          $('#info-telepon_supplier').text(data.telepon_supplier);
+          $('#info-kode_member').text(data.nama_supplier);
+          $('#info-nama').text(data.alamat_supplier);
+          $('#info-no_telephone').text(data.telepon_supplier);
           setTimeout(() => {
             $(document).Toasts('create', {
             class: 'bg-info',
@@ -291,7 +307,7 @@
 <script type="text/javascript">
   function deleteConfirmation(id) {
       event.preventDefault();
-      var nama_supplier = $('#info-nama_supplier').text();
+      var nama_supplier = $('#info-kode_member').text();
       Swal.fire({
           title: "Hapus Supplier "+nama_supplier,
           text: "Menghapus Supplier juga akan menghapus data terkait dari Supplier tersebut, Apakah anda tetap ingin melanjutkan?",

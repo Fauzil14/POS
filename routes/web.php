@@ -57,7 +57,7 @@ Route::prefix('dashboard')->middleware(['verified'])->group(function() {
 
     Route::prefix('member')->group(function() {
         Route::get('/', 'MemberController@index')->name('member');
-        Route::post('/new-member', 'MemberController@newSupplier')->name('member.new-member');
+        Route::post('/new-member', 'MemberController@createMember')->name('member.new-member');
         Route::get('/show-member/{member_id}', 'MemberController@show')->name('member.show');
         Route::put('/update-member', 'MemberController@update')->name('member.update');
         Route::delete('/delete-member/{member_id}', 'MemberController@delete')->name('member.delete');
