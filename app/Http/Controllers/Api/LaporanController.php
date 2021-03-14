@@ -376,7 +376,7 @@ class LaporanController extends Controller
             'start_time' => $start_time->translatedFormat('H:i:s'),
             'end_time' => Carbon::parse($shift->end_time)->translatedFormat('H:i:s'),
             'transaction_on_shift' => Str::decimalForm($shift->transaction_on_shift),
-            'total_penjualan_on_shift' => $shift->penjualan_on_shift
+            'total_penjualan_on_shift' => $shift->total_penjualan_on_shift
         ];
     }
 
