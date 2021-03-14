@@ -38,10 +38,8 @@ class LaporanController extends Controller
                 case 3 :
                     $waktu = Carbon::createFromDate($arr_waktu[2], $arr_waktu[1], $arr_waktu[0])->toDateString();
                     break;
-                
             }
         }
-        dd($waktu);
 
         switch ($jenis_laporan) {
             case $jenis_laporan == 'stok_barang' :
