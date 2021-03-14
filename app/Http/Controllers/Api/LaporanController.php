@@ -330,9 +330,8 @@ class LaporanController extends Controller
                 $shift = Shift::date($waktu)->get();
                 $processed = $this->processAbsensiKasir($shift);
                 $shift = $shift->groupBy('kasir_id');
-                dd($shift);
                 $shift = $shift->map(function($item,$key) {
-                    $new[] = $this->processAbsensiKasirByDay($item);
+                    $new[] = $this->processAbsensiKasirByDay($item->where('kasir_id', $key)->first());
                     return $new;
                 });
                 $waktu = "tanggal " . Carbon::parse($waktu)->translatedFormat('d F Y');
