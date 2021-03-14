@@ -106,12 +106,12 @@ class LaporanController extends Controller
                     });
 
                 $keluar = $keluar->map(function($item, $key) {
-                    $new = array_merge([ 'bulan_ke' => $key ], $this->processStokBarang($item, null));
+                    $new = array_merge([ 'bulan_' => Carbon::parse($key)->translatedFormat('F') ], $this->processStokBarang($item, null));
                     return $new;
                 })->values()->all();
 
                     $masuk = $masuk->map(function($item, $key) {
-                        $new = array_merge([ 'bulan_ke' => $key ], $this->processStokBarang(null, $item));
+                        $new = array_merge([ 'bulan_' => Carbon::parse($key)->translatedFormat('F') ], $this->processStokBarang(null, $item));
                         return $new;
                     })->values()->all();
 
