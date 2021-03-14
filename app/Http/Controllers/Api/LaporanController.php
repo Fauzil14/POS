@@ -64,47 +64,59 @@ class LaporanController extends Controller
                 $waktu = "tanggal " . Carbon::parse($waktu)->translatedFormat('d F Y');
                 break;
             case 7 : // full set month
-                $keluar = DetailPenjualan::whereHas('penjualan', function($q) use ($waktu) {
+                $raw_keluar = DetailPenjualan::whereHas('penjualan', function($q) use ($waktu) {
                     return $q->finished()->month($waktu);
-                })->select('product_id', 'quantity', 'created_at')->get()->groupBy(function($penjualan) {
-                    return $penjualan->created_at->format('W'); // weeks
-                });;
-                $masuk = DetailPembelian::whereHas('pembelian', function($q) use ($waktu) {
+                })->select('product_id', 'quantity', 'created_at')->get();
+                    $keluar = $raw_keluar->groupBy(function($q) {
+                        return $q->created_at->format('W'); // weeks
+                    });
+
+                $raw_masuk = DetailPembelian::whereHas('pembelian', function($q) use ($waktu) {
                     return $q->finished()->month($waktu);
-                })->select('product_id', 'quantity', 'created_at')->get()->groupBy(function($penjualan) {
-                    return $penjualan->created_at->format('W'); // weeks
-                });;
+                })->select('product_id', 'quantity', 'created_at')->get();
+                    $masuk = $raw_masuk->groupBy(function($q) {
+                        return $q->created_at->format('W'); // weeks
+                    });
+
                 $keluar = $keluar->map(function($item, $key) {
                     $new = array_merge([ 'minggu_ke' => $key ], $this->processStokBarang($item));
                     return $new;
                 })->values()->all();
+
                 $masuk = $masuk->map(function($item, $key) {
                     $new = array_merge([ 'minggu_ke' => $key ], $this->processStokBarang($item));
                     return $new;
                 })->values()->all();
+
                 $stok = array_merge_recursive($keluar, $masuk);
                 $waktu = "bulan " . Carbon::parse($waktu)->translatedFormat('F Y');
                 break;
             case 4 : // year
-                $keluar = DetailPenjualan::whereHas('penjualan', function($q) use ($waktu) {
+                $raw_keluar = DetailPenjualan::whereHas('penjualan', function($q) use ($waktu) {
                     return $q->finished()->year($waktu);
-                })->select('product_id', 'quantity', 'created_at')->get()->groupBy(function($penjualan) {
-                    return $penjualan->created_at->format('Y-m'); // months
-                });;
-                $masuk = DetailPembelian::whereHas('pembelian', function($q) use ($waktu) {
+                })->select('product_id', 'quantity', 'created_at')->get();
+                    $keluar = $raw_keluar->groupBy(function($q) {
+                        return $q->created_at->format('Y-m'); // months
+                    });
+
+                $raw_masuk = DetailPembelian::whereHas('pembelian', function($q) use ($waktu) {
                     return $q->finished()->year($waktu);
-                })->select('product_id', 'quantity', 'created_at')->get()->groupBy(function($penjualan) {
-                    return $penjualan->created_at->format('Y-m'); // months
-                });;
+                })->select('product_id', 'quantity', 'created_at')->get();
+                    $masuk = $raw_masuk->groupBy(function($q) {
+                        return $q->created_at->format('Y-m'); // months
+                    });
+
                 $keluar = $keluar->map(function($item, $key) {
-                    $new = array_merge([ 'bulan' => Carbon::parse($key)->translatedFormat('F') ], $this->processStokBarang($item));
+                    $new = array_merge([ 'bulan_ke' => $key ], $this->processStokBarang($item));
                     return $new;
                 })->values()->all();
+
                 $masuk = $masuk->map(function($item, $key) {
-                    $new = array_merge([ 'bulan' => Carbon::parse($key)->translatedFormat('F') ], $this->processStokBarang($item));
+                    $new = array_merge([ 'bulan_ke' => $key ], $this->processStokBarang($item));
                     return $new;
                 })->values()->all();
-                $stok = array_merge($keluar, $masuk);
+                
+                $stok = array_merge_recursive($keluar, $masuk);
                 $waktu = "tahun " . Carbon::parse($waktu)->translatedFormat('Y');
                 break;
         }
