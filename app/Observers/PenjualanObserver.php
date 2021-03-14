@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Models\Kasir;
 use App\Models\Product;
 use App\Models\Penjualan;
 use Illuminate\Support\Facades\Auth;
@@ -42,11 +43,12 @@ class PenjualanObserver
             $penjualan->business->keuangan->increment('saldo', $penjualan->total_price);
 
             if( $penjualan->user->role == 'kasir' ) {
-                $penjualan->user->kasir->increment('number_of_transaction', 1);
-                $penjualan->user->kasir->increment('total_penjualan', $penjualan->total_price);
-                if( $penjualan->user->kasir->status == 'on_shift' ) {
-                    $penjualan->user->kasir->shift->where('end_time', null)->first()->increment('transaction_on_shift', 1);
-                    $penjualan->user->kasir->shift->where('end_time', null)->first()->increment('total_penjualan_on_shift', $penjualan->total_price);
+                $kasir = Kasir::where('user_id', $penjualan->kasir_id)->first();
+                $kasir->increment('number_of_transaction', 1);
+                $kasir->increment('total_penjualan', $penjualan->total_price);
+                if( $kasir->status == 'on_shift' ) {
+                    $kasir->shift->where('end_time', null)->first()->increment('transaction_on_shift', 1);
+                    $kasir->shift->where('end_time', null)->first()->increment('total_penjualan_on_shift', $penjualan->total_price);
                 };
             }
         }
