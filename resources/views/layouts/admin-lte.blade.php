@@ -318,11 +318,10 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{{ route('member') }}" class="nav-link">
               <i class="nav-icon fas fa-id-card"></i>
               <p>
                 Member
-                <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview" style="display: none;">

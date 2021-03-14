@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Route;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Validation\ValidationException;
@@ -56,6 +57,21 @@ class SupplierController extends Controller
         $supplier->load('product');
 
         return view('supplier.detail-supplier', compact('supplier'));
+    }
+
+    public function update(Request $request)
+    {
+        $supplier = Supplier::findOrFail($request->id);
+
+        $validatedData = $request->validate([
+            'nama_supplier' => ['required', 'max:50'],
+            'alamat_supplier' => ['required', 'max:100'],
+            'telepon_supplier' => ['required', Rule::unique('suppliers')->ignore($supplier->id)],
+        ]);
+
+        $supplier->update($validatedData);
+
+        return response()->json($supplier->refresh());
     }
 
     public function delete($supplier_id)

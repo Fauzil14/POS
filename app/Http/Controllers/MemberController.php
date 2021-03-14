@@ -7,6 +7,14 @@ use Illuminate\Http\Request;
 
 class MemberController extends Controller
 {
+    
+    public function index() 
+    {
+        $members = Member::get();
+
+        return view('member.index', compact('members'));
+    }
+    
     public function cariMember($keyword = null)
     {
         $member = Member::where(function($query) use ($keyword) {

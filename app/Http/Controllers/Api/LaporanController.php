@@ -28,7 +28,10 @@ class LaporanController extends Controller
     */
     public function getLaporan($jenis_laporan, $waktu) 
     {
-        
+        $arr_waktu = explode('-', $waktu);
+
+        $waktu = Carbon::createFromDate($arr_waktu[2], $arr_waktu[1], $arr_waktu[0])->toDateString();
+
         switch ($jenis_laporan) {
             case $jenis_laporan == 'stok_barang' :
                 $result = $this->laporanStokBarang($waktu);

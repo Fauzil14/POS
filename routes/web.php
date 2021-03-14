@@ -50,7 +50,17 @@ Route::prefix('dashboard')->middleware(['verified'])->group(function() {
         Route::get('/', 'SupplierController@index')->name('supplier');
         Route::post('/new-supplier', 'SupplierController@newSupplier')->name('supplier.new-supplier');
         Route::get('/show-supplier/{supplier_id}', 'SupplierController@show')->name('supplier.show');
+        Route::put('/update-supplier', 'SupplierController@update')->name('supplier.update');
         Route::delete('/delete-supplier/{supplier_id}', 'SupplierController@delete')->name('supplier.delete');
+
+    });
+
+    Route::prefix('member')->group(function() {
+        Route::get('/', 'MemberController@index')->name('member');
+        Route::post('/new-member', 'MemberController@newSupplier')->name('member.new-member');
+        Route::get('/show-member/{member_id}', 'MemberController@show')->name('member.show');
+        Route::put('/update-member', 'MemberController@update')->name('member.update');
+        Route::delete('/delete-member/{member_id}', 'MemberController@delete')->name('member.delete');
 
     });
 });

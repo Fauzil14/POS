@@ -15,14 +15,14 @@
       <div class="row mb-2">
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-left">
-            <li class="breadcrumb-item"><a href="#"><h3>Daftar Supplier</h3></a></li>
+            <li class="breadcrumb-item"><a href="#"><h3>Daftar Member</h3></a></li>
           </ol>
         </div>
         <div class="col-sm-6">
           <div class="d-flex justify-content-end">
             <a class="btn btn-default ng-binding mr-2" onClick="window.location.reload()"> <i class="fas fa-sync-alt"></i> Total Supplier : {{ count($suppliers) }}</a>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-lg">
-              Tambah Supplier
+              Tambah Member
             </button>
           </div>
         </div>
@@ -42,27 +42,33 @@
                   <thead>
                   <tr>
                     <th>No</th>
-                    <th>Nama Supplier</th>
-                    <th>Alamat Supplier</th>
-                    <th>Telepon Supplier</th>
+                    <th>Kode Member</th>
+                    <th>Nama</th>
+                    <th>No Telephone</th>
+                    @can('admin')
+                    <th>Saldo</th>
+                    @endcan
                     <th>Aksi</th>
                   </tr>
                   </thead>
                   <tbody>
                     @php $n = 1 @endphp
-                    @foreach($suppliers as $supplier)
+                    @foreach($members as $member)
                         <tr>
                             <td>{{ $n++ }}</td>
-                            <td id="nama-supplier-{{$supplier->id}}">{{$supplier->nama_supplier}}</td>
-                            <td>{{$supplier->alamat_supplier}}</td>
-                            <td>{{$supplier->telepon_supplier}}</td>
+                            <td>{{$member->kode_member}}</td>
+                            <td id="nama-member-{{$member->id}}">{{$member->nama}}</td>
+                            <td>{{$member->no_telephone}}</td>
+                            @can('admin')
+                            <td>{{Str::decimalForm($member->saldo)}}</td>
+                            @endcan
                             <td class="text-right py-0 align-middle">
                               <div class="btn-group btn-group-sm">
-                                <a href="{{ route('supplier.show', $supplier->id) }}" class="btn btn-info"><i class="fas fa-eye"></i></a>
-                                <button onclick="deleteConfirmation({{$supplier->id}})" class="btn btn-danger">
+                                <a href="{{ route('member.show', $member->id) }}" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                <button onclick="deleteConfirmation({{$member->id}})" class="btn btn-danger">
                                   <i class="fas fa-trash"></i>
                                 </button>
-                                <form id="delete-supplier-form-{{$supplier->id}}" class="d-none" action="{{route('supplier.delete', $supplier->id)}}" method="post">
+                                <form id="delete-member-form-{{$member->id}}" class="d-none" action="{{route('member.delete', $member->id)}}" method="post">
                                   @method('DELETE')
                                   @csrf 
                                 </form>
@@ -86,7 +92,7 @@
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Tambah Supplier Baru</h4>
+            <h4 class="modal-title">Tambah Member Baru</h4>
             <a href="#" class="btn btn-default ng-binding mx-2" id="reset-form"> <i class="fas fa-sync-alt"></i> &nbsp; Reset Form</a>
             <button type="button" class="close close-tambah" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
@@ -95,31 +101,31 @@
             <div class="modal-body">
 
                       <!-- form start -->
-                      <form method="POST" action="{{ route('supplier.new-supplier') }}" class="form-horizontal" id="tambah">
+                      <form method="POST" action="{{ route('member.new-member') }}" class="form-horizontal" id="tambah">
                         @csrf
 
                         <div class="card-body">
                           <p class="mb-1">Informasi Umum</p>
                           <hr class="mt-0">
                           <div class="form-group row">
-                            <label class="col-sm-3 col-form-label" for="nama_supplier">Nama Supplier</label>
+                            <label class="col-sm-3 col-form-label" for="nama">Nama Supplier</label>
                             <div class="col-sm-9">
-                              <input type="text" class="form-control" name="nama_supplier" id="nama_supplier" placeholder="Masukkan Nama Supplier">
-                              <div class="alert-message" id="nama_supplierError" style="color: red;"></div>
+                              <input type="text" class="form-control" name="nama" id="nama" placeholder="Masukkan Nama Supplier">
+                              <div class="alert-message" id="namaError" style="color: red;"></div>
                             </div>
                           </div>
                           <div class="form-group row">
-                            <label class="col-sm-3 col-form-label" for="alamat_supplier">Alamat Supplier</label>
+                            <label class="col-sm-3 col-form-label" for="no_telephone">No Telephone</label>
                             <div class="col-sm-9">
-                              <input type="text" class="form-control" name="alamat_supplier" id="alamat_supplier" placeholder="Masukkan Alamat Supplier">
-                              <div class="alert-message" id="alamat_supplierError" style="color: red;"></div>
+                              <input type="text" class="form-control" name="no_telephone" id="no_telephone" placeholder="Masukkan Alamat Supplier">
+                              <div class="alert-message" id="no_telephoneError" style="color: red;"></div>
                             </div>
                           </div>
                           <div class="form-group row">
-                            <label class="col-sm-3 col-form-label" for="telepon_supplier">Telepon Supplier</label>
+                            <label class="col-sm-3 col-form-label" for="saldo">Saldo</label>
                             <div class="col-sm-9">
-                              <input type="text" class="form-control" name="telepon_supplier" id="telepon_supplier" placeholder="Masukkan nomor telepon supplier">
-                              <div class="alert-message" id="telepon_supplierError" style="color: red;"></div>
+                              <input type="text" class="form-control" name="saldo" id="saldo" placeholder="Masukkan nomor telepon supplier">
+                              <div class="alert-message" id="saldoError" style="color: red;"></div>
                             </div>
                           </div>
                 
@@ -209,17 +215,17 @@
             position: 'topLeft',
             autohide: true,
             delay: 10000,
-            body: "Nama Supplier&emsp;&emsp; : &nbsp"+data.nama_supplier+
-                  "<br>Alamat Supplier&emsp;&ensp; : &nbsp"+data.alamat_supplier+
-                  "<br>Telepon Supplier&emsp; : &nbsp"+data.telepon_supplier
+            body: "Nama Member&emsp;&emsp; : &nbsp"+data.nama+
+                  "<br>No Telephone&emsp;&ensp; : &nbsp"+data.no_telephone+
+                  "<br>Saldo&emsp; : &nbsp"+data.saldo
           });
           },500);
           $('.alert-message').empty();
         },
         error: function(data) {
-              $('#nama_supplierError').text(data.responseJSON.error.nama_supplier);
-              $('#alamat_supplierError').text(data.responseJSON.error.alamat_supplier);
-              $('#telepon_supplierError').text(data.responseJSON.error.telepon_supplier);
+              $('#namaError').text(data.responseJSON.error.nama);
+              $('#no_telephoneError').text(data.responseJSON.error.no_telephone);
+              $('#saldoError').text(data.responseJSON.error.saldo);
            }
         });
     });
