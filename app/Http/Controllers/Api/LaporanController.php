@@ -333,7 +333,7 @@ class LaporanController extends Controller
                 $shift = $shift->map(function($item,$key) {
                     $new[] = $this->processAbsensiKasirByDay($item->where('kasir_id', $key)->first());
                     return $new;
-                })->values()->all();
+                })->values();
                 $waktu = "tanggal " . Carbon::parse($waktu)->translatedFormat('d F Y');
                 break;
             case 7 : // full set month
@@ -343,7 +343,11 @@ class LaporanController extends Controller
                     return Carbon::parse($shift->start_time)->format('W'); // weeks
                 });
                 $shift = $shift->map(function($item, $key) {
-                    $new = array_merge([ 'minggu_ke' => $key ], $this->processAbsensiKasirByDay($item->first()));
+                    $kasir = $item->groupBy('kasir_id');
+                    // $shift_by_day[] = $kasir->map(function($item,$key) {
+                    //     $new = $item->
+                    // });
+                    $new = array_merge([ 'minggu_ke' => $key ], );
                     return $new;
                 })->values()->all();
                 $waktu = "bulan " . Carbon::parse($waktu)->translatedFormat('F Y');
