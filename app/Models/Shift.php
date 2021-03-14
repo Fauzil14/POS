@@ -36,17 +36,17 @@ class Shift extends Model
     }
 
     public function scopeDate($query, $tanggal) {
-        $query->whereDate('created_at', $tanggal);
+        $query->whereDate('start_time', $tanggal);
     }
     
     public function scopeMonth($query, $bulan) {
         $bulan = explode('-', $bulan);
-        $query->whereYear('created_at', $bulan[0])
-                ->whereMonth('created_at', $bulan[1]);
+        $query->whereYear('start_time', $bulan[0])
+                ->whereMonth('start_time', $bulan[1]);
     }
 
     public function scopeYear($query, $tahun) {
-        $query->whereYear('created_at', $tahun);
+        $query->whereYear('start_time', $tahun);
     }
 
     public function user() {
