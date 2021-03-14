@@ -15,7 +15,7 @@ class CreateShiftsTable extends Migration
     {
         Schema::create('shifts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kasir_id')->constrained('kasirs')->onDelete('cascade');
+            $table->foreignId('kasir_id')->constrained('users')->onDelete('cascade');
             $table->timestamp('start_time');
             $table->timestamp('end_time')->nullable();
             $table->integer('transaction_on_shift');
