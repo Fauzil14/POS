@@ -18,7 +18,6 @@ class LaporanPembelianResource extends JsonResource
             "kode_transaksi" => $this->kode_transaksi,
             "nama_staff" => $this->user->name,
             "kode_staff" => $this->staff->kode_user,
-            "nama_supplier" => $this->supplier->nama_supplier,
             "total_price" => $this->total_price,
             "status" => $this->status,
             "created_at" => $this->created_at->translatedFormat('H:i'),
