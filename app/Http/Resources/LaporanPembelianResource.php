@@ -16,9 +16,9 @@ class LaporanPembelianResource extends JsonResource
     {
         return [
             "kode_transaksi" => $this->kode_transaksi,
-            "nama_staff" => empty($this->user) ? null : $this->user->name,
-            "kode_staff" => empty($this->staff) ? null : $this->staff->kode_user,
-            "nama_supplier" => empty($this->supplier) ? null : $this->supplier->nama_supplier,
+            "nama_staff" => is_null($this->user) ? "Staff tidak ada atau sudah dihapus" : $this->user->name,
+            "kode_staff" => is_null($this->staff) ? "Staff tidak ada atau sudah dihapus" : $this->staff->kode_user,
+            "nama_supplier" => is_null($this->supplier) ? "Supplier tidak ada atau sudah di hapus" : $this->supplier->nama_supplier,
             "total_price" => $this->total_price,
             "status" => $this->status,
             "created_at" => $this->created_at->translatedFormat('H:i'),

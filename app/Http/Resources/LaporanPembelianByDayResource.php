@@ -17,9 +17,9 @@ class LaporanPembelianByDayResource extends JsonResource
     {
         return [
             "kode_transaksi" => $this->kode_transaksi,
-            "nama_staff" => $this->user->name,
-            "kode_staff" => $this->staff->kode_user,
-            "nama_supplier" => empty($this->supplier) ? null : $this->supplier->nama_supplier,
+            "nama_staff" => is_null($this->user) ? "Staff tidak ada atau sudah dihapus" : $this->user->name,
+            "kode_staff" => is_null($this->staff) ? "Staff tidak ada atau sudah dihapus" : $this->staff->kode_user,
+            "nama_supplier" => is_null($this->supplier) ? "Supplier tidak ada atau sudah di hapus" : $this->supplier->nama_supplier,
             "total_price" => Str::decimalForm($this->total_price, true),
             "tanggal" => $this->created_at->translatedFormat('l d-m-Y'),
             "waktu_transaksi" => $this->created_at->translatedFormat('H:i'),

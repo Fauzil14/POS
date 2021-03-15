@@ -18,7 +18,7 @@ class DetailPembelianResource extends JsonResource
             "id" => $this->id,
             "pembelian_id" => $this->pembelian_id,
             "product_id" => $this->product_id,
-            "nama_product" => $this->product->nama,
+            "nama_product" => is_null($this->product) ? "Produk tidak ada atau sudah dihapus" : $this->product->nama,
             "quantity" => $this->quantity,
             "harga_beli" => $this->harga_beli,
             "harga_jual" => $this->harga_jual,

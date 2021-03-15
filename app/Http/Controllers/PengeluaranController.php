@@ -7,6 +7,7 @@ use App\Models\Beban;
 use App\Models\RoleUser;
 use App\Models\Pengeluaran;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Models\DetailPengeluaran;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -87,12 +88,39 @@ class PengeluaranController extends Controller
         }
     }
 
+    public function update(Request $request)
+    {
+        $detail_pengeluaran = DetailPengeluaran::findOrFail($request->id);
+
+        $validatedData = $request->validate([
+            'tanggal' => ['required'],
+            'beban_id' => ['required', 'exists:bebans,id'],
+            'deskripsi' => ['sometimes'],
+            'subtotal_pengeluaran' => ['required'],
+        ]);
+
+        if(isset($validatedData['tanggal'])) {
+            Pengeluaran::where('id', $detail_pengeluaran->pengeluaran_id)->update(['tanggal' => $validatedData['tanggal']]);
+        }
+
+        $detail_pengeluaran->update($validatedData);
+        $detail_pengeluaran->refresh();
+
+        return response()->json([
+            'tanggal' => Carbon::parse($detail_pengeluaran->pengeluaran->tanggal)->format('d-m-Y'),
+            'nama_pegawai' => $detail_pengeluaran->pegawai->name,
+            'jenis_beban' => $detail_pengeluaran->beban->jenis_beban,
+            'deskripsi' => $detail_pengeluaran->deskripsi,
+            'subtotal_pengeluaran' => $detail_pengeluaran->subtotal_pengeluaran
+        ]);
+    }
 
     public function show($detail_pengeluaran_id)
     {
         $pengeluaran = DetailPengeluaran::findOrFail($detail_pengeluaran_id);
-
-        return view('pengeluaran.detail-pengeluaran', compact('pengeluaran'));
+        $bebans = Beban::get();
+        $pengeluaran->load('pegawai','beban');
+        return view('pengeluaran.detail-pengeluaran', compact('pengeluaran', 'bebans'));
     }
 
     public function delete($detail_pengeluaran_id)

@@ -1,7 +1,22 @@
 @extends('layouts.admin-lte')
 
 @section('styles')
-  
+     <!-- daterange picker -->
+     <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css')}}">
+     <!-- iCheck for checkboxes and radio inputs -->
+     <link rel="stylesheet" href="{{ asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
+     <!-- Bootstrap Color Picker -->
+     <link rel="stylesheet" href="{{ asset('plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css')}}">
+     <!-- Tempusdominus Bootstrap 4 -->
+     <link rel="stylesheet" href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')}}">
+     <!-- Select2 -->
+     <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css')}}">
+     <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
+     <!-- Bootstrap4 Duallistbox -->
+     <link rel="stylesheet" href="{{ asset('plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css')}}">
+     <!-- BS Stepper -->
+     <link rel="stylesheet" href="{{ asset('plugins/bs-stepper/css/bs-stepper.min.css')}}">
+   
 @endsection
 
 @section('content')
@@ -11,8 +26,8 @@
       <div class="row mb-2">
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-left">
-            <li class="breadcrumb-item"><a href="{{route('supplier')}}"><h3>Daftar Supplier</h3></a></li>
-            <li class="breadcrumb-item"><a href="#"><h3>Detail Supplier</h3></a></li>
+            <li class="breadcrumb-item"><a href="{{route('pengeluaran')}}"><h3>Daftar Pengeluaran</h3></a></li>
+            <li class="breadcrumb-item"><a href="#"><h3>Detail Pengeluaran</h3></a></li>
           </ol>
         </div>
         <div class="col-sm-6">
@@ -34,36 +49,42 @@
             <!-- About Me Box -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Informasi Supplier</h3>
+                <h3 class="card-title">Informasi Pengeluaran</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <strong>Nama Supplier</strong>
+                <strong>Tanggal</strong>
 
-                <p id="info-nama_supplier" class="text-muted">
-                  {{ ucfirst($supplier->nama_supplier) }}
+                <p id="info-tanggal" class="text-muted">
+                  {{ Str::formatDate($pengeluaran->created_at, 'd-m-Y') }}
                 </p>
 
                 <hr>
 
-                <strong>Alamat Supplier</strong>
+                <strong>Nama Pegawai</strong>
 
-                <p id="info-alamat_supplier" class="text-muted">
-                  {{ ucfirst($supplier->alamat_supplier) }}
+                <p id="info-nama_pegawai" class="text-muted">
+                  {{ $pengeluaran->pegawai->name }}
                 </p>
 
-                <strong>Telepon Supplier</strong>
+                <strong>Jenis Beban</strong>
 
-                <p id="info-telepon_supplier" class="text-muted">
-                  {{ ucfirst($supplier->telepon_supplier) }}
+                <p id="info-jenis_beban" class="text-muted">
+                  {{ $pengeluaran->beban->jenis_beban }}
+                </p>
+
+                <strong>Deskripsi</strong>
+
+                <p id="info-deskripsi" class="text-muted">
+                  {{ $pengeluaran->deskripsi }}
                 </p>
 
                 <hr>
 
-                <strong>Jumlah produk</strong>
+                <strong>Nominal Pengeluaran</strong>
 
-                <p id="info-produk" class="text-muted">
-                  {{ count($supplier->product) }}
+                <p id="info-nominal_pengeluaran" class="text-muted">
+                  {{ $pengeluaran->subtotal_pengeluaran }}
                 </p>
 
                 <hr>
@@ -181,36 +202,58 @@
                   <!-- /.tab-pane -->
 
                   <div class="tab-pane active" id="settings">
-                    <form method="POST" action="{{ route('supplier.update') }}" class="form-horizontal" id="update">
+                    <form method="POST" action="{{ route('pengeluaran.update') }}" class="form-horizontal" id="update">
                       @method('PUT')
                       @csrf
 
-                      <input type="hidden" name="id" value="{{ $supplier->id }}">
+                      <input type="hidden" name="id" value="{{ $pengeluaran->id }}">
 
                       <div class="card-body pt-0">
-                        <p class="mb-1">Informasi Umum</p>
-                        <hr class="mt-0">
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label" for="nama_supplier">Nama Supplier</label>
-                          <div class="col-sm-9">
-                            <input type="text" class="form-control" name="nama_supplier" id="nama_supplier" value="{{ $supplier->nama_supplier }}" placeholder="Masukkan Nama Supplier">
-                            <div class="alert-message" id="nama_supplierError" style="color: red;"></div>
+                        <div class="form-group">
+                          <label class="col-sm-6 col-form-label" for="tanggal">Tanggal</label>
+
+                          <div class="input-group col-sm">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                            </div>
+                            <input type="text" class="form-control" value="{{Str::formatDate($pengeluaran->created_at, 'd-m-Y')}}" id="tanggal" name="tanggal" placeholder="dd-mm-yyyy" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask>
+                            <div class="alert-message" id="tanggalError" style="color: red;"></div>
                           </div>
+                          <!-- /.input group -->
                         </div>
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label" for="alamat_supplier">Alamat Supplier</label>
-                          <div class="col-sm-9">
-                            <input type="text" class="form-control" name="alamat_supplier" id="alamat_supplier" value="{{$supplier->alamat_supplier}}" placeholder="Masukkan alamat supplier">
-                            <div class="alert-message" id="alamat_supplierError" style="color: red;"></div>
+                        <!-- /.form group -->
+                      <div class="form-group">
+                        <label class="col-sm-6 col-form-label" for="beban_id">Jenis Beban</label>
+                        <div class="col-sm">
+                            <!-- select -->
+                            <select class="custom-select" id="beban_id" name="beban_id">
+                              <option disabled>Pilih jenis beban</option>
+                              {{-- <option selected value="{{ $pengeluaran->beban->id }}">{{ ucfirst($pengeluaran->beban->jenis_beban) }}</option> --}}
+                              @foreach ($bebans as $beban)
+                              <option id="jenis_beban" value="{{ $beban->id }}" @if($pengeluaran->beban->id == $beban->id) 'selected' @endif>{{ ucfirst($beban->jenis_beban) }}</option>
+                              @endforeach
+                            </select>
+                            <div class="alert-message" id="bebanIdError" style="color: red;"></div>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label class="col-sm-6 col-form-label" for="deskripsi">Deskripsi</label>
+                        <div class="col-sm">
+                          <input type="text" class="form-control" value="{{$pengeluaran->deskripsi}}" name="deskripsi" id="deskripsi" placeholder="Masukkan keterangan pengeluaran">
+                          <div class="alert-message" id="deskripsiError" style="color: red;"></div>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label class="col-sm-6 col-form-label" for="subtotal_pengeluaran">Nominal Pengeluaran</label>
+                        <div class="input-group col-sm">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">Rp.</span>
                           </div>
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label" for="telepon_supplier">Telepon Supplier</label>
-                          <div class="col-sm-9">
-                            <input type="text" class="form-control" name="telepon_supplier" id="telepon_supplier" value="{{$supplier->telepon_supplier}}" placeholder="Masukkan telepon supplier supplier">
-                            <div class="alert-message" id="telepon_supplierError" style="color: red;"></div>
+                            <input type="number" class="form-control" value="{{$pengeluaran->subtotal_pengeluaran}}" id="subtotal_pengeluaran" name="subtotal_pengeluaran">
                           </div>
-                        </div>
+                          <div class="alert-message" id="subtotal_pengeluaranError" style="color: red;"></div>
                       </div>
 
                       <hr class="mt-0">
@@ -220,10 +263,10 @@
                           </form>
                         </div>
                         <div class="col-sm-6">
-                          <button onclick="deleteConfirmation({{$supplier->id}})" class="btn btn-danger float-right">
+                          <button onclick="deleteConfirmation({{$pengeluaran->id}})" class="btn btn-danger float-right">
                             <i class="fas fa-trash"></i>
                           </button>
-                          <form id="delete-supplier-form" class="d-none" action="{{route('supplier.delete', $supplier->id)}}" method="post">
+                          <form id="delete-pengeluaran-form" class="d-none" action="{{route('pengeluaran.delete', $pengeluaran->id)}}" method="post">
                             @method('DELETE')
                             @csrf 
                           </form>
@@ -251,6 +294,25 @@
 @section('javascripts')
 
 
+<!-- Select2 -->
+<script src="{{asset('plugins/select2/js/select2.full.min.js')}}"></script>
+<!-- Bootstrap4 Duallistbox -->
+<script src="{{asset('plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js')}}"></script>
+<!-- InputMask -->
+<script src="{{asset('plugins/moment/moment.min.js')}}"></script>
+<script src="{{asset('plugins/inputmask/jquery.inputmask.min.js')}}"></script>
+<!-- date-range-picker -->
+<script src="{{asset('plugins/daterangepicker/daterangepicker.js')}}"></script>
+<!-- bootstrap color picker -->
+<script src="{{asset('plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js')}}"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="{{asset('plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js')}}"></script>
+<!-- Bootstrap Switch -->
+<script src="{{asset('plugins/bootstrap-switch/js/bootstrap-switch.min.js')}}"></script>
+<!-- BS-Stepper -->
+<script src="{{asset('plugins/bs-stepper/js/bs-stepper.min.js')}}"></script>
+
+
 <script>
   $(document).ready(function() {
     var form = $("#update");
@@ -262,26 +324,31 @@
         url: form.attr('action'),
         data: form.serialize(),
         success: function(data) {
-          $('#info-nama_supplier').text(data.nama_supplier);
-          $('#info-alamat_supplier').text(data.alamat_supplier);
-          $('#info-telepon_supplier').text(data.telepon_supplier);
+          console.log(data);
+          var jenis_beban = $('#jenis_beban').text();
+          $('#info-tanggal').text(data.tanggal);
+          $('#info-jenis_beban').text(data.jenis_beban);
+          $('#info-deskripsi').text(data.deskripsi);
+          $('#info-nominal_pengeluaran').text(data.subtotal_pengeluaran);
           setTimeout(() => {
             $(document).Toasts('create', {
             class: 'bg-info',
-            title: 'Data Supplier berhasil di ubah',
+            title: 'Data pengeluaran berhasil di ubah',
             position: 'topLeft',
             autohide: true,
             delay: 10000,
-            body: "Nama Supplier&emsp;&emsp;&emsp; : &nbsp"+"{{$supplier->nama_supplier}}"+"  =>  "+data.nama_supplier+
-                  "Alamat Supplier&emsp;&emsp;&emsp; : &nbsp"+"{{$supplier->alamat_supplier}}"+"  =>  "+data.alamat_supplier+
-                  "Telepon Supplier&emsp;&emsp;&emsp; : &nbsp"+"{{$supplier->telepon_supplier}}"+"  =>  "+data.telepon_supplier
+            body: "<p>Tanggal     :"+"{{Str::formatDate($pengeluaran->created_at, 'd-m-Y')}}"+"  =>  "+data.tanggal+"</p>"+ 
+                  "<p>Jenis Beban :"+jenis_beban+"  =>  "+data.jenis_beban+"</p>"+
+                  "<p>Deskripsi   :"+"{{$pengeluaran->deskripsi}}"+"  =>  "+data.deskripsi+"</p>"+
+                  "<p>Nominal     :"+"{{$pengeluaran->subtotal_pengeluaran}}"+"  =>  "+data.subtotal_pengeluaran+"</p>"
           });
           },500);
         },
         error: function(data) {
-              $('#nama_supplierError').text(data.responseJSON.error.nama_supplier);
-              $('#alamat_supplierError').text(data.responseJSON.error.alamat_supplier);
-              $('#telepon_supplierError').text(data.responseJSON.error.telepon_supplier);
+              $('#tanggalError').text(data.responseJSON.error.tanggal);
+              $('#bebanIdError').text(data.responseJSON.error.beban_id);
+              $('#deskripsiError').text(data.responseJSON.error.deskripsi);
+              $('#subtotal_pengeluaranError').text(data.responseJSON.error.subtotal_pengeluaran);
            }
         });
     });
@@ -291,10 +358,10 @@
 <script type="text/javascript">
   function deleteConfirmation(id) {
       event.preventDefault();
-      var nama_supplier = $('#info-nama_supplier').text();
+      var jenis_beban = $('#jenis_beban').text();
       Swal.fire({
-          title: "Hapus Supplier "+nama_supplier,
-          text: "Menghapus Supplier juga akan menghapus data terkait dari Supplier tersebut, Apakah anda tetap ingin melanjutkan?",
+          title: "Hapus pengeluaran "+jenis_beban,
+          text: "Menghapus pengeluaran juga akan menghapus data terkait dari pengeluaran tersebut, Apakah anda tetap ingin melanjutkan ?",
           type: "warning",
           showCancelButton: !0,
           confirmButtonText: "Ya",
@@ -304,7 +371,7 @@
 
           if (e.value === true) {
 
-              document.getElementById('delete-supplier-form').submit();
+              document.getElementById('delete-pengeluaran-form').submit();
 
           } else {
               e.dismiss;
@@ -315,5 +382,14 @@
       })
   }
 </script>
+
+<script>
+  $(function() {
+    //Datemask dd/mm/yyyy
+    $('#tanggal').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' })
+
+  });
+</script>
+
 @endsection
 

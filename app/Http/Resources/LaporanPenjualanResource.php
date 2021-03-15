@@ -16,10 +16,10 @@ class LaporanPenjualanResource extends JsonResource
     {
         return [
             "kode_transaksi" => $this->kode_transaksi,
-            "diskon_member" => $this->business->diskon_member,
-            "nama_kasir" => $this->user->name,
-            "kode_kasir" => $this->kasir->kode_user,
-            "kode_member" => $this->member->kode_member,
+            "diskon_member" => is_null($this->business) ? null : $this->business->diskon_member,
+            "nama_kasir" => is_null($this->user) ? "Kasir tidak ada atau sudah di hapus" : $this->user->name,
+            "kode_kasir" => is_null($this->kasir) ? "Kasir tidak ada atau sudah di hapus" : $this->kasir->kode_user,
+            "kode_member" => is_null($this->member) ? "Member tidak ada atau sudah di hapus" : $this->member->kode_member,
             "total_price" => $this->total_price,
             "jenis_pembayaran" => $this->jenis_pembayaran,
             "dibayar" => $this->dibayar,
