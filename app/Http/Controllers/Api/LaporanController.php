@@ -16,6 +16,7 @@ use App\Models\BusinessTransaction;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\LaporanPembelianResource;
 use App\Http\Resources\LaporanPenjualanResource;
+use App\Http\Resources\LaporanPenjualanByDayResource;
 
 class LaporanController extends Controller
 {
@@ -193,8 +194,16 @@ class LaporanController extends Controller
                 $penjualan = $penjualan->groupBy(function($penjualan) {
                     return $penjualan->created_at->format('W'); // weeks
                 });
-                $penjualan = $penjualan->map(function($item, $key) {
-                    $new = array_merge([ 'minggu_ke' => $key ], $this->processPenjualan($item));
+                $penjualan = $penjualan->map(function($item, $key) use ($penjualan) {
+                    $penjualan_per_hari = $item->groupBy(function($item) {
+                        return $item->created_at->format('Y-m-d');
+                    });
+                    $penjualan_per_hari = $penjualan_per_hari->map(function($item, $key) {
+                        return LaporanPenjualanByDayResource::collection($item);
+                    });
+                    $new = array_merge([ 'minggu_ke' => $key ], 
+                                        $this->processPenjualan($item), 
+                                        ['penjualan_per_hari' => $penjualan_per_hari]);
                     return $new;
                 })->values()->all();
                 $waktu = "bulan " . Carbon::parse($waktu)->translatedFormat('F Y');
@@ -285,7 +294,6 @@ class LaporanController extends Controller
             case 10 : // full set date
                 $transaksi = BusinessTransaction::date($waktu)->get();
                 $processed = $this->processLabaRugi($transaksi);
-                // $transaksi = LaporanPembelianResource::collection($transaksi);
                 $waktu = "tanggal " . Carbon::parse($waktu)->translatedFormat('d F Y');
                 break;
             case 7 : // full set month

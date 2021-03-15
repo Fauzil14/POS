@@ -67,7 +67,7 @@ Route::prefix('dashboard')->middleware(['verified'])->group(function() {
     Route::prefix('pengeluaran')->group(function() {
         Route::get('/', 'PengeluaranController@index')->name('pengeluaran');
         Route::post('/new-pengeluaran', 'PengeluaranController@makePengeluaran')->name('pengeluaran.new-pengeluaran');
-        Route::get('/show-pengeluaran/{pengeluaran_id}', 'PengeluaranController@show')->name('pengeluaran.show');
+        Route::get('/show-pengeluaran/{detail_pengeluaran_id}', 'PengeluaranController@show')->name('pengeluaran.show');
         Route::put('/update-pengeluaran', 'PengeluaranController@update')->name('pengeluaran.update');
         Route::delete('/delete-pengeluaran/{detail_pengeluaran_id}', 'PengeluaranController@delete')->name('pengeluaran.delete');
     

@@ -87,6 +87,14 @@ class PengeluaranController extends Controller
         }
     }
 
+
+    public function show($detail_pengeluaran_id)
+    {
+        $pengeluaran = DetailPengeluaran::findOrFail($detail_pengeluaran_id);
+
+        return view('pengeluaran.detail-pengeluaran', compact('pengeluaran'));
+    }
+
     public function delete($detail_pengeluaran_id)
     {
         $detail_pengeluaran = DetailPengeluaran::findOrFail($detail_pengeluaran_id);
