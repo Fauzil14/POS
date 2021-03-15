@@ -16,12 +16,13 @@ class LaporanPembelianResource extends JsonResource
     {
         return [
             "kode_transaksi" => $this->kode_transaksi,
-            "nama_staff" => $this->user->name,
-            "kode_staff" => $this->staff->kode_user,
+            "nama_staff" => empty($this->user) ? null : $this->user->name,
+            "kode_staff" => empty($this->staff) ? null : $this->staff->kode_user,
+            "nama_supplier" => empty($this->supplier) ? null : $this->supplier->nama_supplier,
             "total_price" => $this->total_price,
             "status" => $this->status,
             "created_at" => $this->created_at->translatedFormat('H:i'),
-            "detail_penjualan" => DetailPembelianResource::collection($this->detail_penjualan)
+            "detail_pembelian" => DetailPembelianResource::collection($this->detail_pembelian)
         ];
     }
 }

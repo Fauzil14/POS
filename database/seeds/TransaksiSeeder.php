@@ -48,7 +48,7 @@ class TransaksiSeeder extends Seeder
                 'kasir_id' => $kasir_id,
                 'start_time' => Carbon::createFromFormat('Y-m-d H', $value->toDateString() . ' 07')
             ]);
-            
+
             $x = rand(1, 4);
             for($i = 1; $i <= $x; $i++) {
                 $penjualan = $penjualan->firstOrCreate([
