@@ -40,9 +40,7 @@ class TransaksiSeeder extends Seeder
         $dateRange = dateRange($first_day, $last_day);
 
         $penjualan = new Penjualan;
-        $pembelian = new Pembelian;
         $kasir_id = rand(4,5);
-        $staff_id = rand(6,7);
 
         foreach($dateRange as $key => $value) {
             // start kasir shift
@@ -95,6 +93,10 @@ class TransaksiSeeder extends Seeder
             $shift->update([
                 'end_time' => Carbon::createFromFormat('Y-m-d H', $value->toDateString() . ' 17'),
             ]);
+
+            $pembelian = new Pembelian;
+            $staff_id = rand(6,7);
+            $supplier_id = rand(1,19);
 
             if( $value->isThursday() || $value->isSaturday() ) { 
                 $n = rand(1,4);
