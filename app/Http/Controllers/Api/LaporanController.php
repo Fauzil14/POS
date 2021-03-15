@@ -14,6 +14,7 @@ use App\Models\DetailPembelian;
 use App\Models\DetailPenjualan;
 use App\Models\BusinessTransaction;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\LaporanPembelianByDayResource;
 use App\Http\Resources\LaporanPembelianResource;
 use App\Http\Resources\LaporanPenjualanResource;
 use App\Http\Resources\LaporanPenjualanByDayResource;
@@ -255,7 +256,12 @@ class LaporanController extends Controller
                     return $pembelian->created_at->format('W'); // weeks
                 });
                 $pembelian = $pembelian->map(function($item, $key) {
-                    $new = array_merge([ 'minggu_ke' => $key ], $this->processPembelian($item));
+                    $pembelian_per_hari = $item->groupBy(function($item) {
+                        return LaporanPembelianByDayResource::collection($item);
+                    });
+                    $new = array_merge([ 'minggu_ke' => $key ], 
+                                        $this->processPembelian($item), 
+                                        ['pembelian_per_hari' => $pembelian_per_hari]);
                     return $new;
                 })->values()->all();
                 $waktu = "bulan " . Carbon::parse($waktu)->translatedFormat('F Y');

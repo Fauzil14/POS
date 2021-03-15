@@ -2,9 +2,10 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class LaporanPembelianResource extends JsonResource
+class LaporanPembelianByDayResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,10 +20,8 @@ class LaporanPembelianResource extends JsonResource
             "nama_staff" => $this->user->name,
             "kode_staff" => $this->staff->kode_user,
             "nama_supplier" => $this->supplier->nama_supplier,
-            "total_price" => $this->total_price,
-            "status" => $this->status,
-            "created_at" => $this->created_at->translatedFormat('H:i'),
-            "detail_penjualan" => DetailPembelianResource::collection($this->detail_penjualan)
+            "total_price" => Str::decimalForm($this->total_price, true),
+            "waktu_transaksi" => $this->created_at->translatedFormat('H:i'),
         ];
     }
 }

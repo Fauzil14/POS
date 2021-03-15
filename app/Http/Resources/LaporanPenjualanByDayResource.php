@@ -20,7 +20,6 @@ class LaporanPenjualanByDayResource extends JsonResource
             "nama_kasir" => $this->user->name,
             "kode_kasir" => $this->kasir->kode_user,
             "total_price" => Str::decimalForm($this->total_price, true),
-            "status" => $this->status,
             "waktu_transaksi" => $this->created_at->translatedFormat('H:i'),
         ];
     }
