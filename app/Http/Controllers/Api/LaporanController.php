@@ -195,16 +195,10 @@ class LaporanController extends Controller
                 $penjualan = $penjualan->groupBy(function($penjualan) {
                     return $penjualan->created_at->format('W'); // weeks
                 });
-                $penjualan = $penjualan->map(function($item, $key) use ($penjualan) {
-                    $penjualan_per_hari = $item->groupBy(function($item) {
-                        return $item->created_at->translatedFormat('l');
-                    });
-                    $penjualan_per_hari = $penjualan_per_hari->map(function($item, $key) {
-                        return LaporanPenjualanByDayResource::collection($item);
-                    });
+                $penjualan = $penjualan->map(function($item, $key) {
                     $new = array_merge([ 'minggu_ke' => $key ], 
                                         $this->processPenjualan($item), 
-                                        ['penjualan_per_hari' => $penjualan_per_hari]);
+                                        ['penjualan_per_hari' => LaporanPenjualanByDayResource::collection($item)]);
                     return $new;
                 })->values()->all();
                 $waktu = "bulan " . Carbon::parse($waktu)->translatedFormat('F Y');
@@ -256,15 +250,9 @@ class LaporanController extends Controller
                     return $pembelian->created_at->format('W'); // weeks
                 });
                 $pembelian = $pembelian->map(function($item, $key) {
-                    $pembelian_per_hari = $item->groupBy(function($item) {
-                        return $item->created_at->translatedFormat('l');
-                    });
-                    $pembelian_per_hari = $pembelian_per_hari->map(function($item, $key) {
-                        return LaporanPembelianByDayResource::collection($item);
-                    });
                     $new = array_merge([ 'minggu_ke' => $key ], 
                                         $this->processPembelian($item), 
-                                        ['pembelian_per_hari' => $pembelian_per_hari]);
+                                        ['pembelian_per_hari' => LaporanPembelianByDayResource::collection($item)]);
                     return $new;
                 })->values()->all();
                 $waktu = "bulan " . Carbon::parse($waktu)->translatedFormat('F Y');
