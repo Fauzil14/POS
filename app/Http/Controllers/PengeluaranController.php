@@ -2,15 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\PengeluaranResource;
+use Carbon\Carbon;
+use App\Models\Beban;
 use App\Models\RoleUser;
 use App\Models\Pengeluaran;
 use Illuminate\Http\Request;
+use App\Models\DetailPengeluaran;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use RealRashid\SweetAlert\Facades\Alert;
+use App\Http\Resources\PengeluaranResource;
 
 class PengeluaranController extends Controller
 {
+    public function index() 
+    {
+        $pengeluarans = DetailPengeluaran::whereHas('pengeluaran', function ($q) {
+            $q->where('business_id', Auth::user()->roles->pluck('pivot.business_id')->first());
+        })->get();
+
+        $bebans = Beban::get();
+
+        return view('pengeluaran.index', compact('pengeluarans', 'bebans'));
+    }
+
     public function getPengeluaran($waktu)
     {   
         // $waktu = hari_ini/bulan_ini
@@ -30,6 +45,16 @@ class PengeluaranController extends Controller
         }
     }
 
+
+    /* Note: Beban
+        1.'Beban Gaji Karyawan',
+        2.'Beban Listrik',
+        3.'Beban Air',
+        4.'Beban Penyewaan Gedung',
+        5.'Beban Angkut Penjualan',
+        6.'Harga Pokok Penjualan',
+        7.'Beban Lain-Lain',
+    */
     public function makePengeluaran(Request $request)
     {
 
@@ -39,9 +64,13 @@ class PengeluaranController extends Controller
             'deskripsi'             => 'nullable',
             'subtotal_pengeluaran'  => 'required_with:beban_id',
         ]);
-        
+
+        if( isset($validatedData['tanggal']) ) {
+            $tanggal = Carbon::parse($validatedData['tanggal'])->format('Y-m-d');
+        }
+
         $pengeluaran = Pengeluaran::firstOrCreate([
-            'tanggal'     => isset($validatedData['tanggal']) ? $validatedData['tanggal'] : today()->format('Y-m-d'),
+            'tanggal'     => isset($tanggal) ? $tanggal : today()->format('Y-m-d'),
             'business_id' => RoleUser::firstWhere('user_id', Auth::id())->business_id,
         ]);
 
@@ -57,14 +86,20 @@ class PengeluaranController extends Controller
             return response()->json($data);
         }
     }
+
+    public function delete($detail_pengeluaran_id)
+    {
+        $detail_pengeluaran = DetailPengeluaran::findOrFail($detail_pengeluaran_id);
+
+        try {
+            $detail_pengeluaran->delete();
+    
+            Alert::success('Berhasil', 'Pengeluaran berhasil di hapus');
+            return redirect()->route('pengeluaran');
+        } catch(\Throwable $e) {
+            Alert::error('Gagal', 'Pengeluaran gagal di hapus');
+            return back();
+        }
+    }
    
-/* Note: Beban
-    1.'Beban Gaji Karyawan',
-    2.'Beban Listrik',
-    3.'Beban Air',
-    4.'Beban Penyewaan Gedung',
-    5.'Beban Angkut Penjualan',
-    6.'Harga Pokok Penjualan',
-    7.'Beban Lain-Lain',
- */
 }

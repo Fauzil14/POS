@@ -65,5 +65,9 @@ class AppServiceProvider extends ServiceProvider
             }
         });
 
+        Str::macro('formatDate', function($value, $format) {
+            return Carbon::parse($value)->translatedFormat($format);
+        });
+
     }
 }

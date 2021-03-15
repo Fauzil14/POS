@@ -11,8 +11,8 @@
       <div class="row mb-2">
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-left">
-            <li class="breadcrumb-item"><a href="{{route('member')}}"><h3>Daftar Member</h3></a></li>
-            <li class="breadcrumb-item"><a href="#"><h3>Detail Member</h3></a></li>
+            <li class="breadcrumb-item"><a href="{{route('supplier')}}"><h3>Daftar Supplier</h3></a></li>
+            <li class="breadcrumb-item"><a href="#"><h3>Detail Supplier</h3></a></li>
           </ol>
         </div>
         <div class="col-sm-6">
@@ -34,52 +34,36 @@
             <!-- About Me Box -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Informasi Member</h3>
+                <h3 class="card-title">Informasi Supplier</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <strong>Nama Member</strong>
+                <strong>Nama Supplier</strong>
 
-                <p id="info-kode_member" class="text-muted">
-                  {{ $member->kode_member }}
+                <p id="info-nama_supplier" class="text-muted">
+                  {{ ucfirst($supplier->nama_supplier) }}
                 </p>
 
                 <hr>
 
-                <strong>Nama Member</strong>
+                <strong>Alamat Supplier</strong>
 
-                <p id="info-nama" class="text-muted">
-                  {{ $member->nama }}
+                <p id="info-alamat_supplier" class="text-muted">
+                  {{ ucfirst($supplier->alamat_supplier) }}
                 </p>
 
-                <strong>No Telepon</strong>
+                <strong>Telepon Supplier</strong>
 
-                <p id="info-no_telephone" class="text-muted">
-                  {{ $member->no_telephone }}
-                </p>
-
-                <hr>
-
-                <strong>Saldo</strong>
-
-                <p id="info-saldo" class="text-muted">
-                  {{ Str::decimalForm($member->saldo, true) }}
+                <p id="info-telepon_supplier" class="text-muted">
+                  {{ ucfirst($supplier->telepon_supplier) }}
                 </p>
 
                 <hr>
 
-                <strong>Jumlah Transaksi</strong>
+                <strong>Jumlah produk</strong>
 
-                <p id="info-jumlah_transaksi" class="text-muted">
-                  {{ count($member->penjualan) }}
-                </p>
-
-                <hr>
-
-                <strong>Total Pembelian</strong>
-
-                <p id="info-jumlah_pembelian" class="text-muted">
-                  {{ Str::decimalForm($member->penjualan->sum('total_price'), true) }}
+                <p id="info-produk" class="text-muted">
+                  {{ count($supplier->product) }}
                 </p>
 
                 <hr>
@@ -197,36 +181,37 @@
                   <!-- /.tab-pane -->
 
                   <div class="tab-pane active" id="settings">
-                    <form method="POST" action="{{ route('member.update') }}" class="form-horizontal" id="update">
+                    <form method="POST" action="{{ route('supplier.update') }}" class="form-horizontal" id="update">
                       @method('PUT')
                       @csrf
 
-                      <input type="hidden" name="id" value="{{ $member->id }}">
+                      <input type="hidden" name="id" value="{{ $supplier->id }}">
 
-                      <div class="card-body">
+                      <div class="card-body pt-0">
                         <p class="mb-1">Informasi Umum</p>
                         <hr class="mt-0">
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label" for="nama">Nama Member</label>
+                          <label class="col-sm-3 col-form-label" for="nama_supplier">Nama Supplier</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" name="nama" id="nama" value="{{$member->nama}}" placeholder="Masukkan Nama Member">
-                            <div class="alert-message" id="namaError" style="color: red;"></div>
+                            <input type="text" class="form-control" name="nama_supplier" id="nama_supplier" value="{{ $supplier->nama_supplier }}" placeholder="Masukkan Nama Supplier">
+                            <div class="alert-message" id="nama_supplierError" style="color: red;"></div>
                           </div>
                         </div>
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label" for="no_telephone">No Telephone</label>
+                          <label class="col-sm-3 col-form-label" for="alamat_supplier">Alamat Supplier</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" name="no_telephone" id="no_telephone" value="{{$member->no_telephone}}" placeholder="Masukkan nomor telepon">
-                            <div class="alert-message" id="no_telephoneError" style="color: red;"></div>
+                            <input type="text" class="form-control" name="alamat_supplier" id="alamat_supplier" value="{{$supplier->alamat_supplier}}" placeholder="Masukkan alamat supplier">
+                            <div class="alert-message" id="alamat_supplierError" style="color: red;"></div>
                           </div>
                         </div>
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label" for="saldo">Saldo</label>
+                          <label class="col-sm-3 col-form-label" for="telepon_supplier">Telepon Supplier</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" name="saldo" id="saldo" value="{{$member->saldo}}" placeholder="Masukkan saldo awal member">
-                            <div class="alert-message" id="saldoError" style="color: red;"></div>
+                            <input type="text" class="form-control" name="telepon_supplier" id="telepon_supplier" value="{{$supplier->telepon_supplier}}" placeholder="Masukkan telepon supplier supplier">
+                            <div class="alert-message" id="telepon_supplierError" style="color: red;"></div>
                           </div>
                         </div>
+                      </div>
 
                       <hr class="mt-0">
                       <div class="row">
@@ -235,10 +220,10 @@
                           </form>
                         </div>
                         <div class="col-sm-6">
-                          <button onclick="deleteConfirmation({{$member->id}})" class="btn btn-danger float-right">
+                          <button onclick="deleteConfirmation({{$supplier->id}})" class="btn btn-danger float-right">
                             <i class="fas fa-trash"></i>
                           </button>
-                          <form id="delete-member-form" class="d-none" action="{{route('member.delete', $member->id)}}" method="post">
+                          <form id="delete-supplier-form" class="d-none" action="{{route('supplier.delete', $supplier->id)}}" method="post">
                             @method('DELETE')
                             @csrf 
                           </form>
@@ -277,26 +262,26 @@
         url: form.attr('action'),
         data: form.serialize(),
         success: function(data) {
-          $('#info-nama').text(data.nama);
-          $('#info-no_telephone').text(data.no_telephone);
-          $('#info-saldo').text(data.saldo);
+          $('#info-nama_supplier').text(data.nama_supplier);
+          $('#info-alamat_supplier').text(data.alamat_supplier);
+          $('#info-telepon_supplier').text(data.telepon_supplier);
           setTimeout(() => {
             $(document).Toasts('create', {
             class: 'bg-info',
-            title: 'Data Member berhasil di ubah',
+            title: 'Data Supplier berhasil di ubah',
             position: 'topLeft',
             autohide: true,
             delay: 10000,
-            body: "Nama Member&emsp;&emsp;&emsp; : &nbsp"+"{{$member->nama}}"+"  =>  "+data.nama+
-                  "No Telepon&emsp;&emsp;&emsp; : &nbsp"+"{{$member->no_telephone}}"+"  =>  "+data.no_telephone+
-                  "Saldo&emsp;&emsp;&emsp; : &nbsp"+"{{$member->saldo}}"+"  =>  "+data.saldo
+            body: "Nama Supplier&emsp;&emsp;&emsp; : &nbsp"+"{{$supplier->nama_supplier}}"+"  =>  "+data.nama_supplier+
+                  "Alamat Supplier&emsp;&emsp;&emsp; : &nbsp"+"{{$supplier->alamat_supplier}}"+"  =>  "+data.alamat_supplier+
+                  "Telepon Supplier&emsp;&emsp;&emsp; : &nbsp"+"{{$supplier->telepon_supplier}}"+"  =>  "+data.telepon_supplier
           });
           },500);
         },
         error: function(data) {
-              $('#namaError').text(data.responseJSON.error.nama);
-              $('#no_telephoneError').text(data.responseJSON.error.no_telephone);
-              $('#saldoError').text(data.responseJSON.error.saldo);
+              $('#nama_supplierError').text(data.responseJSON.error.nama_supplier);
+              $('#alamat_supplierError').text(data.responseJSON.error.alamat_supplier);
+              $('#telepon_supplierError').text(data.responseJSON.error.telepon_supplier);
            }
         });
     });
@@ -306,10 +291,10 @@
 <script type="text/javascript">
   function deleteConfirmation(id) {
       event.preventDefault();
-      var nama_member = $('#info-nama').text();
+      var nama_supplier = $('#info-nama_supplier').text();
       Swal.fire({
-          title: "Hapus member "+nama_member,
-          text: "Menghapus member juga akan menghapus data terkait dari member tersebut, Apakah anda tetap ingin melanjutkan ?",
+          title: "Hapus Supplier "+nama_supplier,
+          text: "Menghapus Supplier juga akan menghapus data terkait dari Supplier tersebut, Apakah anda tetap ingin melanjutkan?",
           type: "warning",
           showCancelButton: !0,
           confirmButtonText: "Ya",
@@ -319,7 +304,7 @@
 
           if (e.value === true) {
 
-              document.getElementById('delete-member-form').submit();
+              document.getElementById('delete-supplier-form').submit();
 
           } else {
               e.dismiss;

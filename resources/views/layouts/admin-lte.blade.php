@@ -333,6 +333,14 @@
               </p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="{{ route('pengeluaran') }}" class="nav-link">
+              <i class="nav-icon fas fa-hand-holding-usd"></i>
+              <p>
+                Pengeluaran
+              </p>
+            </a>
+          </li>
           <li class="nav-header">Action</li>
           <li class="nav-item">
             <a class="nav-link" href="{{ route('logout') }}"

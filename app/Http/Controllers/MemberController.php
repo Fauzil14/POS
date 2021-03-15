@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Member;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class MemberController extends Controller
@@ -66,6 +67,21 @@ class MemberController extends Controller
         $member->load('penjualan');
 
         return view('member.detail-member', compact('member'));
+    }
+
+    public function update(Request $request)
+    {
+        $member = Member::findOrFail($request->id);
+
+        $validatedData = $request->validate([
+            'nama'         => ['required', 'max:50'],
+            'no_telephone' => ['required', Rule::unique('members')->ignore($member->id)],
+            'saldo'        => ['required', 'integer', 'min:10000'],
+        ]);
+
+        $member->update($validatedData);
+
+        return response()->json($member->refresh());
     }
 
     public function delete($member_id)

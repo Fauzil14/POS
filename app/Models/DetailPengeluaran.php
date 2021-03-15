@@ -44,4 +44,12 @@ class DetailPengeluaran extends Model
         return $this->hasOne('App\Models\Pengeluaran', 'id', 'pengeluaran_id');
     }
 
+    public function pegawai() {
+        return $this->hasOne(User::class, 'id', 'pegawai_id');
+    }
+
+    public function beban() {
+        return $this->hasOne(Beban::class, 'id', 'beban_id');
+    }
+
 }
