@@ -197,7 +197,7 @@ class LaporanController extends Controller
                 });
                 $penjualan = $penjualan->map(function($item, $key) use ($penjualan) {
                     $penjualan_per_hari = $item->groupBy(function($item) {
-                        return $item->created_at->format('Y-m-d');
+                        return $item->created_at->translatedFormat('l');
                     });
                     $penjualan_per_hari = $penjualan_per_hari->map(function($item, $key) {
                         return LaporanPenjualanByDayResource::collection($item);
@@ -257,6 +257,9 @@ class LaporanController extends Controller
                 });
                 $pembelian = $pembelian->map(function($item, $key) {
                     $pembelian_per_hari = $item->groupBy(function($item) {
+                        return $item->created_at->translatedFormat('l');
+                    });
+                    $pembelian_per_hari = $pembelian_per_hari->map(function($item, $key) {
                         return LaporanPembelianByDayResource::collection($item);
                     });
                     $new = array_merge([ 'minggu_ke' => $key ], 
