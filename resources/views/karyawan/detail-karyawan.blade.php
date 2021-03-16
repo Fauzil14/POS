@@ -365,7 +365,6 @@
           },500);
         },
         error: function(data) {
-              console.log(data);
               $('#nameError').text(data.responseJSON.error.name);
               $('#emailError').text(data.responseJSON.error.email);
               $('#passwordError').text(data.responseJSON.error.password);
