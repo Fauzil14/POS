@@ -11,11 +11,12 @@ use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Crypt;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use function PHPUnit\Framework\throwException;
+
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Validation\ValidationException;
-
-use function PHPUnit\Framework\throwException;
 
 class AuthController extends Controller
 {
@@ -32,7 +33,7 @@ class AuthController extends Controller
         $user = User::create([
             'name'      => $validatedData['name'],           
             'email'     => $validatedData['email'],           
-            'password'  => Hash::make($validatedData['password']),           
+            'password'  => $validatedData['password'],           
         ]);
 
         $token = JWTAuth::fromUser($user);

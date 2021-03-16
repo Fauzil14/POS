@@ -72,4 +72,13 @@ Route::prefix('dashboard')->middleware(['verified'])->group(function() {
         Route::delete('/delete-pengeluaran/{detail_pengeluaran_id}', 'PengeluaranController@delete')->name('pengeluaran.delete');
     
     });
+    
+    Route::prefix('karyawan')->group(function() {
+        Route::get('/', 'KaryawanController@index')->name('karyawan');
+        Route::post('/new-karyawan', 'KaryawanController@createKaryawan')->name('karyawan.new-karyawan');
+        Route::get('/show-karyawan/{karyawan_id}', 'KaryawanController@show')->name('karyawan.show');
+        Route::put('/update-karyawan', 'KaryawanController@update')->name('karyawan.update');
+        Route::delete('/delete-karyawan/{karyawan_id}', 'KaryawanController@delete')->name('karyawan.delete');
+    
+    });
 });

@@ -230,7 +230,7 @@
                               <option disabled>Pilih jenis beban</option>
                               {{-- <option selected value="{{ $pengeluaran->beban->id }}">{{ ucfirst($pengeluaran->beban->jenis_beban) }}</option> --}}
                               @foreach ($bebans as $beban)
-                              <option id="jenis_beban" value="{{ $beban->id }}" @if($pengeluaran->beban->id == $beban->id) 'selected' @endif>{{ ucfirst($beban->jenis_beban) }}</option>
+                                <option id="jenis_beban" value="{{ $beban->id }}" @if($pengeluaran->beban->id == $beban->id) selected @endif>{{ ucfirst($beban->jenis_beban) }}</option>
                               @endforeach
                             </select>
                             <div class="alert-message" id="bebanIdError" style="color: red;"></div>
@@ -325,7 +325,7 @@
         data: form.serialize(),
         success: function(data) {
           console.log(data);
-          var jenis_beban = $('#jenis_beban').text();
+          var jenis_beban = $('#info-jenis_beban').text();
           $('#info-tanggal').text(data.tanggal);
           $('#info-jenis_beban').text(data.jenis_beban);
           $('#info-deskripsi').text(data.deskripsi);

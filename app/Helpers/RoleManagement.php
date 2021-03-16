@@ -59,6 +59,13 @@ trait RoleManagement {
         }
     }
 
+    public function syncRole($role) {
+        $role_id = Role::firstWhere('role_name', $role)->id;
+        $role_user = RoleUser::where('user_id', Auth::id())->first();
+
+        static::roles()->updateExistingPivot($role_id, ['business_id' => $role_user->business_id, 'kode_user' => $role_user->kode_user]);
+    }
+
 }
 
 

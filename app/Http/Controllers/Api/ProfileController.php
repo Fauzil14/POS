@@ -14,6 +14,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Crypt;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Validation\ValidationException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
@@ -94,7 +95,7 @@ class ProfileController extends Controller
         $user = User::findOrFail(Auth::id());
 
         try {
-            $user->password = Hash::make($validatedData['new_password']);
+            $user->password = $validatedData['new_password'];
             $user->save();
 
             return $this->sendResponse('succes', 'Your password has been change', true, 200);

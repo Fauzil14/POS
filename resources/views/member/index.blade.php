@@ -124,7 +124,7 @@
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label" for="saldo">Saldo</label>
                             <div class="col-sm-9">
-                              <input type="text" class="form-control" name="saldo" id="saldo" placeholder="Masukkan saldo awal member">
+                              <input type="number" class="form-control" name="saldo" id="saldo" placeholder="Masukkan saldo awal member">
                               <div class="alert-message" id="saldoError" style="color: red;"></div>
                             </div>
                           </div>

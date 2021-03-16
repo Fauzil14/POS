@@ -100,7 +100,8 @@ class PengeluaranController extends Controller
         ]);
 
         if(isset($validatedData['tanggal'])) {
-            Pengeluaran::where('id', $detail_pengeluaran->pengeluaran_id)->update(['tanggal' => $validatedData['tanggal']]);
+            $tanggal = Carbon::parse($validatedData['tanggal'])->format('Y-m-d');
+            Pengeluaran::where('id', $detail_pengeluaran->pengeluaran_id)->update(['tanggal' => $tanggal]);
         }
 
         $detail_pengeluaran->update($validatedData);

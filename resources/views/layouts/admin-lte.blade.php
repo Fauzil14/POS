@@ -222,15 +222,6 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a href="widgets.html" class="nav-link active">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Widgets
-                <span class="right badge badge-danger">New</span>
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-file-invoice-dollar"></i>
               <p>
@@ -298,21 +289,15 @@
             </a>
             <ul class="nav nav-treeview pl-3" style="display: none;">
               <li class="nav-item">
+                <a href="{{ route('karyawan') }}" class="nav-link">
+                  <i class="fas fa-sort-down fa-rotate-270"></i>
+                  <p class="pl-2">Karyawan Terdaftar</p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="charts/chartjs.html" class="nav-link">
                   <i class="fas fa-sort-down fa-rotate-270"></i>
-                  <p class="pl-2">Pimpinan</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="charts/flot.html" class="nav-link">
-                  <i class="fas fa-sort-down fa-rotate-270"></i>
-                  <p class="pl-2">Kasir</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="charts/inline.html" class="nav-link">
-                  <i class="fas fa-sort-down fa-rotate-270"></i>
-                  <p class="pl-2">Staff</p>
+                  <p class="pl-2">Permintaan Karyawan</p>
                 </a>
               </li>
             </ul>

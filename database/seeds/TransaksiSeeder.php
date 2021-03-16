@@ -105,6 +105,7 @@ class TransaksiSeeder extends Seeder
                 $pembelian = $pembelian->create([
                     'kode_transaksi' => $pembelian->kodeTransaksi($staff_id),
                     'business_id' => 2,
+                    'supplier_id' => $supplier_id,
                     'staff_id' => $staff_id,
                     'created_at' => $value
                 ]);

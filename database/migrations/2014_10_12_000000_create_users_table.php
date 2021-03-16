@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->text('encrypted_password')->nullabel();
             $table->smallInteger('umur')->nullable();
             $table->string('alamat', 500)->nullable();
             $table->string('profile_picture')->default('https://katastima-pos.herokuapp.com/pictures/user-512.png');

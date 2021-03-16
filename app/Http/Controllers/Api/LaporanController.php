@@ -46,7 +46,13 @@ class LaporanController extends Controller
         switch ($jenis_laporan) {
             case $jenis_laporan == 'stok_barang' :
                 $result = $this->laporanStokBarang($waktu);
-                return $this->sendResponse('success', 'Laporan stok barang ' . $result[0], $result[1], 200);
+                $len = strlen($waktu);
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Laporan stok barang ' . $result[0],
+                    'laporan' => $len == 7 ? 'bulan' : ($len == 4 ? 'tahun' : 'hari'),
+                    'data' => $result,
+                ]);
                 break;
                 $result = $this->laporanStokBarang($waktu);
             case $jenis_laporan == 'transaksi_pembelian' : 

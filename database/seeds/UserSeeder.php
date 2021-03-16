@@ -3,6 +3,7 @@
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Crypt;
 
 class UserSeeder extends Seeder
 {
@@ -18,7 +19,7 @@ class UserSeeder extends Seeder
                         'name'              => 'fauzil',
                         'email'             => 'fauzil@gmail.com',
                         'email_verified_at' => now(),
-                        'password'          => Hash::make('password'),
+                        'password'          => 'password',
                         'umur'              => 23,
                         'alamat'            => 'payakumbuh',
                     ],
@@ -26,7 +27,7 @@ class UserSeeder extends Seeder
                         'name'              => 'rais',
                         'email'             => 'rais@gmail.com',
                         'email_verified_at' => now(),
-                        'password'          => Hash::make('password'),
+                        'password'          => 'password',
                         'umur'              => 18,
                         'alamat'            => 'yogyakarta',
                     ],
@@ -34,7 +35,7 @@ class UserSeeder extends Seeder
                         'name'              => 'pimpinan',
                         'email'             => 'pimpinan@gmail.com',
                         'email_verified_at' => now(),
-                        'password'          => Hash::make('password'),
+                        'password'          => 'password',
                         'umur'              => 40,
                         'alamat'            => 'Jakarta',
                     ],
@@ -42,7 +43,7 @@ class UserSeeder extends Seeder
                         'name'              => 'kasir',
                         'email'             => 'kasir@gmail.com',
                         'email_verified_at' => now(),
-                        'password'          => Hash::make('password'),
+                        'password'          => 'password',
                         'umur'              => 20,
                         'alamat'            => 'DIY',
                     ],
@@ -50,7 +51,7 @@ class UserSeeder extends Seeder
                         'name'              => 'kasir 2',
                         'email'             => 'kasir2@gmail.com',
                         'email_verified_at' => now(),
-                        'password'          => Hash::make('password'),
+                        'password'          => 'password',
                         'umur'              => 22,
                         'alamat'            => 'DIY',
                     ],
@@ -58,7 +59,7 @@ class UserSeeder extends Seeder
                         'name'              => 'staff',
                         'email'             => 'staff@gmail.com',
                         'email_verified_at' => now(),
-                        'password'          => Hash::make('password'),
+                        'password'          => 'password',
                         'umur'              => 30,
                         'alamat'            => 'DI Yogyakarta',
                     ],
@@ -66,7 +67,7 @@ class UserSeeder extends Seeder
                         'name'              => 'staff 2',
                         'email'             => 'staff2@gmail.com',
                         'email_verified_at' => now(),
-                        'password'          => Hash::make('password'),
+                        'password'          => 'password',
                         'umur'              => 29,
                         'alamat'            => 'DI Yogyakarta',
                     ],
@@ -90,7 +91,7 @@ class UserSeeder extends Seeder
                 'name'              => 'pengusaha',
                 'email'             => 'pengusaha@gmail.com',
                 'email_verified_at' => now(),
-                'password'          => Hash::make('password'),
+                'password'          => 'password',
                 'umur'              => 30,
                 'alamat'            => 'payakumbuh',
             ],
@@ -98,7 +99,7 @@ class UserSeeder extends Seeder
                 'name'              => 'pengusaha1',
                 'email'             => 'pengusaha1@gmail.com',
                 'email_verified_at' => now(),
-                'password'          => Hash::make('password'),
+                'password'          => 'password',
                 'umur'              => 26,
                 'alamat'            => 'payakumbuh',
             ],

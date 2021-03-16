@@ -3,10 +3,14 @@
 namespace App\Models;
 
 use App\Helpers\RoleManagement;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Crypt;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements MustVerifyEmail, JWTSubject
 {
@@ -18,7 +22,7 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'umur', 'alamat'
+        'name', 'email', 'password', 'encrypted_password', 'umur', 'alamat'
     ];
 
     /**
@@ -27,7 +31,7 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'encrypted_password'
     ];
 
     protected $appends = [ 'role' ];
@@ -40,6 +44,16 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected static function boot() 
+    {
+        parent::boot();
+
+        static::creating(function($query) {
+            $query->encrypted_password = Crypt::encrypt($query->password);
+            $query->password = Hash::make($query->password);
+        });
+    }
 
     public function getJWTIdentifier()
     {
