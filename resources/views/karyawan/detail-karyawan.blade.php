@@ -266,7 +266,12 @@
                               <select class="custom-select" id="role_id" name="role_id">
                                 <option disabled>Pilih Role</option>
                                 @foreach ($allroles as $role)
-                                  <option value="{{ $role->id }}">{{ ucfirst($role->role_name) }}</option>
+                                  <option value="{{ $role->id }}" 
+                                    @php 
+                                      if($role->role_name == $karyawan->role) {
+                                        echo "selected";
+                                      }
+                                    @endphp>{{ ucfirst($role->role_name) }}</option>
                                 @endforeach
                               </select>
                           </div>

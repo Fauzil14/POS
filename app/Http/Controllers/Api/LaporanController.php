@@ -51,7 +51,7 @@ class LaporanController extends Controller
                     'status' => 'success',
                     'message' => 'Laporan stok barang ' . $result[0],
                     'laporan' => $len == 7 ? 'bulan' : ($len == 4 ? 'tahun' : 'hari'),
-                    'data' => collect($result)->flatten(),
+                    'data' => collect($result)->values(),
                 ]);
                 break;
                 $result = $this->laporanStokBarang($waktu);

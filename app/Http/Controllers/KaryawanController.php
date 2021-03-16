@@ -74,9 +74,9 @@ class KaryawanController extends Controller
             }
         }
 
-        $allroles = Role::get();
+        $allroles = Role::all();
 
-        return view('karyawan.detail-karyawan', compact('karyawan', 'allroles', 'password'));
+        return view('karyawan.detail-karyawan', compact('karyawan', 'password', 'allroles'));
     }
 
     public function update(Request $request)
@@ -93,6 +93,7 @@ class KaryawanController extends Controller
             'profile_picture' => 'sometimes|image|max:2048|mimes:jpg,jpeg,png'
         ]);
 
+
         $user->name = $validatedData['name'];
         $user->email = $validatedData['email'];
         $user->password = $validatedData['password'];
@@ -102,23 +103,25 @@ class KaryawanController extends Controller
             $user->profile_picture = $this->uploadImage($validatedData['profile_picture']);
         }
         $user->update(); 
-    
+        
+
         $role = Role::find($validatedData['role_id']);
-        if( $user->role != $role->role_name) {
-            dd([$user->role, $role->role_name]);
-            $user->syncRole($role->role_name);
+        if( $user->role !== $role->role_name) {
+            $user->roles()->updateExistingPivot($validatedData['role_id'], [
+                'business_id' => $user->roles()->pluck('pivot.business_id')->first(),
+                'kode_user' => $user->roles()->pluck('pivot.kode_user')->first(),
+            ]);
+
         }
 
-        if ($request->wantsJson()) {
-            return response()->json([
-                'name' => $validatedData['name'],
-                'email' => $validatedData['email'],
-                'password' => $validatedData['password'],
-                'umur' => $validatedData['umur'],
-                'alamat' => $validatedData['alamat'],
-                'role' => $role->role_name,
-            ]);
-        }
+        return response()->json([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => $validatedData['password'],
+            'umur' => $validatedData['umur'],
+            'alamat' => $validatedData['alamat'],
+            'role' => $role->role_name,
+        ]);
 
     }
 
