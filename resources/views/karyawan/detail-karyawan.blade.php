@@ -5,6 +5,7 @@
 @endsection
 
 @section('content')
+
   <section class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
@@ -264,8 +265,8 @@
                               <!-- select -->
                               <select class="custom-select" id="role_id" name="role_id">
                                 <option disabled>Pilih Role</option>
-                                @foreach ($allroles as $frole)
-                                  <option id="role_name" value="{{ $frole->id }}" @if($karyawan->roles->first()->id == $frole->id) selected @endif>{{ ucfirst($frole->role_name) }}</option>
+                                @foreach ($allroles as $role)
+                                  <option value="{{ $role->id }}">{{ ucfirst($role->role_name) }}</option>
                                 @endforeach
                               </select>
                           </div>
