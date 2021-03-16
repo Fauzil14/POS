@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Validator;
 
 class KaryawanController extends Controller
 {
@@ -84,15 +85,14 @@ class KaryawanController extends Controller
         $user = User::findOrFail($request->id);
 
         $validatedData = $request->validate([
-            'name'            => 'required',
+            'name'            => ['required'],
             'email'           => ['required', Rule::unique('users')->ignore($user->id)],
-            'password'        => 'required|min:8',
-            'umur'            => 'required|integer|max:60',
-            'alamat'          => 'required',
-            'role_id'         => 'required|exists:roles,id',
-            'profile_picture' => 'sometimes|image|max:2048|mimes:jpg,jpeg,png'
+            'password'        => ['required', 'min:8'],
+            'umur'            => ['required', 'integer', 'max:60'],
+            'alamat'          => ['required'],
+            'role_id'         => ['required', 'exists:roles,id'],
+            'profile_picture' => ['nullable', 'image', 'max:2048', 'mimes:jpg,jpeg,png']
         ]);
-
 
         $user->name = $validatedData['name'];
         $user->email = $validatedData['email'];
@@ -104,23 +104,12 @@ class KaryawanController extends Controller
         }
         $user->update(); 
         
-
-        $role = Role::find($validatedData['role_id']);
-        if( $user->role !== $role->role_name) {
-            $user->roles()->sync($validatedData['role_id'], [
-                'business_id' => $user->roles()->pluck('business_id')->first(),
-                'kode_user' => $user->roles()->pluck('kode_user')->first(),
-            ]);
+        $user->refresh();
+        if( $user->roles->first()->pivot->role_id != $validatedData['role_id']) {
+            $user->updateRole($user, $validatedData['role_id']);
         }
 
-        return response()->json([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'password' => $validatedData['password'],
-            'umur' => $validatedData['umur'],
-            'alamat' => $validatedData['alamat'],
-            'role' => $role->role_name,
-        ]);
+        return response()->json($user);
 
     }
 

@@ -53,6 +53,11 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
             $query->encrypted_password = Crypt::encrypt($query->password);
             $query->password = Hash::make($query->password);
         });
+
+        static::updating(function($query) {
+            $query->encrypted_password = Crypt::encrypt($query->password);
+            $query->password = Hash::make($query->password);
+        });
     }
 
     public function getJWTIdentifier()

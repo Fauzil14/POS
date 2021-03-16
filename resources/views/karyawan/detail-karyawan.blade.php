@@ -5,6 +5,7 @@
 @endsection
 
 @section('content')
+{{-- @php if(isset($errors)) { dd($errors); } @endphp --}}
 
   <section class="content-header">
     <div class="container-fluid">
@@ -214,7 +215,7 @@
                   <!-- /.tab-pane -->
 
                   <div class="tab-pane active" id="settings">
-                    <form method="POST" action="{{ route('karyawan.update') }}" class="form-horizontal" id="update">
+                    <form method="POST" action="{{ route('karyawan.update') }}" class="form-horizontal" id="update" enctype="multipart/form-data">
                       @method('PUT')
                       @csrf
 
@@ -336,7 +337,7 @@
   });
 </script>
 
-{{-- <script>
+<script>
   $(document).ready(function() {
     var form = $("#update");
 
@@ -376,7 +377,7 @@
         });
     });
   });
-</script> --}}
+</script>
 
 <script type="text/javascript">
   function deleteConfirmation(id) {

@@ -59,12 +59,12 @@ trait RoleManagement {
         }
     }
 
-    // public function syncRole($role) {
-    //     $role_id = Role::firstWhere('role_name', $role)->id;
-    //     $role_user = RoleUser::where('user_id', Auth::id())->first();
+    public function updateRole($user, $role_id) {
+        $pivot = $user->roles->first()->pivot;
 
-    //     static::roles()->updateExistingPivot($role_id, ['business_id' => $role_user->business_id, 'kode_user' => $role_user->kode_user]);
-    // }
+        $user->roles()->detach();
+        $user->roles()->attach($role_id, ['business_id' => $pivot->business_id, 'kode_user' => $pivot->kode_user]);
+    }
 
 }
 
