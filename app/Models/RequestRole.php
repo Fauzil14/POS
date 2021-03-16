@@ -19,4 +19,8 @@ class RequestRole extends Model
     public function user() {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
+
+    public function role() {
+        return $this->hasOne(Role::class, 'id', 'role_id');
+    }
 }

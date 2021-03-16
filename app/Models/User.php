@@ -50,6 +50,7 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         parent::boot();
 
         static::creating(function($query) {
+            $query->profile_picture = 'https://katastima-pos.herokuapp.com/pictures/user-512.png';
             $query->encrypted_password = Crypt::encrypt($query->password);
             $query->password = Hash::make($query->password);
         });

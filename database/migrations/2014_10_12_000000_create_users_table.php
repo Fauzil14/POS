@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->text('encrypted_password')->nullabel();
             $table->smallInteger('umur')->nullable();
             $table->string('alamat', 500)->nullable();
-            $table->string('profile_picture')->default('https://katastima-pos.herokuapp.com/pictures/user-512.png');
+            $table->string('profile_picture');
             $table->rememberToken();
             $table->timestamps();
         });

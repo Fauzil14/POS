@@ -59,7 +59,7 @@
                             <td>{{$karyawan->email}}</td>
                             <td>{{ucfirst($karyawan->role)}}</td>
                             <td class="text-right py-0 align-middle">
-                              <div class="btn-group btn-group-sm">
+                              <div class="btn-group btn-group-lg btn-group-toggle">
                                 <a href="{{ route('karyawan.show', $karyawan->id) }}" class="btn btn-info"><i class="fas fa-eye"></i></a>
                                 <button onclick="deleteConfirmation({{$karyawan->id}})" class="btn btn-danger">
                                   <i class="fas fa-trash"></i>
@@ -127,7 +127,7 @@
                               <div class="form-group">
                                 <label class="col-form-label" for="umur">Umur</label>
                                 <div>
-                                  <input type="number" class="form-control" name="umur" id="umur" placeholder="Masukkan email">
+                                  <input type="number" class="form-control" name="umur" id="umur" placeholder="Masukkan umur">
                                   <div class="alert-message" id="umurError" style="color: red;"></div>
                                 </div>
                               </div>
@@ -253,6 +253,7 @@
         url: form.attr('action'),
         data: form.serialize(),
         success: function(data) {
+          console.log(data)
           setTimeout(() => {
             $(document).Toasts('create', {
             class: 'bg-success',

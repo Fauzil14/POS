@@ -295,7 +295,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="charts/chartjs.html" class="nav-link">
+                <a href="{{ route('karyawan.request') }}" class="nav-link">
                   <i class="fas fa-sort-down fa-rotate-270"></i>
                   <p class="pl-2">Permintaan Karyawan</p>
                 </a>

@@ -79,6 +79,11 @@ Route::prefix('dashboard')->middleware(['verified'])->group(function() {
         Route::get('/show-karyawan/{karyawan_id}', 'KaryawanController@show')->name('karyawan.show');
         Route::put('/update-karyawan', 'KaryawanController@update')->name('karyawan.update');
         Route::delete('/delete-karyawan/{karyawan_id}', 'KaryawanController@delete')->name('karyawan.delete');
-    
+        
+        // Request Role
+        Route::get('/request-role', 'KaryawanController@indexRequest')->name('karyawan.request');
+        Route::get('/accept-request-role', 'KaryawanController@acceptRequest')->name('karyawan.request.accept');
+        Route::get('/decline-request-role', 'KaryawanController@declineRequest')->name('karyawan.request.decline');
+
     });
 });

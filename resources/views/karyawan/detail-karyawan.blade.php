@@ -65,7 +65,7 @@
               <div class="card-body">
                 <strong>Nama Karyawan</strong>
 
-                <p id="info-naem" class="text-muted">
+                <p id="info-name" class="text-muted">
                   {{ $karyawan->name }}
                 </p>
 
@@ -349,8 +349,12 @@
         data: form.serialize(),
         success: function(data) {
           $('#info-nama').text(data.nama);
-          $('#info-no_telephone').text(data.no_telephone);
-          $('#info-saldo').text(data.saldo);
+          $('#info-name').text(data.name)
+          $('#info-email').text(data.email)
+          $('#info-password').text(data.password)
+          $('#info-umur').text(data.umur)
+          $('#info-alamat').text(data.alamat)
+          $('#info-role').text(data.role)
           setTimeout(() => {
             $(document).Toasts('create', {
             class: 'bg-info',
@@ -358,9 +362,9 @@
             position: 'topLeft',
             autohide: true,
             delay: 10000,
-            body: "Nama karyawan&emsp;&emsp;&emsp; : &nbsp"+"{{$karyawan->nama}}"+"  =>  "+data.nama+
-                  "No Telepon&emsp;&emsp;&emsp; : &nbsp"+"{{$karyawan->no_telephone}}"+"  =>  "+data.no_telephone+
-                  "Saldo&emsp;&emsp;&emsp; : &nbsp"+"{{$karyawan->saldo}}"+"  =>  "+data.saldo
+            // body: "Nama karyawan&emsp;&emsp;&emsp; : &nbsp"+"{{$karyawan->nama}}"+"  =>  "+data.nama+
+            //       "No Telepon&emsp;&emsp;&emsp; : &nbsp"+"{{$karyawan->no_telephone}}"+"  =>  "+data.no_telephone+
+            //       "Saldo&emsp;&emsp;&emsp; : &nbsp"+"{{$karyawan->saldo}}"+"  =>  "+data.saldo
           });
           },500);
         },

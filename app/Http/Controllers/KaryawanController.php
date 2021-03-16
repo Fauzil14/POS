@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Models\RequestRole;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,7 @@ class KaryawanController extends Controller
             return $query->where('business_id', Auth::user()->roles->pluck('pivot.business_id')->first());
         })->get();
 
-        $roles = Role::get();
+        $roles = Role::where('role_name', '!=', 'admin')->get();
 
         return view('karyawan.index', compact('karyawans', 'roles'));
     }
@@ -75,7 +76,7 @@ class KaryawanController extends Controller
             }
         }
 
-        $allroles = Role::all();
+        $allroles = Role::where('role_name', '!=', 'admin')->get();
 
         return view('karyawan.detail-karyawan', compact('karyawan', 'password', 'allroles'));
     }
@@ -126,5 +127,12 @@ class KaryawanController extends Controller
             Alert::error('Gagal', 'Karyawan gagal di hapus');
             return back();
         }
+    }
+
+    public function indexRequest()
+    {
+        $requests = RequestRole::with(['user', 'role'])->get();
+
+        return view('karyawan.request', compact('requests'));
     }
 }

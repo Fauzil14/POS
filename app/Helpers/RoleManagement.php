@@ -63,7 +63,7 @@ trait RoleManagement {
         $pivot = $user->roles->first()->pivot;
 
         $user->roles()->detach();
-        $user->roles()->attach($role_id, ['business_id' => $pivot->business_id, 'kode_user' => $pivot->kode_user]);
+        $user->roles()->attach($role_id, ['business_id' => $pivot->business_id, 'kode_user' => $this->kodeUserPerRole($role_id)]);
     }
 
 }
