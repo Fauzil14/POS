@@ -336,7 +336,7 @@
   });
 </script>
 
-<script>
+{{-- <script>
   $(document).ready(function() {
     var form = $("#update");
 
@@ -376,7 +376,7 @@
         });
     });
   });
-</script>
+</script> --}}
 
 <script type="text/javascript">
   function deleteConfirmation(id) {

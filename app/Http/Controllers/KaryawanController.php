@@ -107,11 +107,10 @@ class KaryawanController extends Controller
 
         $role = Role::find($validatedData['role_id']);
         if( $user->role !== $role->role_name) {
-            $user->roles()->updateExistingPivot($validatedData['role_id'], [
-                'business_id' => $user->roles()->pluck('pivot.business_id')->first(),
-                'kode_user' => $user->roles()->pluck('pivot.kode_user')->first(),
+            $user->roles()->sync($validatedData['role_id'], [
+                'business_id' => $user->roles()->pluck('business_id')->first(),
+                'kode_user' => $user->roles()->pluck('kode_user')->first(),
             ]);
-
         }
 
         return response()->json([
