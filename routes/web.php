@@ -82,8 +82,8 @@ Route::prefix('dashboard')->middleware(['verified'])->group(function() {
         
         // Request Role
         Route::get('/request-role', 'KaryawanController@indexRequest')->name('karyawan.request');
-        Route::get('/accept-request-role', 'KaryawanController@acceptRequest')->name('karyawan.request.accept');
-        Route::get('/decline-request-role', 'KaryawanController@declineRequest')->name('karyawan.request.decline');
+        Route::get('/accept-request-role/{request_id}', 'KaryawanController@acceptRequest')->name('karyawan.request.accept');
+        Route::get('/decline-request-role/{request_id}', 'KaryawanController@declineRequest')->name('karyawan.request.decline');
 
     });
 });

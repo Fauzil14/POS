@@ -135,4 +135,37 @@ class KaryawanController extends Controller
 
         return view('karyawan.request', compact('requests'));
     }
+
+    public function acceptRequest($request_id)
+    {
+        $request = RequestRole::find($request_id);
+        
+        $user = User::findOrFail($request->user_id);
+
+        try {
+            $user->assignRole($request->role->role_name, Auth::user()->roles->pluck('pivot.business_id')->first());
+            $request->update([ 'status' => 'diterima' ]);
+            
+            Alert::succes('Berhasil', 'Permintaan role telah diterima');
+            return back();
+        } catch (\Throwable $th) {
+            Alert::error('Gagal', 'Gagal menerima permintaan role');
+            return back();
+        }
+
+    }
+    public function declineRequest($request_id)
+    {
+        $request = RequestRole::find($request_id);
+        
+        try {
+            $request->update([ 'status' => 'ditolak' ]);
+            
+            Alert::succes('Berhasil', 'Permintaan role telah ditolak');
+            return back();
+        } catch (\Throwable $th) {
+            Alert::error('Gagal', 'Gagal mengubah status permintaan');
+            return back();
+        }
+    }
 }
